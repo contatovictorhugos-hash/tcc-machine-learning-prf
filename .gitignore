@@ -1,5 +1,6 @@
 # Ignorar arquivos massivos que quebram o limite do GitHub LFS
 *.csv
+*.xlsx
 *.pkl
 *.model
 
