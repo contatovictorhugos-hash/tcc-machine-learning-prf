@@ -39,4 +39,9 @@ Para facilitar a validação acadêmica e a leitura da banca, o código-fonte fo
 
 A varredura completa nas simulações indicou que, em rodovias críticas classificadas pelo Índice de Condição da Superfície (ICP) abaixo de 25 pontos, a infraestrutura atua como catalisador das falhas humanas. Um recapeamento local (alteração do ICP simulado de 5 para 70) nestes buckets críticos gera uma **redução real prevista estatisticamente entre 12% a 17%** na contagem total de colisões operacionais – provando altíssimo Retorno sobre o Investimento de Manutenção (ROMI) na segurança viária.
 
-*(Consulte a pasta `09_Analise_Infraestrutura` para os Gráficos Oficiais comprobatórios).*
+**Impacto de Fatores Extrínsecos (Clima e Tempo):**
+Além das condições do asfalto, a modelagem quantificou o impacto direto de variáveis externas no risco de acidentes. As simulações demonstraram numericamente este comportamento:
+- **Condições Climáticas e Velocidade:** Chuvas, especificamente em **pistas duplas e retas**, causam um incremento contra-intuitivo (ex: **+6,7%** na contagem projetada no C3 - Pista Seca vs Molhada) devido à falsa sensação de segurança e excesso de velocidade por parte dos condutores.
+- **Fatores Temporais (Dias da Semana e Feriados):** O registro de acidentes demonstra picos estatísticos incontestáveis durante os **finais de semana** (aumentando o risco calculado em até **+52,9%** em dias inteiramente ensolarados, mas com longo declive, como C2) e durante **feriados nacionais**, que adicionam um incremento considerável em dias de alto fluxo turístico (até **+7,2%** no pico do feriado de verão/natal no Nordeste).
+
+*(Consulte a pasta `08_Fatores_Climaticos` (arquivo `analise_cenarios_tcc.txt`) e `09_Analise_Infraestrutura` para os números e Gráficos Oficiais comprobatórios).*
