@@ -1,0 +1,12 @@
+ESTE PACOTE DE SCRIPTS E SEUS OBJETIVOS NO TCC:
+-----------------------------------------------
+
+======================================================================
+ RESUMO FUNCIONAL: SCRIPTS PYTHON DESTE CAPITULO
+======================================================================
+- explore_data.py:
+    Executa a Análise Exploratória de Dados (EDA) estatística e levanta comportamentos anômalos preliminares.
+
+- generate_eda_plots.py:
+    Gera os diversos gráficos Seaborn iniciais para identificação visual de viés e desbalanceamento de classes.
+

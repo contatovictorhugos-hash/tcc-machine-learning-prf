@@ -1,0 +1,43 @@
+Análise e Plano de Ação - Integração de Dados DNIT (TCC)
+=========================================================
+
+1. Análise Preliminar dos Dados DNIT
+------------------------------------
+Ao inspecionar a estrutura dos arquivos brutos (dnit_2021 a dnit_2026), identificou-se uma grande heterogeneidade e desafios estruturais que precisam ser tratados para o sucesso do modelo (Random Forest).
+
+- Inconsistência de Formato e Encoding: Temos uma mistura de arquivos .csv e .xlsx com problemas de encoding (ex: caracteres especiais corrompidos como 'Extenso', presença de '\ufeff') e separadores.
+- Cabeçalhos Variados (Multi-level headers): Arquivos como o dnit_2023.csv e dnit_2025.xlsx possuem cabeçalhos deslocados ou em múltiplos níveis, com diversas colunas "Unnamed" contendo as subcategorias de "Condição do Pavimento" e "Condição da Conservação".
+- Mapeamento Geográfico em Trechos: A maioria dos arquivos traz a localização como variáveis contínuas de trecho (`km inicial`, `km final`, ou `Km_Inicial`, `Km_Final`), contrastando com a granularidade de ponto exato da base da PRF.
+- Variáveis Chaves de Qualidade: Indicadores contínuos como IP (Índice de Irregularidade), IC (Índice de Condição) e ICM (Índice de Condição da Manutenção) estão presentes, junto com textuais descritivos que precisam de tratamento para categorização exigida pelo Random Forest.
+
+2. Plano de Ação (Step-by-Step)
+-------------------------------
+
+PASSO 1: Ingestão Customizada e Padronização de Colunas
+- Ação: Criar funções de leitura específicas ou um dicionário de mapeamento para cada ano, tratando as peculiaridades (ex: `skiprows=1` no dnit_2023, parse do multi-header no dnit_2025).
+- Ação: Padronizar o 'encoding' para 'utf-8' ou 'latin1' ao ler os CSVs e renomear colunas inconsistentes para um padrão único (ex: `['uf', 'rodovia', 'km_inicial', 'km_final', 'condicao_pavimento', 'icm', ...]`).
+
+PASSO 2: Tratamento da Rodovia (Feature 'br')
+- Ação: Extrair exclusivamente o valor numérico da coluna 'Rodovia' (ex: 'BR-040' ou '040' -> '40', validando o padrão). Remover espaços ou formatações textuais desnecessárias.
+
+PASSO 3: Resolução de Granularidade (Manutenção de Intervalos)
+- Desafio: DNIT = Trecho contínuo. PRF = Evento pontual.
+- Diferencial de Performance: Explodir em KMs com decimais cria milhões de linhas irrelevantes.
+- Ação: Manter o intervalo estrutural nativo do DNIT (`km_inicial` e `km_final`). Apenas garantimos a conversão para floats limpos (substituindo vírgula por ponto). A junção (Join) com a base da PRF usará condições de intervalo (between/asof) verificando se o KM exato do acidente cai dentro de `[km_inicial, km_final]`.
+
+PASSO 4: Chave Geográfica de Junção (Intervalar)
+- Ação: Como não vamos explodir o KM, não haverá uma coluna estrita `br_km` na base do DNIT. A junção será feita usando Preditores Múltiplos: `br` exata (extraída rigorosamente) e a condição `PRF.km >= DNIT.km_inicial AND PRF.km <= DNIT.km_final`.
+
+PASSO 5: Engenharia e Limpeza das Features Qualitativas (Feature Selection)
+- Ação: Identificar as colunas de "Estado do Pavimento", "Sinalização" e "VDM".
+- Regra de Ouro (Random Forest): Converter as variáveis de texto para o tipo `category` no Pandas, ou aplicar logo um One-Hot Encoding (`pd.get_dummies`) para features de Conservação, evitando strings puras que consomem muita RAM.
+- Tratamento de Nulos: Tratar dados nulos sem usar imputação de médias lineares, preferindo preenchimento com categorias "Desconhecido" ou "-1" em métricas numéricas, para manter a divisão de nós nas árvores de decisão. NÃO padronizar as features (conforme a Restrição Metodológica Crítica do README).
+
+PASSO 6: Consolidação e Ponto de Atenção (Data Leakage)
+- Ação: Concatenar verticalmente (append) todos os anos já processados em um DataFrame único.
+- Ação CRÍTICA: Manter a variável temporal temporal (`ano`). Não sobrepor KMs usando a métrica mais recente. O Left Join da PRF usará a chave `ano` para garantir que um acidente em 2021 veja APENAS as condições do DNIT de 2021, evitando Data Leakage (Acesso ao Futuro).
+
+PASSO 7: Retro-preenchimento Temporal (Backfill 2019-2020)
+- Desafio: A PRF contém ocorrências em 2019 e 2020, mas o painel DNIT começa em 2021.
+- Ação: Duplicar os reportes consolidados (linhas) de avaliação do DNIT de 2021, reatribuindo seu rótulo de ano para 2019 e 2020. Isso vai atuar como uma estimativa retroativa das condições da via.
+- Ação: Exportar o resultado final limpo como `df_dnit_processed.csv`.

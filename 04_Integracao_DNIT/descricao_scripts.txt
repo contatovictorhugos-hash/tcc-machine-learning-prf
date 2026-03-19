@@ -1,0 +1,9 @@
+ESTE PACOTE DE SCRIPTS E SEUS OBJETIVOS NO TCC:
+-----------------------------------------------
+
+======================================================================
+ RESUMO FUNCIONAL: SCRIPTS PYTHON DESTE CAPITULO
+======================================================================
+- integration.py:
+    Executa o Interval Join arquitetural: alinha espacialmente os dados focais PRF com trechos contínuos DNIT e aplica o sentinela (-1.0).
+

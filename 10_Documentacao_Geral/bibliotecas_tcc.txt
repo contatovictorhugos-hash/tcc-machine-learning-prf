@@ -1,0 +1,113 @@
+======================================================================
+  DOCUMENTAÇÃO DE BIBLIOTECAS (STACK TECNOLÓGICA) - TCC
+  Projeto: Previsão de Acidentes Rodoviários (PRF + DNIT)
+======================================================================
+
+Neste documento detalhamos todas as bibliotecas Python utilizadas
+ao longo do projeto (ETL, Análise Exploratória e Machine Learning),
+justificativas de escolha técnica e as vantagens apresentadas.
+
+----------------------------------------------------------------------
+1. PANDAS (pandas)
+----------------------------------------------------------------------
+- Uso no Projeto:
+  Motor principal de manipulação de dados para todo o pipeline ETL
+  (Extração, Tratamento e Limpeza). Usado para ler os CSVs originais,
+  remover nulos, filtrar vazamentos de dados (data leakage), criar 
+  novas features (One-Hot Encoding da variável tracado_via) e executar
+  o "ASOF Join" (merge avançado por intervalo geográfico) integrando 
+  os dados da PRF com os dados de infraestrutura do DNIT.
+- Justificativa e Vantagens:
+  A estrutura de DataFrame permite manipulação de centenas de 
+  milhares de linhas (473k rows) diretamente em memória.
+  A função `pd.merge_asof` foi crucial para este TCC, pois permitiu
+  cruzar o quilômetro exato do acidente na PRF (variável contínua) com 
+  o quilômetro inicial e final (bucket) da infraestrutura no DNIT.
+
+----------------------------------------------------------------------
+2. NUMPY (numpy)
+----------------------------------------------------------------------
+- Uso no Projeto:
+  Operações matemáticas de alta performance, manipulação de arrays e 
+  tratamento de cenários nulos/infinitos (`np.nan`). Usado em
+  conjunto com Pandas para lógicas condicionais complexas (`np.where`).
+- Justificativa e Vantagens:
+  É a base numérica do ecossistema Python. Extremamente rápida
+  pois suas rotinas por baixo dos panos são escritas em C. Foi vital
+  para recodificar rapidamente a flag de fim de semana (is_final_semana) 
+  e o cálculo eficiente de medidas de assimetria.
+
+----------------------------------------------------------------------
+3. SCIKIT-LEARN (sklearn)
+----------------------------------------------------------------------
+- Uso no Projeto:
+  A biblioteca de Machine Learning do projeto. Utilizamos as funções:
+  `train_test_split` (para dividir a base de treino e teste),
+  `RandomForestRegressor` (o algoritmo preditivo central) e o pacote
+  de avaliação `sklearn.metrics` (para calcular R² e MAE).
+- Justificativa e Vantagens:
+  Apresenta a implementação mais confiável, validada e documentada
+  de algoritmos Preditivos Clássicos do mercado. A escolha 
+  específica do Random Forest através do Scikit-Learn permitiu a 
+  extração fácil das árvores de decisão, a imunidade à necessidade 
+  de normalizar/padronizar os dados (uma regra do projeto) e forneceu
+  diretamente a lista matemática de "Feature Importance".
+
+----------------------------------------------------------------------
+4. SEABORN (seaborn) & MATPLOTLIB (matplotlib.pyplot)
+----------------------------------------------------------------------
+- Uso no Projeto:
+  Criação de toda a narrativa visual de Data Storytelling. O Matplotlib
+  controla os blocos primários (tamanho da figura, eixos, grids), 
+  enquanto o Seaborn é usado para criar plotagens estatísticas
+  avançadas (Heatmaps temporais, Violins de densidade de chuva, 
+  Boxplots de risco estrutural e Barplots de projeção comparativa).
+- Justificativa e Vantagens:
+  Seaborn opera abstraindo dores profundas do matplotlib, permitindo 
+  mapear a variável *hue* em uma linha de código, separando tendências.
+  Permitiu gerar gráficos de impacto visual corporativo e acadêmico 
+  essenciais para demonstrar o que o algoritmo de Machine Learning 
+  de fato aprendeu em cada cenário ("showcase").
+
+----------------------------------------------------------------------
+5. HOLIDAYS (holidays)
+----------------------------------------------------------------------
+- Uso no Projeto:
+  Bibliotecas para marcação automatizada do calendário de Feriados
+  Nacionais e Estaduais no Brasil.
+- Justificativa e Vantagens:
+  A engenharia de features (Feature Engineering) precisava capturar o
+  efeito de feriados prolongados para justificar os picos de acidentes.
+  Fazer isso em uma lista manual ("hardcoded") para os anos 2019-2025
+  seria passível de erros humanos pesados (Carnaval se move a cada ano).
+  A lib resolve isso retornando booleanos geolocalizados precisos de
+  forma automatizada (O(1)).
+
+----------------------------------------------------------------------
+6. JOBLIB (joblib)
+----------------------------------------------------------------------
+- Uso no Projeto:
+  Responsável pela serialização (salvamento em disco) e desserialização 
+  (leitura rápida) do modelo treinado do Scikit-Learn.
+- Justificativa e Vantagens:
+  Com \`joblib.dump\`, exportamos a floresta aleatória treinada para o 
+  arquivo `random_forest_model.pkl`. O uso do Pickle tradicional do 
+  Python falha em eficiência de memória para enormes matrizes NumPy 
+  (como as criadas pelo modelo Random Forest). O Joblib é otimizado 
+  exatamente para matrizes densas estáticas, garantindo um load rápido
+  na execução do pipeline de previsões diárias dos cenários simulados.
+
+----------------------------------------------------------------------
+7. SCIPY (scipy.stats)
+----------------------------------------------------------------------
+- Uso no Projeto:
+  Computação de diagnóstico estatístico descritivo na fase exploratória
+  (EDA) dos dados brutos, especificamente a função `scipy.stats.skew`
+  para calcular e justificar a altíssima assimetria (Skewness).
+- Justificativa e Vantagens:
+  Ajustou solidamente e matematicamente o problema de "Zero-Inflated"
+  dos dados da PRF (poucos KMs têm a maioria dos acidentes, enquanto
+  milhares de KMs têm zero acidentes). A evidência empírica trazida
+  pelo cálculo de Skew validou teoricamente o uso do RandomForest (que
+  é insensível a assimetria) em demérito da regressão linear simples.
+======================================================================

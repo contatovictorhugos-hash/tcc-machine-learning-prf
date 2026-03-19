@@ -1,0 +1,9 @@
+ESTE PACOTE DE SCRIPTS E SEUS OBJETIVOS NO TCC:
+-----------------------------------------------
+
+======================================================================
+ RESUMO FUNCIONAL: SCRIPTS PYTHON DESTE CAPITULO
+======================================================================
+- trasformation.py:
+    Realiza o ETL inicial: carrega os dados brutos PRF/DNIT, remove duplicidades, trata nulos vitais e exporta a base limpa.
+

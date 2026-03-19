@@ -1,0 +1,38 @@
+Dicionário de Dados: df_dnit_processed.csv (TCC - Integração DNIT x PRF)
+========================================================================
+
+Este arquivo descreve as variáveis presentes na base final limpa do DNIT, preparada
+especificamente para o cruzamento espacial (intervalar) e temporal com a base da PRF.
+
+Identificadores Chave (Join Variables):
+---------------------------------------
+- ano (int): Ano de referência da avaliação. Fundamental para prevenir Data Leakage. Inclui os anos originais (2022-2026) e os anos inferidos via backfill (2019-2021) para viabilizar o pareamento completo com o registro histórico da PRF.
+- br (int): Número puro da Rodovia Federal, sem o prefixo "BR-". Ex: 116, 40, 316.
+- km_inicial (float): Ponto quilométrico onde se inicia o subtrecho de avaliação contínua do DNIT. A junção com o KM exato do acidente da PRF deverá garantir que: PRF.km >= DNIT.km_inicial.
+- km_final (float): Ponto quilométrico onde se encerra o subtrecho de avaliação contínua do DNIT. A junção deverá garantir que: PRF.km <= DNIT.km_final.
+
+Variáveis Alvo Contínuas (Indicadores Estatais):
+------------------------------------------------
+* NOTA: Conforme Regra de Ouro do projeto, essas features contínuas NÃO foram submetidas 
+  à normalização (como Z-Score ou Min-Max) visando o uso numérico puro em Random Forest. 
+  Valores nulos/ausentes foram imputados com cravados `-1.0` para criar um galho 
+  de decisão específico na árvore.
+
+- icc (float): Índice de Condição de Capa. Quantifica o nível de desgaste da camada asfáltica superficial estrutural.
+- icp (float): Índice de Condição do Pavimento. Uma métrica global sobre o conforto e segurança de rolagem da via.
+- icm (float): Índice de Condição da Manutenção. Reflete o esforço ou déficit de manutenção corretiva/preventiva aplicada no trecho.
+
+Variáveis Qualitativas Categóricas (Condições Visuais):
+-------------------------------------------------------
+* NOTA: Presentes a depender do ano de coleta. Em anos mais recentes, as medições foram 
+  explodidas em colunas específicas (como panela vs remendo), enquanto anos iniciais
+  tinham aglutinações qualitativas amplas.
+
+- cond_pavimento (texto): Qualidade geral sintética do asfalto avaliado em campo.
+- cond_conservacao (texto): Avaliação visual das faixas de domínio, vegetação rasteira limitante, etc.
+- cond_pav_panela (texto): Presença e severidade de buracos abertos ("panelas").
+- cond_pav_remendo (texto): Volume e qualidade de remendos asfálticos (operações tapa-buraco).
+- cond_pav_trinca (texto): Grau de trincamento do asfalto (fissuras que precedem esburacado).
+- cond_cons_rocada (texto): Escala que julga se a roçada dos canteiros/defensas laterais está em dia, evitando ofuscamento visual da via ou ocultação de placas.
+- cond_cons_drenagem (texto): Status de limpeza/desobstrução das calhas e valetas laterais de águas pluviais, cujo entupimento pode causar aquaplanagem severa.
+- cond_cons_sinalizacao (texto): Mede o estado de visibilidade da pintura de vias, tachões reflexivos e presença preservada de placas essenciais ao longo do trecho.

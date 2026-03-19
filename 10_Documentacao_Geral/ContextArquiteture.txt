@@ -1,0 +1,98 @@
+# CONTEXTO
+
+- **Projeto:** Análise e Modelagem Preditiva de Acidentes em Rodovias Federais Brasileiras (V3).
+- **Objetivo Analítico:** Estimar a quantidade de acidentes (valor numérico contínuo) em períodos futuros considerando fatores estruturais e operacionais das rodovias (Forecasting com variáveis exógenas).
+- **Fontes de Dados:** Polícia Rodoviária Federal (PRF) e Departamento Nacional de Infraestrutura de Transportes (DNIT).
+- **Período de Análise:** 2019 a 2025.
+
+# REGRAS_DE_OURO
+
+- **Definição de Acidente (Sinistro):** Evento de trânsito ocorrido na malha rodoviária federal, altamente assimétrico (maioria de acidentes rotineiros com poucas vítimas; minoria envolvendo veículos de carga/ônibus com alta letalidade), influenciado por variáveis de infraestrutura (tipo de pista, traçado) e operacionais.
+- **Definição de Métrica de Negócio:** Capacidade do modelo de reduzir a incerteza estatística para embasar o planejamento operacional e a alocação preventiva de recursos (viaturas, equipes médicas) pelo Poder Público.
+- **Métricas de Avaliação Estatística:** 
+  - MAE (Erro Médio Absoluto): Para medir a média das diferenças absolutas entre valores observados e previstos.
+  - R² (Coeficiente de Determinação): Para medir a proporção da variância.
+- **Restrição de Algoritmo:** Utilização EXCLUSIVA do algoritmo *Random Forest Regressor*.
+- **Restrição de Pré-processamento:** O modelo DEVE ser treinado SEM normalização ou padronização dos dados (proibido o uso de Min-Max Scaling, StandardScaler ou similares), garantindo a exploração da robustez nativa das árvores de decisão a escalas distintas e a outliers.
+
+# LOGICA_DE_INTEGRACAO
+
+- **Cruzamento de Bases (Join):** A integração entre a base de dados da PRF e a base do DNIT deve ocorrer obrigatoriamente através das chaves compostas `br` e `km`.
+- **Referência Espacial:** A variável `km` deve ser tratada como um ponto de referência espacial contínuo. O modelo/pipeline deve utilizar essa coordenada linear para buscar e associar os atributos de infraestrutura correspondentes do DNIT (como `tipo_pista` e `tracado_via`) ao local exato ou trecho mais próximo do sinistro.
+
+# ESPECIFICAÇÕES_TECNICAS
+
+## Dicionário de Dados (Base PRF)
+- `id`: Numérico/Discreto (Identificador único do registro)
+- `data_inversa`: Temporal (Data da ocorrência, formato YYYY-MM-DD)
+- `dia_semana`: Categórico/String (Dia da semana da ocorrência)
+- `horario`: Temporal (Hora da ocorrência, formato HH:MM:SS)
+- `uf`: Categórico/String (Unidade Federativa)
+- `br`: Numérico/Discreto (Identificador da Rodovia Federal)
+- `km`: Numérico/Contínuo (Quilometragem da rodovia, unidade: km)
+- `municipio`: Categórico/String (Nome do município)
+- `causa_acidente`: Categórico/String (Causa principal do sinistro)
+- `tipo_acidente`: Categórico/String (Classificação do tipo de colisão/evento)
+- `classificacao_acidente`: Categórico/String (Gravidade do acidente)
+- `fase_dia`: Categórico/String (Período luminoso do dia)
+- `sentido_via`: Categórico/String (Sentido do fluxo: Crescente/Decrescente)
+- `condicao_metereologica`: Categórico/String (Clima no momento do acidente)
+- `tipo_pista`: Categórico/String (Estrutura da via: Simples, Dupla, Múltipla)
+- `tracado_via`: Categórico/String (Geometria da via: Reta, Curva, etc.)
+- `uso_solo`: Categórico/String (Indicador de área urbana/rural: Sim/Não)
+- `pessoas`: Numérico/Discreto (Quantidade total de pessoas envolvidas)
+- `mortos`: Numérico/Discreto (Quantidade de vítimas fatais)
+- `feridos_leves`: Numérico/Discreto (Quantidade de vítimas com ferimentos leves)
+- `feridos_graves`: Numérico/Discreto (Quantidade de vítimas com ferimentos graves)
+- `ilesos`: Numérico/Discreto (Quantidade de pessoas sem ferimentos)
+- `ignorados`: Numérico/Discreto (Quantidade de pessoas com estado não informado)
+- `feridos`: Numérico/Discreto (Quantidade total de feridos)
+- `veiculos`: Numérico/Discreto (Quantidade de veículos envolvidos)
+- `latitude`: Numérico/Contínuo (Coordenada geográfica, latitude)
+- `longitude`: Numérico/Contínuo (Coordenada geográfica, longitude)
+- `regional`: Categórico/String (Superintendência Regional da PRF)
+- `delegacia`: Categórico/String (Delegacia da PRF responsável)
+- `uop`: Categórico/String (Unidade Operacional da PRF)
+- `ano_base`: Temporal/Numérico Discreto (Ano de referência do registro)
+
+## Arquitetura Técnica
+- **Linguagem de Programação:** Python 3.
+- **Ambiente de Desenvolvimento:** Google Colab.
+- **Bibliotecas de Manipulação e Análise:** Pandas, NumPy.
+- **Bibliotecas de Machine Learning:**[DADO NÃO ESPECIFICADO].
+- **Ferramenta de Business Intelligence:** Power BI.
+- **Estratégia de Versionamento de Código:** [DADO NÃO ESPECIFICADO].
+
+## Restrições Metodológicas (Pipeline CRISP-DM)
+
+- **1. Entendimento do Negócio:**
+  - Traduzir o problema de negócio em um problema analítico de Regressão.
+  - Foco na identificação de interdependências entre atributos (ex: má qualidade da via + curvas acentuadas).
+
+- **2. Entendimento dos Dados:**
+  - Realizar Análise Exploratória de Dados (EDA) obrigatória.
+  - Executar análise estatística de *Skewness* (assimetria) para mapear a inclinação da distribuição dos dados de acidentes.
+
+- **3. Preparação dos Dados (ETL):**
+  - **Extração:** Coleta de dados brutos das bases abertas da PRF e DNIT.
+  - **Limpeza:** Tratamento obrigatório de valores ausentes (nulos) e registros duplicados.
+  - **Transformação Estrutural:** Executar redução da dimensionalidade e engenharia de atributos.
+  - **Engenharia de Atributos (Sazonalidade):** O desenvolvedor/IA deve obrigatoriamente criar colunas derivadas de Sazonalidade a partir da coluna `data_inversa`. Isso inclui a extração e criação de *flags* para 'Fim de semana', 'Feriado' e 'Estação do Ano'.
+  - **Features Binárias de Infraestrutura:** Criar colunas booleanas (0 ou 1) a partir das colunas originais `tracado_via` e `tipo_acidente`. Exemplo: `is_curva` (1 se `tracado_via` contiver 'Curva', 0 caso contrário).
+  - **Tratamento de Outliers:** Detectar valores extremos estritamente pelo método do Intervalo Interquartil (IQR). Os outliers detectados NÃO devem ser removidos ou tratados como erros, pois a análise de assimetria define que são características reais da base.
+  - **Escalonamento:** Estritamente proibida a normalização ou padronização geral para o modelo.
+
+- **4. Modelagem (Random Forest Regressor):**
+  - **Amostragem (Bagging):** Gerar amostras *bootstrap* extraindo aleatoriamente os dados.
+  - **Proporção de Treino:** Utilizar aproximadamente 63% dos dados originais para o treinamento de cada árvore.
+  - **Feature Subspace:** Garantir a seleção aleatória de um subconjunto de variáveis em cada nó para forçar o aprendizado de diferentes padrões de correlação.
+  - **Critério de Divisão de Nós:** Utilizar a métrica **MSE (Mean Squared Error)** para avaliar a qualidade das divisões, garantindo a minimização do erro quadrático médio em cada nó, adequado para o problema de regressão.
+  - **Validação Interna:** Utilizar os 37% dos dados restantes em cada subconjunto para a estimativa interna *Out-of-Bag (OOB)*.
+  - **Validação Externa:** Aplicar técnica de validação cruzada (Cross-Validation) para assegurar a capacidade de generalização.
+
+- **5. Avaliação:**
+  - Calcular e registrar obrigatoriamente as métricas MAE e R².
+
+- **6. Implantação:**
+  - Exportar os dados processados e as predições do modelo.
+  - Carregar os resultados no Power BI para a construção de dashboards interativos focados em segmentações temporais e análises geográficas.

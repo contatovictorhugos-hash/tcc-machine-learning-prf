@@ -1,0 +1,9 @@
+ESTE PACOTE DE SCRIPTS E SEUS OBJETIVOS NO TCC:
+-----------------------------------------------
+
+======================================================================
+ RESUMO FUNCIONAL: SCRIPTS PYTHON DESTE CAPITULO
+======================================================================
+- pre_modeling.py:
+    Agrupa o dataset por 'Segmento + Ano/Mês', transformando Eventos Binários no Target Contínuo (Frequência Mês) via One-Hot Encoding.
+

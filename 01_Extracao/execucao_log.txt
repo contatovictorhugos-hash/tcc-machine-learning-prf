@@ -1,0 +1,20 @@
+Log de Execução Estratégica: ETL DNIT (TCC)
+===========================================
+Este documento compila as justificativas metodológicas para as modificações implementadas no `etl_dnit.py`.
+
+1. Reestruturação da Ingestão (Multi-Index Avoidance)
+- MOTIVO: Ao invés de tentar alinhar planilhas visualmente desconfiguradas como dnit_2025.xlsx pelos nomes de colunas usando `[:len()]` que gerou um Length Mismatch error, adotou-se o isolamento explícito por `.iloc`.
+- AÇÃO: Para 2025, nós acessamos numericamente o índice da coluna matriz (ex: Sinalização), ignorando as mesclagens do Excel original.
+
+2. Preservação do Intervalo Espacial Exato (km_inicial e km_final)
+- MOTIVO: A explosão sugerida inicialmente criaria milhões de linhas. O processamento exigiria muita RAM local indevidamente e geraria lentidão nos modelos ao adicionar ruído.
+- AÇÃO: O script `etl_dnit.py` não chama mais a função de expansão. Ele converte km_inicial e km_final estritamente para floats e garante que Initial < Final. A IA ou Cientista responsável pelo cruzamento utilizará bibliotecas como pandasql, polars ou merge_asof para comparar a PRF com esses recortes contínuos.
+
+3. Restrição de Leakage Temporal & Backfill
+- MOTIVO: Fazer Merge mantendo apenas "o asfalto de 2026" para adivinhar "acidentes de 2019" enviaria ao modelo dados do futuro para o passado, um erro fatal em Random Forest chamado *Data Leakage*. E como o histórico da PRF remonta a 2019, deixar o painel em branco criaria missing entries (NaN) de 2019 a 2021.
+- AÇÃO: Ação corretiva implantada na função `generate_temporal_backfill`. O pipeline pega o frame de 2022 inteiro, que é nossa avaliação de infraestrutura base mais íntegra da janela, cria cópias exatas do dataset e rotula a feature `ano` delas para 2019, 2020 e 2021.
+- RESULTADO: O Merge final via PRF_ANO == DNIT_ANO e PRF_KM entre DNIT_KM fará com que o Random Forest entenda retroativamente as condições que as vias possuíam naquela época, sem perda de acidentes e sem consultar o futuro.
+
+4. Imputação Categórica Numérica (Regras RF)
+- MOTIVO: Imputações como "média" destroem a variância natural do relevo analisado pela polícia.
+- AÇÃO: Nulos nos Índices (ICP, ICC, ICM) foram preenchidos categoricamente por `-1`, criando um espaço amostral de "Desconhecido" onde a árvore de decisão fará uma ramificação isolada em caso de dados faltantes (respeitando a regra TCC de zero padronização normal). Transformou `br` puramente numérico extraindo através de iteradores Regex.
