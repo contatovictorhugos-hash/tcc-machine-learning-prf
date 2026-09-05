@@ -1,0 +1,37 @@
+=========================================================================================================================================
+                                          RELATÓRIO DEFINITIVO DE COMPARAÇÃO DE ARQUITETURAS DE IA (V1 à V5)                             
+=========================================================================================================================================
+
+1. ESPECIFICAÇÕES TÉCNICAS E ARQUITETURA
+-----------------------------------------------------------------------------------------------------------------------------------------
+| Parâmetro         | Modelo V1 (Baseline)  | Modelo V2 (Otimizado) | Modelo V3 (Otim + Poda) | Modelo V4 (Log-Transform)| Modelo V5 (Temporal)       |
+-----------------------------------------------------------------------------------------------------------------------------------------
+| Divisão de Dados  | Random 80% / 20%      | Random 70% / 30%      | Random 70% / 30%        | Random 70% / 30%         | Temporal 80/20 (2024-25 TST)|
+| Pre-Processamento | Nenhum                | Nenhum                | Nenhum                  | np.log1p(Target y)       | Nenhum (Target em Escala Real)|
+| n_estimators      | 100 árvores           | 200 árvores           | 200 árvores             | 300 árvores              | 200 árvores                  |
+| max_features      | Todas (1.0)           | 'sqrt' (Subspace)     | 'sqrt' (Subspace)       | 'sqrt'                   | 'sqrt' (Feature Subspace)    |
+| criterion (Erro)  | squared_error (MSE)   | squared_error (MSE)   | poisson                 | squared_error (MSE log)  | squared_error (MSE)          |
+| max_samples(Boot) | 1.0 (100%)            | 1.0 (100%)            | 1.0 (100%)              | 0.8 (Sub Boot)           | 0.9 (Bagging)                |
+| Regularização     | max_depth=None        | max_depth=None        | max_depth=25, min_leaf=5| max_depth=30, min_leaf=3 | max_depth=None, min_leaf=2   |
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+2. RESULTADOS DE PERFORMANCE
+-----------------------------------------------------------------------------------------------------------------------------------------
+| Métrica           | Modelo V1             | Modelo V2             | Modelo V3               | Modelo V4                | Modelo V5 (Novo)             |
+-----------------------------------------------------------------------------------------------------------------------------------------
+| R² (Score)        | 0.9892                  | 0.9770                  | 0.9678                    | 0.9556                   | 0.9726                       |
+| MAE (Erro Médio)  | 0.2276                  | 0.3450                  | 0.4011                    | 0.4107                   | 0.4181                       |
+| MSE (Erro Quad.)  | 0.2985                  | 0.6418                  | 0.8980                    | 1.2398                   | 0.8787                       |
+| Treinamento (s)   | ~ 15 seg                | ~ 8 seg                | ~ 5 seg                  | ~ 6 seg                  | ~ 7 seg                     |
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+3. ANÁLISE CONCLUSIVA DO MODELO V5
+-----------------------------------------------------------------------------------------------------------------------------------------
+-> O Modelo V5 corrige a principal falha estrutural das versões anteriores (Data Leakage) implementando 
+   Split Temporal 80/20 rigoroso (Treino: 2019–2023 | Teste: 2024–2025). Validamos internamente também via 
+   OOB Score e Cross-Validation Temporal usando TimeSeriesSplit (n_splits=5).
+
+   A regressão mantém-se na escola real conforme ditado na RN (sem np.log1p) mas contendo fortes defesas
+   como max_samples=0.90, min_samples_leaf=2 e max_features='sqrt' combinando Variância/Viés controlados.
+-----------------------------------------------------------------------------------------------------------------------------------------
+Arquivo do Modelo V5 gerado: 'random_forest_v5_tcc.pkl'
