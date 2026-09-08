@@ -4,12 +4,13 @@
 *.pkl
 *.model
 
-# Ignorar pastas de ambiente virtual Python
+# Ignorar pastas de ambiente virtual Python e agentes
 .venv/
 venv/
 env/
 __pycache__/
 *.pyc
+.agents/
 
 # Ignorar configurações e cache de IDE/SO
 .idea/

@@ -1,0 +1,17 @@
+==============================================================================
+               RELATÓRIO OFICIAL DE PERFORMANCE DA ARQUITETURA V6             
+==============================================================================
+
+Dataset de Treino: 2020–2023 (271,440 observações)
+Dataset de Teste : 2024–2025 (135,720 observações fora do tempo)
+Percentual de Zeros no Teste: 69.61%
+
+TABELA DE MÉTRICAS:
+Métrica                | V6-Full (Poisson)  | V6-MSE (Benchmark) | V6-Ablation (Infra)
+--------------------------------------------------------------------------------
+R² (Escala Real)       | 0.8678             | 0.8736             | 0.0381            
+MAE (Erro Médio)       | 0.6137 ac/mês       | 0.6219 ac/mês       | 1.4550 ac/mês      
+RMSE                   | 1.2786             | 1.2502             | 3.4493            
+Poisson D² Score       | 0.7964             | 0.7924             | 0.1024            
+MAE Trechos Seguros    | 0.2889 ac/mês       | 0.3075 ac/mês       | 0.9554 ac/mês      
+--------------------------------------------------------------------------------

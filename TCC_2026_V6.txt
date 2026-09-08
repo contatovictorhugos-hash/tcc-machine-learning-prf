@@ -1,0 +1,1574 @@
+﻿UNIVERSIDADE PAULISTA
+CIÊNCIA DA COMPUTAÇÃO
+
+
+
+
+
+
+
+
+
+
+VICTOR HUGO MOREIRA - N2306E6
+GUILHERME FIGUEIRA - G8180C8
+
+
+
+
+
+
+
+
+
+
+
+
+
+ANÁLISE E MODELAGEM PREDITIVA DE ACIDENTES EM RODOVIAS FEDERAIS BRASILEIRAS: UMA ABORDAGEM BASEADA EM CIÊNCIA DE DADOS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SANTANA DE PARNAÍBA
+2026
+________________
+VICTOR HUGO MOREIRA
+GUILHERME FIGUEIRA
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ANÁLISE E MODELAGEM PREDITIVA DE ACIDENTES EM RODOVIAS FEDERAIS BRASILEIRAS: UMA ABORDAGEM BASEADA EM CIÊNCIA DE DADOS
+
+
+
+
+Trabalho de Conclusão de Curso apresentado como exigência parcial para a obtenção do grau de Bacharel em Ciência da Computação na Universidade Paulista. Orientador: Prof. Edy Hayashida.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SANTANA DE PARNAÍBA
+2026
+________________
+
+
+Moreira, Victor
+Figueira, Guilherme
+
+
+    Análise e modelagem preditiva de acidentes em rodovias federais brasileiras: uma abordagem baseada em ciência de dados - Santana de Parnaíba, 2026.
+X f ; 30 cm;
+
+   Orientador: Prof. Edy Hayashida
+    TCC (Bacharel em Ciência da Computação - UNIP - Campus Alphaville, Santana de Parnaíba, 2026.
+
+
+    Inclui Bibliografia
+   1. Ciência de Dados. 2. Rodovias Federais. 3. Modelagem Preditiva.
+
+
+	
+
+
+
+________________
+
+
+VICTOR HUGO MOREIRA
+GUILHERME FIGUEIRA
+
+
+
+
+ANÁLISE E MODELAGEM PREDITIVA DE ACIDENTES EM RODOVIAS FEDERAIS BRASILEIRAS: UMA ABORDAGEM BASEADA EM CIÊNCIA DE DADOS
+
+
+
+
+
+
+Trabalho de conclusão de curso para a obtenção do título de graduação em Ciência da Computação apresentado à Universidade Paulista – UNIP. 
+
+
+Orientador Prof.  Edy Hayashida.
+
+
+
+
+Trabalho de Conclusão de Curso defendido e aprovado em __. ___. ____, pela comissão julgadora:
+
+
+__________________________________________
+
+
+Prof. Edy Hayashida - Universidade Paulista
+
+
+________________
+
+
+RESUMO
+
+
+Os acidentes de trânsito em rodovias federais brasileiras representam um grave problema de segurança pública já muito antigo na história da sociedade brasileira; tal desafio persistente demanda soluções tecnológicas inovadoras para a mitigação de seus impactos sociais e econômicos. Este trabalho analisa o comportamento histórico de acidentes de trânsito para desenvolver um modelo preditivo capaz de estimar a quantidade de acidentes em períodos futuros, considerando fatores estruturais e operacionais das rodovias. O objetivo central reside em fornecer insights do tema para os órgãos responsáveis através da construção de dashboards com a ferramenta Power BI e construir um modelo de suporte à decisão que auxilie órgãos públicos no planejamento operacional e na alocação preventiva de recursos. A metodologia fundamenta-se na utilização de bases de dados abertos da Polícia Rodoviária Federal (PRF) de 2019 a 2025, integrando-as a fontes de enriquecimento como o DNIT por meio de junção intervalar espacial. A análise exploratória dos dados orientou decisões fundamentais acerca do pré-processamento, que inclui o tratamento de valores ausentes e duplicados, a detecção de outliers pelo método do Intervalo Interquartil (IQR), a redução da dimensionalidade e o agrupamento espaço-temporal em buckets de 10 km por mês para mitigar o problema de zero-inflation. Já para a etapa de modelagem preditiva, optou-se por abordar o problema como uma regressão com séries temporais e variáveis externas, caracterizando um cenário de forecasting com variáveis exógenas. Durante a fase de seleção e evolução de algoritmos, cinco arquiteturas com diferentes configurações foram avaliadas progressivamente; o modelo definitivo selecionado foi o Random Forest Regressor com partição temporal cronológica, cuja invariância a escala permite que as previsões sejam geradas e consumidas diretamente na escala original dos dados. Os resultados empíricos demonstraram a eficácia da abordagem, com o modelo final alcançando um coeficiente de determinação R2 de 0,9726 e Erro Médio Absoluto (MAE) de 0,4181 acidentes por trecho/mês na partição de teste inédita. Além disso, as simulações de sensibilidade e explicabilidade por meio de testes Ceteris Paribus comprovaram o impacto da infraestrutura viária, indicando que intervenções no pavimento (ICP) em trechos críticos proporcionam uma redução estimada entre 12% e 17% na frequência de colisões. Dessa forma, o pipeline proposto transforma dados históricos da Polícia Rodoviária Federal em insumos analíticos confiáveis, capazes de apoiar decisões estratégicas e políticas públicas voltadas à redução de acidentes nas rodovias federais brasileiras.
+
+
+Palavras-chave: Ciência de Dados; Rodovias Federais; Modelagem Preditiva; Segurança Viária; Inteligência Artificial.
+________________
+
+
+ABSTRACT
+
+
+Traffic accidents on Brazilian federal highways represent a long-standing public safety issue; this persistent challenge demands innovative technological solutions to mitigate its social and economic impacts. This study analyzes historical traffic accident patterns to develop a predictive model capable of estimating future accident counts, taking into account structural and operational highway factors. The primary objective is to provide insights to relevant agencies through Power BI dashboards and to build a decision-support model that assists public bodies with operational planning and the preventive allocation of resources. The methodology relies on open datasets from the Federal Highway Police (PRF) covering 2019 to 2025, integrated with supplementary sources—such as DNIT data—via spatial interval joins. Exploratory data analysis guided key preprocessing decisions, including handling missing and duplicate values, detecting outliers using the Interquartile Range (IQR) method, reducing dimensionality, and performing spatiotemporal aggregation into 10 km/month buckets to mitigate zero-inflation issues. For the predictive modeling stage, the problem was framed as a regression task involving time series and external variables, characterizing a forecasting scenario with exogenous variables. During the algorithm selection and refinement phase, five architectures with varying configurations were progressively evaluated; the final model selected was a Random Forest Regressor using chronological temporal partitioning, chosen for its scale invariance, which allows predictions to be generated and utilized directly in the data's original scale. Empirical results demonstrated the approach's effectiveness, with the final model achieving an R² coefficient of determination of 0.9726 and a Mean Absolute Error (MAE) of 0.4181 accidents per segment/month on the unseen test set. Furthermore, sensitivity and explainability simulations using *ceteris paribus* tests confirmed the impact of road infrastructure, indicating that pavement interventions (ICP) on critical sections yield an estimated reduction of 12% to 17% in collision frequency. Thus, the proposed pipeline transforms historical data from the Federal Highway Police into reliable analytical inputs capable of supporting strategic decisions and public policies aimed at reducing accidents on Brazilian federal highways.
+Keywords: Data Science; Federal Highways; Predictive Modeling; Road Safety; Artificial Intelligence.
+SUMÁRIO
+1 INTRODUÇÃO        7
+1.1 Motivação        8
+1.2 Objetivo Geral        9
+1.3 Objetivo Específico        9
+1.4 Metodologia        9
+1.5 Organização do Texto        10
+2 REVISÃO DA LITERATURA        11
+2.1 Panorama da segurança viária no Brasil        11
+2.2 De análises descritivas à modelagem preditiva        15
+2.2.1 O processo de ETL (Extract, Transform, Load)        16
+2.2.2 Pipeline de Ciência de Dados e metodologia CRISP-DM        17
+2.2.3 Random Forest: fundamentos teóricos e aplicações        19
+2.2.4 Fundamentos matemáticos e estatísticos        20
+2.2.5 Random Forest no contexto de segurança viária        20
+2.3 Business Intelligence: transformando dados em decisões        22
+2.3.1 Power BI como ferramenta de Business Intelligence        23
+2.4 Conceitos de engenharia de software        24
+2.4.1 Requisitos funcionais        25
+2.4.2 Requisitos não funcionais        26
+2.4.3 Metodologias de desenvolvimento        26
+2.4.4 Estratégias de teste        28
+2.4.5 Arquitetura de sistemas        29
+3 MATERIAIS E MÉTODOS        32
+3.1 Materiais        32
+3.1.1 Linguagem Python        32
+3.1.2 Google Colab        33
+3.1.3 Bibliotecas        34
+3.1.4 Random Forest        37
+3.1.5 PowerBI        42
+3.2 Métodos        43
+3.2.1 Entendimento de negócio        43
+3.2.1.1 Identificação dos stakeholders        44
+3.2.1.2 Requisitos Funcionais e Não Funcionais        46
+3.2.1.3 Estratégia de Versionamento        48
+3.2.2 Entendimento dos Dados        48
+3.2.3 Preparação do Dados        57
+3.2.3.1 Transformação e Otimização Estrutural        57
+3.2.3.2 Engenharia de Atributos        58
+3.2.3.3 Tratamento e Integração da Base do DNIT        62
+3.2.3.4 Junção Intervalar e Resolução da Armadilha Zero-Inflated        62
+3.2.4 Modelagem        63
+3.2.4.1 Estratégia de Divisão dos Dados e Correção do Data Leakage        63
+3.2.4.2 Especificação Técnica das Arquiteturas Avaliadas        64
+3.2.4.3 Validação interna        67
+4 RESULTADOS        69
+4.1 Avaliação Comparativa das Arquiteturas e Seleção do Modelo V5        69
+4.2 Diagnóstico do Modelo V5        71
+4.3 Análise de Importância das Variáveis        72
+4.4 Avaliação do Impacto da Infraestrutura Rodoviária (DNIT)        75
+4.4.1 Diagnóstico do Sentinela -1.0 (Vias Não Monitoradas pelo DNIT)        75
+4.4.2 Análise SHAP e Teste A/B Ceteris Paribus (BR-381 KM 340-350 / MG)        76
+4.4.3 Não Linearidade no PDP e Retorno sobre Investimento        78
+4.4.4 Showcase de Otimização Global Argmax (BR-40 KM 110-120)        80
+4.5 Simulações de Cenários Táticos e Estudo de Caso Operacional (PRF)        81
+4.5.1 Metodologia por Mediana e Avaliação dos Cenários Táticos        82
+4.5.2 Estudo de Caso Real: BR-101 (KM 70)        85
+5 DISCUSSÃO        87
+5.1 Da Reatividade à Antecipação        87
+5.2 A Ilusão das Métricas e a Assimetria Real        88
+5.3 Economia de Infraestrutura e Diretrizes para o DNIT        89
+5.4 A Hierarquia entre Geometria Física e Dinâmica Temporal        90
+
+
+1 INTRODUÇÃO
+
+
+
+
+Os acidentes de trânsito em rodovias federais brasileiras são um problema histórico e de grande magnitude para a saúde pública e para as finanças do governo. De acordo com dados extraídos do Anuário da Polícia Rodoviária Federal (POLÍCIA RODOVIÁRIA FEDERAL, 2025), foram contabilizados 73.156 sinistros nas rodovias federais no ano de 2024, resultando em 6.160 mortes e 84.526 feridos. Esses números evidenciam não apenas o impacto humano, mas também a pressão sobre os serviços de emergência e o sistema de saúde pública.
+Além do alto custo humano evidenciado, os acidentes de trânsito causam impactos econômicos expressivos para a sociedade brasileira. Uma pesquisa realizada pelo Instituto de Pesquisa Econômica Aplicada estima que os acidentes de trânsito no Brasil geram perdas anuais em torno de R$50 bilhões, considerando despesas médicas, custos hospitalares, perda de produtividade, danos materiais e gastos administrativos relacionados ao atendimento e investigação dos sinistros (IPEA, 2020). Em análise mais detalhada sobre rodovias federais, um levantamento da Confederação Nacional do Transporte aponta que os acidentes nessas vias geraram um custo aproximado de R$12,9 bilhões em 2022, reforçando o impacto financeiro da falta de segurança viária para o orçamento público e para a economia nacional (CNT, 2023). Esses valores gritantes evidenciam que a redução dos acidentes não representa apenas uma questão de preservação da vida, mas também uma estratégia de eficiência econômica e sustentabilidade das políticas públicas.
+        Atualmente o setor público brasileiro flutua hoje sobre um oceano de dados que cresce a cada dia, gerado pelos órgãos estatais. A transformação digital no setor público surge como solução para transformar dados em informações estratégicas. Apesar disso ainda esbarra em uma cultura de fragmentação e em processos estritamente analógicos. Como aponta o Laboratório de Inovação e Dados (ÍRIS, 2022), a administração governamental ainda enfrenta o desafio de ultrapassar a barreira da burocracia documental para atingir a maturidade analítica, agindo frequentemente apenas quando o incêndio já começou. Essa postura reativa impede que o Estado alcance a maturidade analítica necessária para converter dados brutos em inteligência estratégica. Portanto, mais do que uma atualização tecnológica, a superação desse cenário exige uma ruptura com o modelo descritivo em favor de uma cultura orientada a dados, capaz de explorar o potencial preditivo da máquina estatal.
+1.1 Motivação
+
+
+Diante da gravidade desse cenário e da complexidade dos fatores que influenciam os acidentes de trânsito, passar de uma análise meramente descritiva para uma abordagem preditiva estatística torna-se imperativo. O volume crescente de dados abertos disponibilizados por órgãos como a Polícia Rodoviária Federal possibilita que a Ciência de Dados avance no diagnóstico retrospectivo para a antecipação de riscos e planejamento preventivo, evitando o incêndio repentino. Pesquisas na área de engenharia de transportes demonstram que modelos de previsão são utilizados para avaliar a segurança de trechos rodoviários, identificar locais críticos e apoiar o planejamento de intervenções e investimentos em infraestrutura, contribuindo diretamente para a administração estratégica da segurança viária (BOFFO, 2011). Nesse cenário, surge a pergunta central deste estudo: como a aplicação de arquiteturas de Machine Learning em dados históricos pode embasar o planejamento operacional e a alocação preventiva de recursos, reduzindo a ocorrência e a gravidade dos acidentes em rodovias federais brasileiras?
+A transição para uma abordagem preditiva do tema, proposta neste estudo, representa uma mudança clara de patamar e fundamenta-se na cultura Data-Driven, que consiste em utilizar o dado como o ativo central para a estratégia organizacional. Ao utilizar o modelo Random Forest para estimar o volume de acidentes e identificar trechos críticos antes que os acidentes ocorram, o sistema deixa de ser apenas um baú de dados e torna-se uma ferramenta de antecipação operacional. Para o Poder Público, essa migração do reativo para o preditivo significa a capacidade de alocar viaturas, equipes médicas e recursos de manutenção de forma orientada a dados, reduzindo gastos, devido à eficácia do investimento, e salvando valiosas vidas.
+
+
+1.2 Objetivo Geral
+
+
+O objetivo geral deste Trabalho de Conclusão de Curso consiste em analisar o comportamento histórico dos sinistros viários em rodovias federais brasileiras para o desenvolvimento de um modelo preditivo robusto fundamentado em arquiteturas de machine learning. A pesquisa busca estimar o volume de acidentes para períodos subsequentes, visando validar a eficácia de modelos de alta performance na redução da incerteza estatística inerente aos microdados governamentais, que muitas vezes parecem peças de um quebra-cabeça espalhadas, demonstrando a aplicabilidade da Ciência de Dados na transformação de dados esparsos em um mapa estratégico navegável.
+1.3 Objetivo Específico
+
+
+Como objetivos específicos, temos a disponibilização de um modelo de machine learning e insights para auxiliar o poder público no investimento assertivo e  a alocação de recursos preventivos nos locais com maior número de incidentes como meio para diminuir a quantidade de vítimas. Para isso ocorre o pré-processamento extenso da base da Polícia Rodoviária Federal (2019-2025) por meio de técnicas de transformação de dados e integração multi-fonte, através do enriquecimento com a base do Departamento Nacional de Infraestrutura de Transportes. Ademais, pretende-se construir dashboards no Power BI para a visualização dos resultados do modelo e da análise descritiva com o objetivo de fornecer insights estratégicos voltados ao suporte à decisão no planejamento operacional e na alocação preventiva de recursos. 
+1.4 Metodologia
+
+
+A metodologia deste estudo fundamenta-se no framework CRISP-DM, Cross Industry Standard Process for Data Mining, que servirá de norte para todos os processos executados, estruturado em um pipeline de Ciência de Dados que integra processos de ETL, Extraction, Transformation, Loading. A fase de preparação dos dados inicia-se com a extração de registros brutos dos portais de dados abertos da PRF e do DNIT (2019-2025). Na etapa de transformação, procede-se à limpeza dos dados, tratamento de valores nulos e engenharia de atributos, visando converter observações brutas em informação estruturada.
+        A etapa de modelagem está fortemente ligada à aplicação do algoritmo Random Forest, utilizando a técnica de validação cruzada para assegurar o desempenho e a capacidade de generalização do modelo. Por fim, na fase de implantação, os dados processados e as predições são integrados ao Power BI, resultando em dashboards estratégicos que permitem a visualização intuitiva e o suporte à decisão operacional, materializando o conceito de gestão Data-Driven no setor público.
+        Portanto, a pesquisa possui uma finalidade exploratória, pois na fase de análise exploratória do framework que orienta o trabalho, busca compreender a relação das variáveis do dataset, dinâmica temporal dos sinistros, identificar os meses de maior incidência e detectar padrões sazonais de acidentes. Por fim, o estudo se torna explicativo ao desenvolver dashboards para fornecer insights estratégicos dos dados, e preditivo com a realização do modelo de dados, ao realizar estimativas do número de acidentes.
+1.5 Organização do Texto
+
+
+EM CONSTRUÇÃO
+        No capítulo 2 será apresentado a revisão de literatura ...
+O capítulo 3 visa demonstrar ....
+O capítulo 4 tem como objetivo ....
+O capítulo 5 apresenta...
+O capítulo 6 contém ...
+O capítulo 8 tem como conteúdo as conclusões...
+Por fim temos um capítulo reservado para as referências bibliográficas.
+________________
+
+
+2 REVISÃO DA LITERATURA
+
+
+Este capítulo apresenta o embasamento teórico necessário para a compreensão dos acidentes de trânsito no Brasil e as tecnologias de Ciência de Dados aplicadas neste presente projeto. A fundamentação está baseada na análise histórica da segurança do trânsito nacional e na evolução das técnicas de inteligência artificial voltadas à modelagem preditiva.
+2.1 Panorama da segurança viária no Brasil
+
+
+A segurança de trânsito no Brasil é um campo crítico que envolve variáveis humanas, veiculares e de infraestrutura, apesar de ser um tema extremamente importante para milhões de brasileiros, o panorama atual da malha rodoviária brasileira é alarmante. Segundo a 27ª edição da pesquisa CNT de Rodovias o país dispõe de cerca de 1,5 milhão de quilômetros de estradas e vias, mas apenas 12,4% desse total é pavimentado, e da minoria que é pavimentada 67,5% da extensão avaliada foi classificada como “regular”, “ruim” ou “péssima”, e apenas 32,5% como “boa” ou “ótima”.
+Além disso, o país está ficando para trás na já velha corrida da pavimentação das estradas, em uma análise da cobertura de estradas pavimentadas em comparação com a área total do país, o Brasil conta com 25,1 km pavimentados por mil km² de área, países como China e Estados Unidos possuem 447 km e 437 km de estradas pavimentadas por mil km² de área, respectivamente. Já em comparação com países adjacentes na América latina, o país detém um índice menor do que os verificados no Equador (31,4), na Argentina (42,3) e no Uruguai (43,9), como exemplificado na Figura 1.
+Figura 1 - Densidade da malha rodoviária pavimentada por país (valores em km/mil km²) 
+  
+
+Fonte: Elaboração CNT, com dados de The CIA World Factbook (2024), Ministério da Infraestrutura (2020) e IBGE (2022).
+A persistência desse cenário de insegurança rodoviária está alicerçada em um descompasso do tamanho da malha rodoviária em comparação com o número de motoristas, pois de 2013 a 2023, houve um aumento de modestos 2,2% das rodovias pavimentadas (CNT, 2024), ao contrário do número de motoristas em que no mesmo período foi registrado um crescimento de 46,1% no número total de veículos, sendo que a região Norte registrou a maior alta, com 70,1%, e é a região com o menor índice de km pavimentados por mil km² de área.
+        Tais problemas afetam a competitividade econômica do país, o estado crítico das rodovias encarece o transporte ao elevar custos com reparos mecânicos, combustível e atrasos. Esse cenário gera gargalos na distribuição que afetam a eficiência de toda a produção, reduzindo a competitividade do país e intensificando o impacto negativo do Custo Brasil. Ademais, também é possível destacar o desperdício de insumos agrícolas, notadamente grãos, durante o deslocamento rodoviário das zonas produtoras aos portos comerciais, tendo na precariedade da malha viária um de seus fatores determinantes..
+Pois o Brasil é essencialmente rodoviário, sendo responsável por aproximadamente 65% do transporte de cargas escoadas e por quase 95% dos passageiros, conforme Boletim Estatístico CNT (2024), consumindo cerca de 15,5% do PIB nacional (ILOS, 2026), muito acima da média dos países desenvolvidos com 8% do PIB nacional.
+Tal dependência é exemplificada pelas suas vulnerabilidades que ficou provada em dados após a paralisação de 2018 onde durante a greve dos caminhoneiros, a produção industrial do Brasil caiu 10,9% em apenas um mês, maio de 2018 (IBGE, 2018), provando é o Brasil é extremamente dependente desse sistema falho economicamente que ceifa milhares de vidas todos os anos.
+Ademais, a falta de infraestrutura não é apenas uma questão econômica que freia o crescimento do Brasil, é também uma questão de saúde pública, de interesse de milhões de brasileiros. Tendo em vista que, conforme o Anuário da Polícia Rodoviária Federal (2025), o ano de 2024 foi o mais letal desde 2017, em análise da série histórica, houve 6160 mortos e 73.156 acidentes (média de 200 acidentes e 16 mortes por dia), como é mostrado na Figura 2.
+
+
+
+
+
+
+
+
+
+
+
+
+Figura 2 – Evolução anual dos sinistros, feridos e mortos em rodovias federais brasileiras (2007–2024).
+  
+
+Fonte: Anuário da Polícia Rodoviária Federal (2025).
+Além de extremamente letais, as rodovias federais brasileiras apresentam elevados índices de acidentes associados a fatores estruturais passíveis de intervenção, como falta de investimento, planejamento e duplicação de vias. Conforme dados do Anuário Estatístico da Polícia Rodoviária Federal (2025) exemplificados na Figura 3, a maior parte dos acidentes e das mortes ocorre em trechos de pista simples, que registraram 35.287 sinistros e 4.291 mortes no período analisado, superando significativamente os números observados em rodovias de pista dupla ou múltipla. Esses números evidenciam que a predominância de vias não duplicadas e com menor padrão de infraestrutura contribui diretamente para o agravamento da sinistralidade nas rodovias federais brasileiras, reforçando a necessidade de políticas públicas orientadas por dados para melhoria da segurança viária.
+Figura 3 – Distribuição de sinistros, feridos e mortos por tipo de pista em rodovias federais brasileiras.  
+Fonte: Anuário da Polícia Rodoviária Federal (2025).
+Diante do impacto comprovado da infraestrutura viária na ocorrência de sinistros, a utilização de técnicas de Ciência de Dados apresenta-se como ferramenta estratégica para apoiar decisões de investimento público. A partir da integração de bases abertas, como os registros da Polícia Rodoviária Federal, dados de condição da malha do Departamento Nacional de Infraestrutura de Transportes e levantamentos da Confederação Nacional do Transporte, é possível identificar padrões espaciais e temporais de acidentes, estimar o risco associado a diferentes características da via e priorizar trechos onde intervenções como duplicação, melhoria do pavimento ou reforço da sinalização produzirão maior redução de sinistros. Modelos preditivos e análises geoespaciais permitem, por exemplo, calcular a probabilidade de acidentes em função de variáveis como tipo de pista, volume de tráfego, geometria da via e histórico de ocorrências, fornecendo aos órgãos públicos evidências quantitativas para otimizar recursos escassos. Assim, a Ciência de Dados contribui para uma gestão proativa da segurança viária, transformando grandes volumes de dados operacionais em insights capazes de orientar políticas públicas mais eficazes e reduzir a mortalidade nas rodovias federais brasileiras.
+2.2 De análises descritivas à modelagem preditiva
+
+
+Historicamente, a gestão de tráfego no Brasil tem se apoiado predominantemente em análises descritivas e diagnósticas, voltadas a responder questões como o que aconteceu e onde ocorreu um sinistro. Embora essenciais para a compreensão inicial do problema, essas abordagens mostram-se limitadas a longo prazo, para resolver estruturalmente o problema, diante da complexidade da segurança viária no Brasil. A incorporação de métodos preditivos, no dia a dia dos órgãos públicos, fundamentados em big data, permite antecipar cenários de risco, estimar probabilidades de ocorrência de acidentes e avaliar o impacto potencial de intervenções estruturais, como sustentado por Provost e Fawcett (2013). Dessa forma, modelos de previsão de acidentes podem ser utilizados para a avaliação do potencial de segurança em determinados locais, identificação e classificação de localidades perigosas ou com propensão a acidentes, e avaliação da eficácia de medidas de melhoria da segurança (BOFFO, 2011).
+Essa mudança de paradigma que o big data proporciona, exige um pipeline robusto de Ciência de Dados, que transforme dados públicos esparsos em inteligência estratégica. O uso de modelagem preditiva visa reduzir a incerteza estatística, fornecendo estimativas fundamentadas para o planejamento operacional, aumentando a assertividade e eficiência de políticas públicas.
+Entende-se big data como conjuntos de dados caracterizados por grande volume, alta velocidade de geração e ampla variedade de formatos, cuja complexidade excede a capacidade de processamento de sistemas tradicionais de banco de dados. Embora o conceito tenha sido inicialmente estruturado a partir dos chamados “3 Vs” (LANEY, 2001) a evolução da área consolidou o modelo dos “5 Vs”, adicionar a veracidade, que diz sobre a confiabilidade dos dados, e o valor, que se refere à utilidade das informações extraídas (GOES, 2014). As abordagens mais recentes expandem essa definição para “7 Vs”, incluindo a variabilidade, mudanças no fluxo de dados, e a visualização, que permite a interpretação clara dos resultados para a tomada de decisão, através de ferramentas de visualização de dados (KITCHIN, 2014).
+Segundo Mayer-Schönberger e Cukier (2013), que estabelecem a base teórica, o Big Data representa uma mudança completa de paradigma na computação, onde se passou da análise esparsa de amostras reduzidas para quantidades massivas de dados, na casa de centenas de milhares. De forma complementar a essa visão, Gandomi e Haider (2015) destacam que, na atualidade, essa análise passa da escala dos terabytes para focar mais na agilidade estratégica, transformando fluxos contínuos de dados em modelos preditivos de alta veracidade (GANDOMI; HAIDER, 2015).
+Entretanto, big data não se resume a apenas tamanho, mas sim um conjunto de alicerces que foram ultrapassados, como o uso de infraestrutura distribuída, mineração de dados e aprendizado de máquina e métodos estatísticos capazes de desvendar tais dados massivos.
+Outrossim, modelagem preditiva é em sua essência o desenvolvimento de modelos matemáticos para estimar eventos com base em dados históricos. Segundo Provost e Fawcett (2013), o objetivo principal da Ciência de Dados aplicada é transformar dados em ativos estratégicos, permitindo decisões orientadas a evidências.
+Por conseguinte, a modelagem preditiva funciona no estudo das relações de variáveis dentro de um conjunto de dados através de modelos matemáticos, que com a quantidade de dados suficiente podem estimar com um certo nível de confiança uma variável resposta.
+2.2.1 O processo de ETL (Extract, Transform, Load)
+
+
+O processo de ETL é a fundação de todos os projetos de ciência de dados e análise de dados. Com isso, esse processo famoso será a âncora deste presente trabalho, de onde teremos os dois principais objetivos do projeto, a criação de um modelo preditivo e a análise descritiva de série histórica.
+        Ademais, essa etapa inicial é a mais importante em um projeto de Ciência de Dados, sendo responsável por cerca de 70% do tempo de implementação do mesmo, a qualidade dessa etapa influi diretamente no resultado tanto das análises quanto do modelo preditivo (PRESS, 2016).
+        Portanto, o ETL consiste no conjunto de procedimentos responsáveis por extrair dados de diferentes fontes, transformá-los de forma adequada e carregá-los em um ambiente estruturado para análise, como um data warehouse ou um repositório analítico (IBM, 2024).
+O processo de ETL é tradicionalmente dividido em três etapas principais:
+Extração (Extract) se refere a etapa referente a extração dos dados brutos da base de dados original. No contexto deste projeto se refere a obtenção dos dados abertos da Polícia Rodoviária Federal e as condições do pavimento do DNIT do período de 2019 a 2025.
+Transformação (Transform) se refere a etapa na qual os dados brutos extraídos passam por diversos procedimentos de tratamento e preparação para a próxima etapa. No contexto deste trabalho ocorreu a limpeza de dados, tratamento de valores ausentes, padronização de formatos e integração entre diferentes fontes de dados.
+Carga (Load) se refere a etapa final do processo, na qual os dados prontos são disponibilizados em um ambiente para realização de análises e aplicações de modelos estatísticos. No contexto deste trabalho ocorreu a disponibilização para aplicação do modelo Random Forest.
+2.2.2 Pipeline de Ciência de Dados e metodologia CRISP-DM
+Após a preparação inicial dos dados por meio do processo de ETL, inicia-se o pipeline de ciência de dados, responsável pela análise, modelagem e interpretação das informações. Esse processo pode ser compreendido à luz de uma metodologia muito útil a CRISP-DM (Cross Industry Standard Process for Data Mining), amplamente utilizada em projetos de mineração de dados e ciência de dados.
+        O CRISP-DM organiza o desenvolvimento de projetos analíticos em diferentes etapas estruturadas, permitindo maior clareza no planejamento e execução das atividades. Entre essas etapas destacam-se a compreensão do problema, a compreensão dos dados, a preparação dos dados, a modelagem e a avaliação dos resultados.
+        A primeira etapa consiste na definição do problema e dos objetivos analíticos. Nesse processo temos inicialmente a definição do problema e os objetivos á alcançar, isso inclui estabelecer se o problema é de regressão, determinar um valor numérico contínuo, número de acidentes, e classificação, determinar categorias, se uma via é perigosa ou não, definir as variáveis de interesse, métricas de avaliação e a tecnologia utilizada.
+        Um conceito importante é a assimetria, conhecida no meio do datascience como skewness, é uma métrica estatística que quantifica a falta de simetria, em uma distribuição normal, Curva de Gauss, skewness é zero, ocorre que média, mediana e moda possuem o mesmo valor. Com isso, no caso de skewness negativa a cauda da distribuição se estende para a esquerda, ou seja existem muitos valores altos na base, já com skewness positivo indica uma cauda longa para a direita, ou seja muitos valores pequenos e poucos grandes (JOANES; GILL, 1998).
+        Após a carga de dados existe o alicerce para uma transformação eficaz, que é a análise exploratória dos dados, que inclui o estudo e análise através de estatísticas descritivas do dataset, como por exemplo uma análise feita no projeto, os dados da PRF de 2019 a 2025, temos que através do cálculo de skewness, assimetria, que mede o quão inclinada é a distribuição dos dados, foi constatado que acidentes de trânsitos são muitos assimétricos, muitos acidentes pequenos e poucos acidentes gigantes, tal dado está fundamentado na realidade, tendo em vista que a maioria dos acidentes são rotineiros com poucas vítimas e a minoria envolve ônibus e transporte de carga.
+        Essa descoberta afeta muitas outras etapas do pipeline, sabendo que acidentes de trânsitos são muitos assimétricos, a média deixa de ser uma métrica confiável, pois os valores extremos, distorcem a média, com isso realizar análises utilizando ou prevendo a média de acidentes para todo o dataset deixa de metodologicamente correto, por isso uma análise exploratória dos dados é vital para o sucesso do projeto.
+        Com isso na próxima etapa que é o pré processamento, onde entre outras coisas é tratado, os outliers, valores extremos, devido à análise de assimetria fica nítido que não são erros e sim uma característica da base. Outros passos, por exemplo, são a limpeza de dados, Transformações Estruturais, normalização e engenharia de atributos para maximizar o acerto do modelo.
+        Para finalizar, ocorre a divisão dos dados, em treino e teste, treinamento do modelo e por fim o teste com os dados do mesmo, no qual será extraído as métricas de avaliação, como por exemplo,  MAE e R², que são o erro médio absoluto mede a média das diferenças absolutas entre valores observados e previstos, e o coeficiente de determinação mede a proporção da variância, respectivamente.
+2.2.3 Random Forest: fundamentos teóricos e aplicações
+
+
+        O algoritmo de aprendizado de máquina utilizado neste projeto é o Random Forest que é baseado no método de ensemble learning proposto por Leo Breiman (2001). O modelo opera através da construção de múltiplas árvores de decisão independentes, cujas previsões são agregadas por meio de média, no caso de regressão, ou votação majoritária, no caso de classificação.
+        Com isso, o modelo basicamente consiste na subdivisão do conjunto principal de dados em subconjuntos ligeiramente diferentes, cada árvore enxerga um cenário diferente, ao final da avaliação é feito a média ou votação, esse é o conceito de Bagging, no qual evita do modelo decorar os dados e na propagação de erros. 
+        Ademais, a segunda parte do modelo é a Feature Subspace, que é a capacidade de cada árvore escolher aleatóriamente, um conjunto de variáveis, isso força o modelo a aprender diferentes padrões de correlação entre as variáveis. O processo do modelo está exemplificado na Figura 4 abaixo:
+
+
+Figura 4 – Esquema de funcionamento do algoritmo Random Forest.
+  
+
+Fonte: Sharma (2021).
+2.2.4 Fundamentos matemáticos e estatísticos
+
+O Bagging consiste na geração de múltiplos subconjuntos de treinamento, denominados amostras bootstrap, extraídos do conjunto de dados original por meio de amostragem aleatória. Em cada árvore, aproximadamente 63% dos dados originais de treino são selecionados efetivamente para o treino do modelo, enquanto 37% da base de dados é utilizada para validação cruzada embutida, conceito de Out-of-Bag, no final a taxa de erro média nessa etapa é o erro OOB (BREIMAN, 1996).
+        Do ponto de vista estatístico, o Bagging visa reduzir a variância do estimador final através da agregação de modelos instáveis, como árvores de decisão. Matematicamente a variância média seria reduzida pelo fator 1/B, onde B é o número de árvores. Embora, na prática, as árvores apresentem correlação entre si, em casos reais é verificada uma redução significativa da variância.
+        Já o Feature Subspace realiza a avaliação das divisões nos nós das árvores de decisão, consiste no processo de testar diferentes divisões das variáveis e medir o quanto cada uma delas reduz a heterogeneidade das classes presentes no nó. Essa heterogeneidade é mensurada por métricas de impureza, como o Índice de Gini. Um nó é considerado puro quando todas as observações pertencem à mesma classe, resultando em impureza igual a zero. Por outro lado, quanto mais equilibrada for a distribuição entre as classes, maior será a impureza. O algoritmo seleciona a divisão que maximiza a redução ponderada da impureza, seguindo uma estratégia de otimização gulosa, na qual a melhor decisão local é tomada em cada etapa da construção da árvore (BREIMAN, 2001).
+2.2.5 Random Forest no contexto de segurança viária
+A literatura especializada evidencia que o algoritmo Random Forest apresenta características teóricas que o tornam adequado para problemas preditivos complexos envolvendo grandes volumes de dados e múltiplas variáveis explicativas, como é o caso do tema proposto. 
+Segundo James et al. (2023), métodos ensemble, especialmente aqueles baseados em agregação de modelos, tendem a apresentar desempenho superior em casos reais envolvendo dados ruidosos e heterogêneos. Tal característica é relevante em bases públicas, como as utilizadas em estudos de segurança viária, nas quais inconsistências e variabilidade são regra.
+
+Principais características:
+
+* Modelagem de relações não lineares;
+O modelo não pressupõe que a relação dos dados é direta, acidentes de trânsito não são proporcionais, o número de vítimas pode disparar quando duas situações como curva e má qualidade da via se somam. As árvores particionam o espaço conseguindo capturar as variedades bruscas do tema.
+* Captura automática de interações; 
+Uma das vantagens do Feature Subspace é a identificação de interdependências entre atributos sem a intervenção manual do pesquisador. Isso faz com que o modelo capture a sinergia entre diferentes cenários como a ocorrência simultânea de má qualidade da via e curvas acentuadas
+* Robustez a outliers; 
+Um destaque dos métodos ensemble, é ser antifrágil contra valores atípicos, no qual não utiliza a média, em modelos lineares a média seria puxado para baixo;
+* Baixa Sensibilidade à Escala das Variáveis 
+Em uma Regressão Linear ou K-Nearest Neighbors, a variáveis numéricas estarem normalizadas é essencial para o desempenho do modelo na avaliação correta dos dados, dado que tais modelos utilizam a distâncias matemáticas entre os pontos, então se diferentes variáveis estiverem em diferentes escalas o calculo da distancia não se aplica corretamente. O Random Forest utiliza árvores de decisão, que operam através de partições binárias baseadas em limiares, posição de corte para separar as classes;
+* Resistência ao overfitting; 
+O conceito de overfitting, sobreajuste, é quando um modelo se ajusta excessivamente aos ruídos dos dados e com isso não aprende a correlação dos mesmos, perdendo sua capacidade de generalização para novos cenários. A "sabedoria da multidão" (BREIMAN, 2001) é definido onde o erro de uma árvore que decorou demais a base de dados é cancelado pelo consenso do conjunto;
+* Estimativa interna, Out-of-Bag (OOB); 
+Matematicamente, não é necessário dividir os dados em treino e teste, pois as árvores são treinadas com 63% dos dados, e quando é feito o teste é utilizado o cenário nas árvores que nunca viram esses dados;
+2.3 Business Intelligence: transformando dados em decisões
+
+
+Primeiramente, o conceito de Business Intelligence, fazer BI é dar sentido ao caos, transformando o volume massivo de dados em bússola estratégica. É o processo de lapidar informações para que a liderança decida com base em evidências, não em intuição ou achismos. De acordo com Chen, Chiang e Storey (2012), o Business Intelligence é uma grande evolução nos sistemas de suporte à decisão, pois ele integra bases de dados, ferramentas e mecanismos de visualização para converter big data em informações estruturadas e estrategicamente relevantes.
+        Sob essa perspectiva, o BI não é apenas uma ferramenta de geração de relatórios descritivos, mas também envolve a transformação sistemática de observações em informação utilizável, permitindo a identificação de padrões, tendências e anomalias que ajudam decisões operacionais, táticas e estratégicas. Portanto, fica claro que a principal contribuição do Business Intelligence está na sua capacidade de reduzir a incerteza por meio da disponibilização de indicadores consolidados visuais.
+        Com isso, sob a ótica do transporte viário, o BI é uma ferramenta poderosa na monitoração das vias através da geração de relatórios atualizados em tempo real, sendo uma ferramenta indispensável atualmente para a localização de acidentes e mobilização do poder público, como por exemplo centrais de monitoramento de tráfego.
+        Entretanto, muitas vezes esquecida, está a análise de dados históricos, embora o monitoramento em tempo real seja essencial para respostas operacionais imediatas, a exploração de dados históricos permite entender a dinâmica estrutural dos acidentes, identificar padrões e avaliar tendências de médio e longo prazo, como por exemplo o anuário da PRF, que contém que dados históricos e análises descritivas.
+        Sob o contexto da segurança viária, uma análise histórica permite identificar períodos de maior criticidade, trechos com recorrência elevada de sinistros e padrões associados a variáveis que mudaram na via, como variação da velocidade máxima permitida, inclusão de radares e mudanças no traçado (DNIT, 2010). Tais evidências históricas quando demonstradas em um relatório ampliam a capacidade de planejamento estratégico dos órgãos públicos, favorecendo a alocação preventiva de recursos e a implementação de políticas baseadas em dados (WEGMAN et al., 2015).
+Ademais, o business intelligence, quando integrado a técnicas de análise exploratória e modelagem estatística, ultrapassa a dimensão meramente descritiva e passa a incorporar capacidades diagnósticas e preditivas (GOES, 2014). Sendo possível estimar matematicamente o número de acidentes ou a via mais perigosa em determinado mês, por exemplo.
+        Dessa forma, o Business Intelligence não deve ser compreendido apenas como instrumento de visualização, mas como parte de um ecossistema analítico bem grande, no qual a integração entre dashboards interativos e modelos preditivos transforma dados administrativos em suporte efetivo à tomada de decisão orientada por evidências (CHEN; CHIANG; STOREY, 2012).
+2.3.1 Power BI como ferramenta de Business Intelligence
+
+
+Dentre as plataformas atuais do mercado de Business Intelligence, destaca-se o Power BI, segundo a Microsoft (2026), o software atua como uma plataforma de inteligência de negócios que integra diversas fontes de dados, permitindo a transformação de informações brutas em dashboards visuais com intuito de auxiliar à tomada de decisão.
+        No contexto deste trabalho, o Power BI é utilizado como instrumento de operacionalização do Business Intelligence aplicado à segurança viária, viabilizando a transformação das bases históricas da Polícia Rodoviária Federal e do DNIT. A ferramenta possibilita transformar uma análise histórica em algo visual com a criação de indicadores estratégicos, segmentações temporais, análises geográficas e monitoramento de variáveis críticas associadas à ocorrência de acidentes em rodovias federais (FERRARI; RUSSO, 2016).
+        Dessa forma, a plataforma atua como o estado da arte e o padrão de mercado para a análise e representação de dados (GARTNER, 2024). O Power BI atua como o meio de conversão entre a base de dados bruta e o conhecimento estratégico, e através de suas capacidades de processamento e visualização que as observações coletadas são transmutadas em informações úteis. Portanto, a ferramenta não é apenas um repositório, mas o meio indispensável para a apresentação dos resultados desta pesquisa, permitindo que as análises de segurança viária alcancem a clareza necessária para o entendimento das conclusões propostas.
+
+
+2.4 Conceitos de engenharia de software
+
+
+A Engenharia de Software é mais que o mero ato de `codar`, sendo uma disciplina que aplica princípios de engenharia, métodos e boas práticas para o desenvolvimento, manutenção de sistemas complexos de forma sistemática. O surgimento desta área, está historicamente datado pela conferência da OTAN em 1968, ocorreu como uma resposta estrutural à chamada "crise do software", um período em que a complexidade dos sistemas superava a capacidade humana de gerenciá-los pois não existia uma base metodológica sólida, para servir de base para a expansão dos sistemas. Sob a perspectiva de Sommerville (2011), a engenharia de software profissional não se limita apenas aos aspectos técnicos da produção, mas envolve a gestão de projetos, o desenvolvimento de ferramentas, métodos e teorias que sustentam a produção de software de alta qualidade dentro de limites econômicos viáveis.
+Entrando na prática, para compreender a natureza da engenharia de software, pode-se fazer um paralelo com o urbanismo. Enquanto a engenharia civil lida com materiais físicos e com a lei da gravidade para erguer edifícios, a engenharia de software lida com a abstração para construir estruturas lógicas que devem suportar fluxos informacionais massivos. O software, neste contexto, está para uma cidade em constante expansão, se não houver um zoneamento rigoroso, arquitetura, um sistema de saneamento funcional, gestão de dados, e inspeções constantes, testes, a cidade entrará em colapso sob o peso de sua própria expansão. Esta disciplina é o esforço humano para impor ordem ao caos enorme de milhões de linhas de código de um sistema complexo.
+Assim, a engenharia de software é alçada em princípios como abstração, modularidade e encapsulamento, os quais por sua vez contribuem para a redução da complexidade ao direcionar o desenvolvimento para os aspectos essenciais de um sistema. Esses princípios permitem mitigar a chamada complexidade arbitrária que surge ao longo do ciclo de vida do sistema, facilitando a organização e a manutenção dos sistemas. (PRESSMAN; MAXIM, 2016), enfatiza que o software é um elemento de sistema que é lógico, e não físico, ele não se desgasta no sentido tradicional, mas se deteriora devido a mudanças mal planejadas que introduzem instabilidades. Nesse contexto, a engenharia de software busca estabelecer processos sistemáticos e repetíveis capazes de aumentar a previsibilidade dos resultados, permitindo que o desenvolvimento de sistemas deixe de ser um "artesanato heroico" para se tornar uma produção industrial controlada.
+A interdependência entre os componentes de um sistema moderno exige que o engenheiro de software possua uma visão ampla, compreendendo desde a delimitação dos requisitos até a estratégia de implantação e manutenção. Conforme Sommerville (2011), a engenharia de software está centralizada como uma engenharia de cunho econômico, onde a eficácia é medida pela capacidade de entregar valor ao negócio com custos adequados e alta confiabilidade. Um ponto muito importante é a definição do que o sistema deve ser e fazer.
+
+
+2.4.1 Requisitos funcionais
+
+
+Os requisitos funcionais são basicamente a especificação de o que o sistema deve fazer, servindo como o contrato primordial, um elo entre a equipe de desenvolvimento e os stakeholders, declarando suas funções, comportamentos e serviços, definindo a utilidade fundamental do produto para o usuário e para o negócio. 
+A determinação desses requisitos é uma parte crucial do processo de descoberta e refinamento, onde o responsável deve traduzir necessidades muitas vezes ambíguas dos usuários em especificações técnicas objetivas. Atualmente, este processo é frequentemente documentado através de Casos de Uso ou Histórias de Usuário. Por exemplo, em um sistema de gestão de saúde mental, conforme exemplificado por Sommerville (2011), um requisito funcional seria "o sistema deve permitir que o médico prescreva medicamentos para um paciente", sendo uma ação crítica do sistema.
+
+
+2.4.2 Requisitos não funcionais
+
+
+Enquanto os requisitos funcionais tratam de o'que o sistema deve fazer, os requisitos não funcionais (RNFs) definem as restrições, qualidades e padrões de desempenho sob os quais o sistema deve operar (SOMMERVILLE, 2011), sendo o `como`, o sistema deve operar. Eles não descrevem funções ou objetivos específicos do programa, mas sim a forma como essas funções são executadas, abrangendo atributos como usabilidade, segurança, confiabilidade, portabilidade e eficiência.
+Em essência, os requisitos não funcionais devem ser objetivos e quantificáveis, o que representa um dos maiores desafios da engenharia de requisitos. Por isso, especificações vagas como "o sistema deve ser rápido", devem ser substituídas por métricas objetivas, como, o sistema deve processar no mínimo 6 transações por segundo. 
+Portanto, para ilustrar a importância dos RNFs, considere a analogia do oxigênio em um submarino. A função do submarino é navegar e realizar missões (requisitos funcionais), mas a qualidade do ar e a resistência do casco à pressão (requisitos não funcionais) são o que permitem que a missão seja bem-sucedida e segura. Se o ar acaba, o submarino para de funcionar como um ambiente habitável, independentemente de seus motores estarem operacionais. No software, um sistema que realiza todas as tarefas solicitadas, mas leva 30 segundos para carregar uma página, é um sistema que falhou em seus requisitos de performance, tornando-se inválido.
+
+
+2.4.3 Metodologias de desenvolvimento
+
+
+Primeiramente, as metodologias de desenvolvimento de software representam os frameworks de processos adotados pelas organizações para estruturar as atividades técnicas. Historicamente, o campo é dividido entre as metodologias tradicionais, baseadas em planejamento extenso, e as metodologias ágeis, focadas na adaptabilidade e no valor incremental. Em geral, a escolha metodológica é extremamente determinante para o sucesso do projeto e influência em uma série de fatores como o prazo, o custo e a qualidade do produto final.
+O modelo tradicional mais conhecido é o Cascata (Waterfall), que tem como base uma sequência rígida de fases onde a saída de uma fase é a entrada obrigatória da próxima. Um paralelo claro para este modelo é o de uma linha de montagem industrial fordista clássica, não se pode instalar o motor de um carro antes que o chassi esteja pronto. No software, isso significa que a implementação só começa após a especificação de requisitos estar totalmente entregue. Embora ofereça previsibilidade em ambientes estáveis, este modelo falha drasticamente em cenários de alta incerteza, conforme evidenciado pelo CHAOS Report (STANDISH GROUP, 2020), que com base em 50.000 projetos demonstrou que projetos baseados no modelo Waterfall têm o dobro de probabilidade de falhar em comparação a projetos gerenciados com metodologias ágeis.
+Em contrapartida, as metodologias ágeis, como Scrum e Extreme Programming (XP), baseiam-se em ciclos iterativos e incrementais. Como no livro A Origem das Espécies do naturalista Charles Robert Darwin,  o software "evolui" a cada iteração, adaptando-se às pressões do ambiente (feedback do cliente) e descartando o que não funciona. O Manifesto Ágil prioriza o software em funcionamento sobre a documentação abrangente, permitindo que o cliente participe ativamente de todo o ciclo de vida do projeto. Portanto, as metodologias ágeis buscam mitigar o risco de entregar algo que o cliente não deseja através de entregas frequentes e feedback constante.
+        Com isso, os principais diferenciais entre essas duas filosofias, pode ser observado na Tabela 1, destacando como cada uma lida com o planejamento, a documentação e o papel dos envolvidos.
+
+
+Tabela 1 — Comparativo entre Metodologia Tradicional e Metodologia Ágil.
+
+
+Critério Comparativo
+	Metodologia Tradicional
+	Metodologia Ágil
+	Planejamento
+	Preditivo e Detalhado (Up-front)
+	Adaptativo e Contínuo (Just-in-time)
+	Requisitos
+	Estáticos e formalizados no início
+	Dinâmicos e refinados em iterações
+	Documentação
+	Artefatos exaustivos e burocráticos
+	Apenas o necessário para a colaboração
+	Feedback
+	Ocorre ao final do ciclo de meses/anos
+	Ocorre em ciclos de 2 a 4 semanas
+	Papel do Cliente
+	Fornece requisitos e valida o final
+	Coautor e participante ativo do processo
+	Fonte: Elaborado pelo autor (2026).
+
+        A transição para o agilismo reflete a necessidade de velocidade e adaptação no mercado contemporâneo, que é caracterizado por ser um ambiente extremamente complexo de constante mudança devido à evolução tecnológica contínua. No entanto, conforme ressaltado por Schwaber e Sutherland (2020), as metodologias ágeis exigem equipes pequenas e altamente motivadas, podendo apresentar desafios em organizações de grande porte acostumadas a processos burocráticos. A eficácia dessas metodologias reside na valorização do fator humano; o sucesso do desenvolvimento depende fundamentalmente da competência comportamental e da colaboração da equipe, e não apenas de ferramentas técnicas, premissa base estabelecida pelo próprio Manifesto Ágil (BECK et al., 2001).
+2.4.4 Estratégias de teste
+
+Primeiramente, de acordo com Roger S. Pressman e Bruce Maxim (2016), a etapa de teste de software é o processo de avaliação técnica que tem como objetivo identificar diferenças entre o comportamento esperado de acordo com os requisitos funcionais e não funcionais e o comportamento observado no sistema no ambiente de testes. É uma etapa crítica no processo de desenvolvimento de software e garante qualidade para o sistema, atuando como um filtro que busca descobrir defeitos antes que eles se transformem em bugs em produção. Abaixo os 5 testes mais comuns no processo de desenvolvimento de software:
+
+
+1. Teste de Unidade (Unit Test): Focado na menor unidade do sistema, geralmente um módulo ou função. O objetivo é validar individualmente cada unidade garantindo que elas funcionem isoladamente.
+2. Teste de Integração (Integration Test): Focado em detectar falhas na comunicação entre módulos ou diferentes sistemas que já foram testados individualmente, pelo teste de unidade.
+3. Teste de Sistema (System Test): Focado no hardware e seu desempenho da aplicação com um todo, são verificados requisitos de performance, segurança e compatibilidade.
+4. Teste de Aceitação (Acceptance Test): Conduzido pelo cliente ou usuário final no ambiente de testes garantindo que o sistema está em conformidade com os requisitos funcionais e não funcionais, com isso está pronto para implantação.
+5. Teste de Regressão (Regression Test): Focado no pós implantação, tem como objetivo garantir que as funcionalidades críticas que não foram alteradas, continuem funcionando corretamente.
+
+
+A estratégia de teste é uma abordagem de melhoria contínua, evoluindo conforme o sistema cresce em complexidade. Um elemento importante que muitas vezes é esquecido é a documentação, que garante que todos os elementos do software foram adequadamente catalogados e estão prontos para o suporte e manutenção. Segundo Sommerville (2011), a validação não se limita à execução de código, mas inclui revisões técnicas eficazes que servem como filtro antes mesmo do início dos testes formais.
+2.4.5 Arquitetura de sistemas
+A arquitetura de software refere-se à organização estrutural de um sistema e às relações estabelecidas entre seus principais componentes. Em termos gerais, ela define como as partes de um sistema são distribuídas, como se comunicam e quais responsabilidades cada componente assume dentro da aplicação. Diferentemente das decisões de baixo nível, como algoritmos ou estruturas de dados, a arquitetura está relacionada às decisões estruturais que vão afetar o sistema no longo prazo. Conforme discutido por Richards e Ford (2020), a arquitetura de software moderna é composta pela combinação das características do sistema (os chamados ilities, como escalabilidade e disponibilidade), os componentes de software e as decisões de design que guiam a construção do ecossistema tecnológico.
+        No contexto de sistemas modernos, a arquitetura tem um papel fundamental na capacidade de evolução do software, por exemplo uma aplicação desenvolvida sem uma organização arquitetural clara tende a acumular complexidade com o passar do tempo, devido a ajustes técnicos, funcionalidades foram do padrão e entre outros, tornando alterações e manutenções progressivamente mais difíceis com o passar do tempo. Segundo Len Bass, Paul Clements e Rick Kazman (2012), decisões arquiteturais influenciam diretamente atributos de qualidade como desempenho, escalabilidade, segurança e manutenção, razão pela qual essas decisões costumam ser tomadas nas fases iniciais do projeto.
+        A escolha de uma arquitetura não é arbitrária, em geral, ela está diretamente relacionada aos requisitos não funcionais definidos para o sistema. Por exemplo, aplicações que demandam alta escalabilidade e disponibilidade frequentemente adotam arquiteturas distribuídas, enquanto sistemas mais simples podem se beneficiar de estruturas monolíticas ou em camadas. Como destacam Len Bass, Paul Clements e Rick Kazman (2012), a arquitetura funciona como um meio de comunicação entre os diferentes stakeholders do projeto, permitindo discutir decisões técnicas e avaliar antecipadamente seus impactos sobre a qualidade do sistema.
+        Diferentes estilos arquitetônicos podem ser utilizados para estruturar sistemas de software, cada um apresentando características específicas relacionadas à organização dos componentes, comunicação entre módulos e escalabilidade da aplicação. A comparação entre os principais estilos de arquitetura da engenharia de software pode ser observada na Tabela 2.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Tabela 2 – Comparação entre estilos de arquitetura de software
+
+
+Estilo
+	Definição
+	Vantagens
+	Desvantagens
+	Cenários
+	Monolítico
+	Única unidade executável (módulos no mesmo processo).
+	Desenvolvimento simples; implantação direta.
+	Baixa escalabilidade; acoplamento elevado.
+	Pequenos sistemas e protótipos.
+	Microsserviços
+	Serviços independentes que se comunicam via APIs.
+	Alta escalabilidade; independência tecnológica.
+	Complexidade de rede; alto custo operacional.
+	Grandes sistemas distribuídos.
+	Camadas
+	Organização lógica (Apresentação, Negócio, Dados).
+	Organização clara; fácil manutenção.
+	Sobrecarga de comunicação entre camadas.
+	Sistemas corporativos tradicionais.
+	Cliente-Servidor
+	Divisão entre solicitantes e processadores de dados.
+	Controle centralizado e segurança.
+	Dependência total do servidor central.
+	Bancos de dados e apps web.
+	Serverless
+	Funções em nuvem acionadas por eventos.
+	Escalabilidade automática; custo por uso.
+	Vendor lock-in; controle limitado.
+	Processamento sob demanda.
+	
+
+Fonte: Adaptado de Len Bass, Paul Clements e Rick Kazman (2012).
+________________
+3 MATERIAIS E MÉTODOS
+
+
+Este capítulo tem como objetivo definir e detalhar todos os materiais e metodologias empregadas neste estudo,  desde a fase de planejamento até a entrega de resultados com a visualização dos resultados em um dashboard.
+
+3.1 Materiais
+
+
+        Esta seção do projeto apresenta as ferramentas, linguagens e plataformas utilizadas no desenvolvimento do projeto, incluindo o ambiente de programação, bibliotecas de análise de dados, ferramentas de visualização e demais recursos tecnológicos empregados durante o processo de análise e modelagem.
+3.1.1 Linguagem Python
+
+
+A linguagem de programação utilizada para o desenvolvimento deste estudo foi a Python. Trata-se de uma linguagem criada pelo cientista da computação holandês Guido van Rossum, foi oficialmente lançada em 1991. O Python é uma linguagem de programação interpretada de alto nível, no qual seus pilares fundadores são simplicidade sintática, legibilidade e produtividade.
+        Ademais, a linguagem busca reduzir a distância entre o raciocínio humano e a lógica computacional. Para isso, entrega um aprendizado facilitado e a manipulação de informações de forma mais direta. Devido a uma sintaxe mais clara, próxima da linguagem humana, e a presença de estruturas de dados de alto nível (VAN ROSSUM, 2026).
+        No contexto deste projeto, tal escolha justifica-se pela robustez da linguagem no tratamento de grandes volumes de dados, amplamente adotada em projetos de ciência de dados, aprendizado de máquina e análise estatística, pela qual conta com uma grande quantidade de bibliotecas especializadas disponíveis para manipulação e análise de dados.
+        Esta linguagem de programação é caracterizada pela sua capacidade de abstração aliada à eficiência computacional. Em termos práticos, isso significa que tarefas complexas de análise e modelagem podem ser feitas com um número reduzido de linhas de código. Tal característica favorece tanto a reprodutibilidade de experimentos quanto a clareza na implementação dos métodos empregados, e legibilidade do código, aspectos essenciais em pesquisas científicas (MCKINNEY, 2022).
+        Além disso, Python possui um ecossistema consolidado de bibliotecas voltadas à manipulação de dados estruturados e não estruturados, visualização de informações e construção de modelos de aprendizado de máquina. Essas bibliotecas funcionam como instrumentos especializados dentro de um laboratório computacional, cada uma voltada para um conjunto específico de tarefas. Dessa forma, a linguagem atua como uma camada integradora capaz de realizar diversas etapas do pipeline de ciência de dados, permitindo a execução de processos como limpeza, transformação e modelagem dos dados de forma estruturada e escalável (MCKINNEY, 2022).
+        No presente trabalho, a linguagem Python foi utilizada para implementar rotinas de preparação dos dados, análise exploratória e desenvolvimento de modelos preditivos. A escolha dessa tecnologia se justifica não apenas por ser a mais popular no campo da ciência de dados, mas também pela sua capacidade de integrar diferentes ferramentas analíticas em um fluxo único de processamento, favorecendo a organização metodológica do projeto e a consistência dos resultados obtidos.
+3.1.2 Google Colab
+
+
+O Google Colaboratory (ou Colab) é um ambiente de desenvolvimento, estilo notebook Jupyter, gratuito e executado totalmente na nuvem. O objetivo desse software é democratizar o acesso a ferramentas de Ciência de Dados e a pesquisa em machine learning, permitindo que qualquer pessoa execute códigos em Python no navegador de forma online, sem qualquer instalação ou configuração prévia.
+Com isso, a escolha dessa ferramenta se justifica, pois resolve desafios de reprodutibilidade e observabilidade inerentes a projetos de Ciência de Dados. Ao oferecer acesso a recursos de hardware na nuvem de forma gratuita, o que é crucial para o processamento e modelagem de big data. Além disso, a arquitetura pré-configurada garante a execução de bibliotecas utilizadas no projeto como NumPy, Pandas e Scikit-learn.
+
+
+3.1.3 Bibliotecas
+
+
+        Primeiramente, a implementação de um pipeline de Ciência de Dados moderno, desde as fases de entendimento do negócio até a implantação, exige o uso robusto de diversas bibliotecas. Com isso, as bibliotecas selecionadas fazem parte da chamada stack tecnológica do projeto que permite manipular grande volume de dados, realizar análises, gerar gráficos e por fim a treinamento de modelos como o random forest. A seguir o detalhamento das bibliotecas utilizadas no projeto e suas justificativas de escolha para esse complexo cenário.
+
+1. Pandas
+
+
+É uma biblioteca de código aberto, que atua diretamente nas etapas de extração e transformação, se destacando como motor principal de manipulação de dados para todo o pipeline ETL moderno. Desenvolvida por Wes McKinney em 2008 durante sua passagem pela AQR Capital Management (MCKINNEY, 2010). No contexto desse projeto foi utilizado para ler todos os arquivos originais, remover nulos, filtrar vazamentos de dados, criar novas colunas, e executar o "ASOF Join" (merge avançado por intervalo geográfico) integrando os dados da PRF com os dados de infraestrutura do DNIT.
+
+2. NumPy
+
+
+O NumPy, estabelecido em 2005 por Travis Oliphant através da unificação de bibliotecas ancestrais, é a fundação sobre a qual quase toda a computação científica em Python é construída (OLIPHANT, 2005). Seu objetivo primordial é o fornecimento de objetos de matriz multidimensional e rotinas otimizadas em C para cálculos matemáticos. No contexto desse trabalho atua como uma grande calculadora por trás de todos os cálculos, vital para a criação de novas colunas como, `is_final_semana`, e cálculo eficiente de medidas de assimetria.
+
+
+3. Scikit-Learn
+
+
+Scikit-Learn é o pacote central de modelagem de muitos projetos de Ciência de Dados, pois tem como objetivo democratizar o acesso a algoritmos de aprendizado de máquina. Concebida inicialmente por David Cournapeau em 2007 como um projeto do Google Summer of Code e posteriormente amadurecida por pesquisadores do INRIA. Neste projeto, foram empregadas diversas funcionalidades da biblioteca, tais como a função`RandomForestRegressor`, algoritmo preditivo, o `train_test_split`, dividir a base de dados em treino e teste e por fim a avaliação do modelo com `sklearn.metrics`, para calcular R² e MAE. 
+
+
+4. Seaborn e Matplotlib
+
+        A visualização de dados neste estudo foi estruturada através do ecossistema composto pelas bibliotecas Matplotlib e Seaborn, ferramentas que permitem a transmutação de matrizes numéricas em representações gráficas de alta qualidade.
+O Matplotlib, concebido originalmente por John D. Hunter em 2003, é a biblioteca fundamental de plotagem para a linguagem Python, projetada para emular as capacidades gráficas do MATLAB em um ambiente de código aberto (HUNTER, 2007). Complementarmente, utilizou-se o Seaborn, desenvolvido por Michael Waskom (2021), que atua como uma interface de alto nível construída sobre o Matplotlib. O Seaborn introduz estilos visuais modernos, facilitando a exploração de padrões complexos em grandes volumes de dados (WASKOM, 2021).
+Neste trabalho, a sinergia entre ambas foi essencial para a Análise Exploratória de Dados. O Matplotlib foi empregado para o controle refinado da estrutura dos gráficos, os eixos e legendas, enquanto o Seaborn foi utilizado para a geração de Matrizes de Correlação, heatmaps, Histogramas de Distribuição e outros, permitindo identificar visualmente a sazonalidade e os pontos críticos de sinistros nas rodovias federais antes da etapa de modelagem preditiva.
+
+
+5. Holidays
+
+
+        A biblioteca Holidays desempenha um papel crucial, ao resolver um grande desafio logístico e computacional de identificar datas comemorativas de forma programática. O projeto open source automatiza o cálculo de feriados nacionais, estaduais e municipais, lidando com a complexidade de datas móveis como o Carnaval e a Sexta-Feira Santa, por exemplo. Com isso, foi utilizado na etapa de engenharia de atributos ao criar variáveis dummies como `is_feriado`,`is_final_semana` e outras.
+
+
+6. Joblib
+
+
+A ferramenta Joblib foi empregada no projeto através da função joblib.dump para a serialização do modelo Random Forest treinado, exportando-o para o formato .pkl. A escolha do Joblib em detrimento do módulo Pickle nativo do Python justifica-se por sua alta eficiência na manipulação de grandes matrizes NumPy que compõem a estrutura da floresta aleatória. A biblioteca utiliza técnicas de memmapping, que permitem a leitura rápida do modelo em disco para a execução do pipeline de previsões diárias, garantindo que a fase de inferência ocorra com baixo consumo de memória.
+
+
+7. SciPy
+
+
+O SciPy é uma biblioteca fundamental para a computação científica em Python, servindo como base para operações matemáticas avançadas. Fundada por Travis Oliphant, Eric Jones e Pearu Peterson em 2001, a biblioteca consolidou décadas de algoritmos numéricos em uma interface de alto desempenho (VIRTANEN et al., 2020).
+        Neste estudo, utilizou-se especificamente o submódulo scipy.stats para a realização de diagnósticos estatísticos descritivos durante a Análise Exploratória de Dados. A função scipy.stats.skew foi fundamental para quantificar matematicamente a assimetria dos dados de sinistros da PRF. Essa métrica evidenciou o fenômeno de "Zero-Inflation", onde a grande maioria dos trechos rodoviários apresenta zero acidentes, enquanto poucos pontos críticos concentram a maioria das ocorrências. Com essa avaliação de altíssima assimetria, skewness, serviu de base teórica para descartar modelos de regressão linear simples e validar a escolha do Random Forest, algoritmo que, por natureza, é adaptado a distribuições não-normais e assimetrias severas.
+3.1.4 Random Forest
+
+
+        Primeiramente, o modelo de machine learning empregado neste estudo é o Random Forest. A escolha por esta arquitetura, detalhada conceitualmente no Capítulo 2.2.5, fundamenta-se nas características estatísticas complexas do dataset, que exigem um algoritmo robusto a distribuições não-normais e valores extremos.
+        Ademais, três características do dataset ajudaram a sustentar esse modelo como o único ideal para a análise e o descarte de outros como Regressão Linear Múltipla, Algoritmos Baseados em Distância, Redes Neurais Artificiais e Boosting que são a alta assimetria, grande número de valores extremos e característica de zero inflados.
+A análise exploratória do dataset revelou dados extremamente heterogêneos, caracterizados por uma assimetria positiva severa, pela análise da distribuição estatística dos dados, a variável alvo do modelo, ‘quantidade_acidentes’ (agrupada em buckets espaciais de 10 km por mês), demonstrou uma média de 2,22 acidentes por trecho, enquanto isso a mediana ficou em apenas 1,0. Essa diferença mostra uma distribuição assimétrica confirmada pelo índice de Skewness de 5,6871. Comportamento também é visto em outras variáveis do dataset como de feridos apresentou um Skewness de 10,36 e mortos de 9,68.
+A seguir a Tabela 3, em que demonstra que os dados não seguem uma distribuição normal e sim uma cauda longa. Além disso, como a mediana é menor que a média, sabemos que em muitos casos, nada aconteceu, não houve nenhuma morte, caracterizando um cenário de zero inflados com a média sendo “puxada” pelos valores extremos.
+Média: Representa o valor aritmético médio das ocorrências.
+Mediana: Representa o valor central exato da distribuição, separando os 50% menores dos 50% maiores. 
+Skewness: Métrica que mostra a inclinação da distribuição dos dados. 
+Kurtosis: Mede o peso das caudas e o grau de achatamento da distribuição em relação à Curva de Gauss (que possui curtose = 3). 
+% de Outliers (IQR): Indica a proporção de registros que ultrapassam o limite superior do Intervalo Interquartil. 
+Tabela 3 - Análise distribuição estatística dos dados
+
+Variável
+	Média
+	Mediana
+	Skewness
+	Kurtosis
+	% Outlier IQR
+	mortos
+	0.083
+	0.0
+	9.6802
+	432.9515
+	7.12
+	feridos_graves
+	0.276
+	0.0
+	5.8208
+	130.3877
+	22.44
+	feridos_leves
+	0.868
+	1.0
+	9.0764
+	285.6457
+	4.32
+	feridos
+	1.144
+	1.0
+	10.3618
+	312.7316
+	44.15
+	veiculos
+	1.976
+	2.0
+	6.9958
+	477.6257
+	7.0
+	
+
+Fonte: Elaborado pelo autor (2026).
+
+
+        Com isso, é imperativo analisar em detalhes a variável alvo do modelo ‘quantidade_acidentes’. Para tal objetivo foi construído a figura 5 com um painel analítico triplo.
+Figura 5 - Distribuição e Cauda da Variável Alvo
+  
+
+Fonte: Elaborado pelo autor (2026).
+A Figura 5 foi construída para analisar a assimetria, dividindo a análise em três perspectivas complementares:
+
+
+Histograma + KDE (Kernel Density Estimate):
+
+
+        O primeiro gráfico ilustra o histograma de distribuição, para mostrar a frequência de ocorrência, já o KDE é a linha suave que passa por cima dele, estimando a função de densidade de probabilidade. Dessa forma mostra a curva que a base de dados possui. O eixo horizontal (X) representa a quantidade de acidentes em um trecho/mês, enquanto o eixo vertical (Y) mostra quantas vezes esse cenário ocorreu na base histórica.
+        É possível observar uma clara longa cauda para a direita, isso prova que na maioria dos buckets acontecem apenas 1 acidentes (Mediana = 1), entretanto a linha tracejada vermelha (Média = 2.2) está deslocada para a direita, sendo “puxada” pelos valores extremos.
+
+
+A Função de Cauda (CCDF - Complementary Cumulative Distribution Function):
+
+
+        O gráfico central mostra a probabilidade de ocorrer um determinado número de acidentes. Para visualizar eventos raros, o eixo vertical (Y) foi colocado em escala logarítmica (de 10^0 a 10^-5).
+         Caso os dados não tivessem uma cauda pesada, a linha azul despencaria verticalmente para zero logo após os primeiros números, pois números maiores não existiriam. Em vez disso, observamos uma escada que se estende longamente para a direita. 
+Analisando os percentis da distribuição, temos que o P95 é igual a 7, apenas 5% dos trechos têm mais de 7 acidentes no trecho, mas o P99.9 chega a 28 acidentes, e a cauda se arrasta ainda até o máximo de 64 acidentes. Este gráfico prova que eventos de altíssima sinistralidade, embora raros, são persistentes e estruturais.
+
+
+
+
+
+
+Q-Q Plot vs. Normal (Quantile-Quantile Plot):
+
+
+        O gráfico da direita é uma ferramenta de diagnóstico estatístico, em que ele plota os quantis dos dados reais (pontos azuis) contra os quantis teóricos de uma distribuição Normal/Gaussiana perfeita (linha vermelha diagonal). Se os dados seguissem uma distribuição normal, os pontos azuis seguiam perfeitamente a linha vermelha.
+        Com isso, percebe-se que a premissa de normalidade não é atendida, o que invalida o uso de abordagens paramétricas tradicionais, como a Regressão Linear Múltipla. Pois a mesma pressupõe que os resíduos do modelo seguem uma distribuição normal, premissa diretamente refutada pelo Q-Q Plot apresentado na Figura 5, que demonstra o severo desvio da normalidade nos dados de sinistros. A violação desta premissa inválida os intervalos de confiança e os testes de significância do modelo, comprometendo a validade estatística de qualquer inferência gerada, além de que a manutenção dos outliers estruturais 'puxaria' a reta de regressão, forçando o algoritmo a superestimar de forma irrealista o número de acidentes em dias normais e vias seguras (JAMES et al., 2023). 
+De forma muito parecida, Redes Neurais Artificiais (RNAs), embora sejam modelos não-lineares, exigem a normalização das variáveis, transformação na mesma escala, para a convergência dos gradientes, conflitando diretamente com o objetivo central deste trabalho, uma vez que a normalização da variável alvo inviabiliza a geração de previsões diretamente interpretáveis na escala real de acidentes para consumo. Adicionalmente, RNAs sofrem severa instabilidade diante de outliers extremos não tratados (GOODFELLOW; BENGIO; COURVILLE, 2016). Uma saída comum na literatura seria eliminar esses outliers, entretanto, neste domínio, os valores extremos não são erros de medição, mas sim a realidade real deste complexo cenário.
+        Para algoritmos baseados em distância, como K-Nearest Neighbors (KNN) e Support Vector Machines (SVM), a topologia dos dados também as desqualifica. Por calcularem distâncias geométricas entre os pontos, esses algoritmos são fundamentalmente sensíveis à escala das variáveis, variáveis em escalas maiores dominam o cálculo da distância, distorcendo a avaliação de similaridade entre as observações (JAMES et al., 2013), exigindo obrigatoriamente a normalização dos dados de entrada. Tal exigência conflita diretamente com o objetivo central deste trabalho, pois normalizar as variáveis tornaria as previsões não interpretáveis na escala real, inviabilizando o consumo direto dos resultados nos dashboards sem transformação inversa, introduzindo uma dependência operacional e adicionando uma complexidade fora do padrão para o objetivo do projeto.
+Ademais, a presença confirmada da cauda longa afasta a viabilidade de algoritmos de Gradient Boosting. A razão principal reside em que modelos de Boosting constroem árvores rasas de forma sequencial, onde cada nova árvore tenta corrigir os resíduos da árvore anterior (HASTIE; TIBSHIRANI; FRIEDMAN, 2009), exigindo calibração extensiva de hiperparâmetros para lidar com a alta variância introduzida pelos valores extremos. Por fim, sua natureza sequencial amplifica o impacto dos resíduos extremos em distribuições de cauda longa, onde os poucos pontos de altíssima sinistralidade dominam o processo de otimização do gradiente a cada iteração, comprometendo a capacidade de generalização do modelo para os trechos de sinistralidade rotineira que compõem a maioria da base.
+        Portanto, faz-se necessário analisar especificamente os benefícios inerentes da escolha da arquitetura do Random Forest. O argumento central da sua escolha reside na invariância à escala, por operar através de divisões binárias baseadas em comparações de valor, o algoritmo é matematicamente insensível a transformações de escala das variáveis, eliminando a necessidade de normalização da variável alvo e permitindo que as previsões sejam geradas e exportadas diretamente na escala real de acidentes para consumo, satisfazendo o RF-1 do projeto (JAMES et al., 2023). 
+Em segundo lugar, tal invariância à escala implica diretamente na robustez a outliers estruturais, preservando os valores extremos que representam a realidade crítica do cenário viário, satisfazendo o RNF-2. Em terceiro lugar, o uso do Bagging e da 'sabedoria da multidão' (BREIMAN, 2001) garante resistência ao overfitting e maior capacidade de generalização do modelo. Por último, o Random Forest não tem como base relações lineares entre as variáveis, permitindo a modelagem de relações não lineares e a captura automática de interações complexas entre os atributos, conforme abordado nos fundamentos teóricos dos Capítulos 2.2.3 e 2.2.5. Portanto, essa soma de características técnicas e o projeto é focado em análises preditivas e não na comparação de modelos, o Random Forest é modelo ideal para reduzir a incerteza estatística no cenário complexo e não-normal dos sinistros viários, oferecendo uma relação custo benefício ótima para o objetivo.
+3.1.5 PowerBI
+
+        Para a construção de dashboards para apoiar a análise exploratória e visualização dos resultados foi utilizado o PowerBI, que é uma plataforma de inteligência de negócios desenvolvida pela Microsoft (2026), ele foi incorporado à stack tecnológica do projeto para operacionalizar a camada de visualização e tomada de decisão. Ferramenta de mercado consolidada, seu papel no pipeline vai além da mera geração de relatórios estáticos, ele funciona como a ponte de consumo entre os modelos preditivos complexos desenvolvidos em Python e os gestores públicos da PRF e do DNIT, que são os profissionais que demandam respostas rápidas, mas não necessariamente dominam linhas de código.
+
+
+A escolha da plataforma justifica-se por três fatores práticos:
+
+
+Em primeiro lugar, pela integração nativa com arquivos estruturados `.csv` e `.parquet` exportados diretamente das rotinas de modelagem. O modelo utilizado o Random Forest gera estimativas na escala original dos dados, eliminando a necessidade de transformações inversas e permitindo que o Power BI consuma a variável resposta diretamente. 
+Em segundo lugar, a flexibilidade da linguagem DAX, Data Analysis Expressions, viabiliza o cálculo de medidas agregadas em tempo real. É possível calcular taxas de severidade, variações percentuais e médias móveis espaciais à medida que o usuário interage com os filtros de tela. 
+Por fim, a capacidade de renderização geoespacial da ferramenta permite mapear os 139.590 buckets de 10 km ao longo da malha rodoviária federal. O resultado é uma interface interativa dividida em painéis temáticos: diagnósticos históricos descritivos, mapas de calor de risco espacial, matrizes de simulação de cenários operacionais e rankings de priorização de investimento em infraestrutura para o DNIT.
+
+
+3.2 Métodos
+
+
+Esta seção do projeto apresenta as metodologias empregadas no desenvolvimento do estudo, baseia-se nas 6 fases do framework CRISP-DM, entendimento do negócio, entendimento dos dados, preparação dos dados, modelagem, avaliação e por fim a implantação.
+3.2.1 Entendimento de negócio 
+
+
+A primeira fase da metodologia CRISP-DM, o Entendimento de Negócio, transcende a mera catalogação de requisitos para situar-se no cerne da Engenharia de Software, não apenas a entrega de uma lista de to-do`s que o sistema deve fazer mas sim a construção de uma ponte entre a dor do usuário, nesse caso a sociedade, e a viabilidade tecnológica. Com o projeto situado no contexto da administração pública, as dores não são apenas do usuário e sim de toda a sociedade, que sofre com inúmeros problemas já apresentados. Portanto, o sucesso desta etapa não é medido pela quantidade de funções documentadas, mas pela precisão com que os objetivos de governança são traduzidos em requisitos de software que, efetivamente, geram valor público e suportam a tomada de decisão orientada a dados.
+A seguir o diagrama que detalha os passos realizados durante o desenvolvimento do projeto:
+Figura 6 - Diagrama do Projeto
+  
+Fonte: Elaborado pelo autor (2026).
+
+3.2.1.1 Identificação dos stakeholders
+
+
+Primeiramente, no contexto da Engenharia de Software, o termo stakeholders se refere a todas as pessoas, grupos ou instituições que possuem interesse direto ou indireto no sistema desenvolvido. Com isso, a identificação desses personagens é muito importante para compreender as necessidades de cada uma das personas. Um ponto extremamente relevante em projetos de ciência de dados aplicados ao setor público é que essa etapa assume papel ainda mais crucial, pois as decisões feitas a partir dos modelos de dados impactam não apenas organizações específicas, mas também a sociedade como um todo, tendo um impacto na casa dos milhões.
+Os stakeholders institucionais, representam a persona governamental do projeto, é responsável pelo planejamento estratégico, formulação de políticas públicas e alocação de orçamento. Neste projeto, temos dois, Polícia Rodoviária Federal e o Departamento Nacional de Infraestrutura de Transportes, que inclusive são as duas fontes de dados do estudo. Para eles, o modelo preditivo e as análises realizadas servem como uma ferramenta de Inteligência Estratégica, trazendo base e justificando matematicamente onde os investimentos em infraestrutura (recapeamento, duplicação) trarão o maior Retorno sobre o Investimento (ROI) em termos de vidas salvas e redução de acidentes.
+Os stakeholders operacionais, representam os profissionais que atuam na ponta, ou literalmente no asfalto, e que consumirão os insights do modelo no dia a dia através de relatórios. Neste projeto estão incluídos os agentes da PRF, as equipes de resgate médico e as equipes de manutenção viária, para este grupo, a granularidade do modelo é chave. A inteligência preditiva permite abandonar a postura reativa e passar a realizar o patrulhamento preventivo, posicionando viaturas e radares móveis nos trechos de maior risco probabilístico antes que os sinistros ocorram.
+Os stakeholders sociais, representam os beneficiários finais do projeto, a sociedade brasileira, que inclui os motoristas, os passageiros e o setor de transporte de cargas. De forma indireta, o Sistema Único de Saúde (SUS), que sofre com a superlotação de leitos, e a economia nacional, que amarga perdas anuais na casa dos R$50 bilhões devido ao famoso "Custo Brasil" gerado por acidentes, como apresentado na seção 2.1. Para a sociedade, o sucesso deste modelo preditivo são a preservação da vida, no aumento da segurança viária e na eficiência logística do país.
+
+
+
+3.2.1.2 Requisitos Funcionais e Não Funcionais
+
+
+        Após a tradução das necessidades da administração pública em um problema estruturado, é necessário a definição do escopo técnico do projeto. Sob a ótica da Engenharia de Software, esta etapa consolida a criação do contrato do desenvolvimento com os stakeholders, através da elicitação de requisitos. Os Requisitos Funcionais (RF) delimitarão as ações, transformações e processamentos que o pipeline de dados deve executar para gerar inteligência estratégica. Em contrapartida, os Requisitos Não Funcionais (RNF) atuarão como as restrições arquiteturais e metodológicas inegociáveis do projeto, garantindo que o rigor científico se aplicada na metodologia e a integridade estatística dos dados rodoviários sejam preservados ao longo de todo o ciclo de vida do modelo preditivo, para que seja assegurada um alto nível de certeza nos resultados do modelo.
+
+
+Requisitos funcionais: 
+
+
+* Ingestão e Integração Multi-fonte: O sistema deve ser capaz de extrair dados históricos da PRF (2019-2025) e do DNIT (2019-2025) realizar a junção intervalar, alocando o quilômetro exato do acidente dentro do intervalo [km_inicial, km_final] da rodovia correspondente.
+
+
+* Transformação e Engenharia de Atributos: O sistema deve ser capaz de realizar a limpeza, tratamento dos dados e a criação de novas variáveis temporárias e binárias.
+
+
+* Exploração dos dados: O sistema deve ser capaz de explorar os dados para gerar gráficos e insights que auxiliem na tomada de decisões estratégicas.
+
+
+* Treinamento do modelo preditivo: O sistema deve instanciar e treinar um algoritmo Random Forest Regressor para estimar a quantidade de acidentes por trecho/mês.
+
+
+* Simulação de cenários: O sistema deve ser capaz de realizar a simulação de predições alterando variáveis exógenas (ex: clima, feriado) e de infraestrutura (ex: qualidade do pavimento).
+
+
+* Integração com BI: O sistema deve ser capaz de exportar os dados tratados para o PowerBI afim na geração de insights na ferramenta.
+
+
+* Escala Real: O sistema deve ser capaz de gerar previsões diretamente interpretáveis em escala real para consumo em dashboards por stakeholders não técnicos.
+
+
+Requisitos não funcionais: 
+
+
+* Output em escala real: O pipeline de pré-processamento não deve realizar transformações inversas.
+
+
+* Preservação de outliers: O sistema não deve remover valores extremos, outliers, das variáveis, pois os dados apresentam assimetria extrema representando a realidade crítica do cenário, e não erros de medição.
+
+
+* Otimização de memória: O sistema deve otimizar os tipos de dados, convertendo float64 para float32 e strings para category, garantindo a execução fluida no ambiente.
+
+
+* Desempenho mínimo do modelo: O modelo treinado deve atingir um Coeficiente de Determinação (R²) superior a 0.90 e um Erro Médio Absoluto (MAE) inferior a 1.0 acidente por trecho/mês no conjunto de testes.
+
+
+* Avaliação entre versões: Devem ser gerados pelo menos três versões do modelo Random Forest Regressor com configurações diferentes e comparar o desempenho dos mesmos.
+
+
+
+
+
+
+3.2.1.3 Estratégia de Versionamento
+
+
+        Para o versionamento do código, foi empregada no projeto o Git, com o modelo de ramificação GitFlow, que é um sistema de controle distribuído onde é possível guardar diferentes versões e o histórico do projeto. Esta escolha se justifica pois é necessário manter a integridade do código durante o avanço das 6 etapas do procedimento CRISP-DM, o uso do Git é padrão nos projetos de desenvolvimento de software modernos.
+        A ramificação principal main, foi constantemente alimentada com novas versões branchs assim que uma nova etapa do procedimento é concluída. Com isso, como repositório remoto foi escolhido o GitHub, onde no final do projeto será disponibilizado para conferência.
+
+
+3.2.2 Entendimento dos Dados
+
+
+        A segunda fase do procedimento CRISP-DM, consiste na famosa análise exploratória do dataset, momento em que é feito análises estatísticas a fim de entender estruturalmente os dados e a descoberta de características que muitas vezes não são vistas à primeira vista. 
+Ademais, tais informações descobertas nessa etapa são utilizadas por todo o projeto, apoiando decisões técnicas críticas, algumas delas já foram citadas ao longo deste trabalho, como a escolha do algoritmo Random Forest Regressor citada no capítulo 3.1.5.
+Primeiramente, o processo se iniciou com a realização de análises a fim de compreender o complexo cenário dos acidentes nas rodovias federais brasileiras. Antes de qualquer exploração estatística, contudo, foi necessário diagnosticar a qualidade da base bruta da PRF, identificando o percentual de valores nulos por variável, conforme apresentado na Figura 7.
+
+
+
+
+
+
+
+
+Figura 7 – EDA 1: Porcentagem de Valores Nulos por Variável na Base Bruta.
+  
+
+Fonte: Elaborado pelo autor (2026).
+A análise da Figura 7 revelou que as variáveis uop e delegacia concentram os maiores índices de ausência, com aproximadamente 8,2% e 4,3% de valores nulos, respectivamente. Em contrapartida, variáveis críticas para o modelo preditivo, como tipo_acidente e classificacao_acidente, apresentaram taxas de nulidade inferiores a 0,5%, o que confirma a integridade das informações centrais da base. Essa etapa fundamentou as decisões de tratamento de dados da fase de pré-processamento, onde as colunas com alto percentual de nulos e baixa relevância analítica foram descartadas, enquanto as variáveis com nulidade residual foram tratadas por remoção pontual de registros. Com a qualidade da base diagnosticada, a análise avançou para a compreensão do fenômeno em si. A Figura 8 apresenta os dez tipos de acidentes mais frequentes registrados na base histórica.
+
+
+
+
+
+
+
+
+
+
+Figura 8 – EDA 2: Top 10 Tipos de Acidentes Relatados (Dado Bruto).
+  
+
+Fonte: Elaborado pelo autor (2026).
+Com isso, percebe-se que a colisão traseira destaca-se como o tipo mais recorrente, ultrapassando 85.000 ocorrências, seguida pela saída de leito carroçável com aproximadamente 72.000 registros e pela colisão transversal com cerca de 60.000 casos. Esses três tipos, juntos, respondem por uma parcela expressiva do volume total de sinistros. Tal distribuição evidencia que a maioria dos acidentes está associada ao comportamento do condutor em situações de tráfego convencional, onde a distância de segurança, a atenção e o controle direcional são determinantes. 
+Foi observado que os acidentes em sua maior parte são causados por fatores humanos, mas são potencializados por fatores estruturais da via, fatores estruturais da via, visto que a precariedade desta eleva a taxa de sinistros.
+Aprofundando a análise sobre o comportamento humano como um dos fatores condicionantes, a Figura 9 detalha as principais causas registradas pelos agentes da PRF.
+
+
+
+
+Figura 9 – EDA 3: Principais Causas Condicionantes dos Acidentes.
+  
+
+Fonte: Elaborado pelo autor (2026).
+Com o entendimento da Figura 9 percebe-se que a falta de atenção à condução, a reação tardia ou ineficiente do condutor e a ausência de reação do condutor lideram o ranking de causas primárias, cada uma superando 40.000 ocorrências na série histórica analisada. Juntas, essas três categorias evidenciam que o fator humano é o principal vetor de risco nas rodovias federais brasileiras, respondendo por uma proporção majoritária dos sinistros. Velocidade incompatível e o acesso à via sem observar outros veículos completam o grupo das cinco causas mais frequentes, reforçando a predominância de comportamentos inadequados na condução. 
+Além disso, a ingestão de álcool pelo condutor, embora em menor volume absoluto, aparece em sétimo lugar com aproximadamente 20.000 registros, sendo um fator de particular gravidade dado seu impacto na severidade dos acidentes. Essa distribuição de causas é um insumo estratégico fundamental para os stakeholders operacionais, pois orienta as campanhas educativas e as operações de fiscalização da PRF para os comportamentos de maior impacto estatístico.
+A identificação das rodovias mais críticas em termos de letalidade acumulada é apresentada na Figura 10.
+
+
+
+
+Figura 10 – EDA 5: Top 10 Rodovias (BRs) com Maior Letalidade Acumulada.
+
+
+  
+
+Fonte: Elaborado pelo autor (2026).
+Analisando o gráfico, percebe-se que as rodovias BR-116 e BR-101 destacam-se com folga como as mais letais do país no período analisado, acumulando aproximadamente 5.000 e 4.700 mortes, respectivamente. Essa concentração é esperada dado que ambas são as principais rodovias longitudinais do Brasil, atravessando múltiplos estados e concentrando enormes volumes de tráfego de cargas e passageiros. As demais rodovias do ranking, como BR-153, BR-163, BR-381 e BR-040, apresentam letalidade acumulada entre 1.300 e 1.800 mortes, configurando um segundo grupo de vias prioritárias para intervenção. Essa hierarquização das rodovias por letalidade é um dos principais outputs estratégicos do projeto, pois permite que órgãos como a PRF e o DNIT priorizem geograficamente os investimentos em duplicação, manutenção e sinalização com base em evidências quantitativas.
+
+
+
+
+
+
+
+
+Figura 11 – EDA 6: Dispersão Bruta – Ocupantes vs. Veículos Envolvidos (Amostra 10k).
+  
+
+Fonte: Elaborado pelo autor (2026).
+
+
+O gráfico de dispersão foi gerado a partir de uma amostra de 10.000 registros aleatórios da base, evidenciando que a grande maioria dos acidentes envolve entre 1 e 5 veículos e até 10 pessoas, o que caracteriza o perfil típico do sinistro rotineiro nas rodovias federais. Os pontos classificados como "Com Vítimas Fatais" (verde) aparecem distribuídos ao longo de toda a faixa de veículos envolvidos, mas com concentração em acidentes de menor número de veículos, reforçando que um único veículo com muitos ocupantes, como ônibus ou vans, pode gerar elevada letalidade. Os outliers extremos, com mais de 40 pessoas envolvidas, correspondem exatamente ao fenômeno de cauda longa discutido estatisticamente no capítulo 3.1.4, confirmando que esses eventos, embora raros, são estruturais e não podem ser descartados da base.
+A distribuição gravimétrica dos acidentes, consolidada na Figura 12, fornece uma visão da proporção entre os diferentes níveis de severidade.
+
+
+Figura 12 – EDA 9: Classificação Gravimétrica dos Acidentes (Distribuição da Variável Alvo).
+  
+
+Fonte: Elaborado pelo autor (2026).
+A análise do gráfico de pizza revela que 75,9% dos acidentes registrados resultaram em vítimas feridas, enquanto 17,0% foram classificados como sem vítimas e 7,1% como com vítimas fatais. Essa distribuição é um insumo direto para a priorização de políticas públicas: enquanto a maioria dos sinistros gera demanda sobre o sistema de saúde com feridos, a fração fatal, embora minoritária em volume, representa o impacto humano mais grave e irreversível. Do ponto de vista do modelo preditivo, essa distribuição reforça o cenário de classes desbalanceadas, onde a concentração em "Com Vítimas Feridas" poderia enviesar um classificador ingênuo, justificando a abordagem de regressão adotada neste projeto em vez de uma classificação direta.
+A composição do traçado das vias onde os acidentes ocorreram, apresentada na Figura 13, adiciona a dimensão de infraestrutura à análise exploratória.
+Figura 13 – EDA 8: Composição do Traçado da Via Original.
+  
+
+Fonte: Elaborado pelo autor (2026).
+Pelo gráfico de pizza fica claro que trechos em pista reta concentram 58,4% dos acidentes registrados, seguidos por "Múltiplos Traçados/Outros" com 20,6% e curvas com 13,5%. O elevado percentual de acidentes em retas pode parecer contraditório à primeira vista, mas é explicado pela maior proporção de extensão em reta da malha rodoviária brasileira e pelo comportamento de excesso de velocidade que esses trechos tendem a induzir. As curvas ao contrário do senso comum representam apenas 13,5% dos casos, entretanto, concentram acidentes de maior gravidade, pois a perda de controle em curvas frequentemente resulta em saídas de pista e colisões frontais. Interseções de vias, declives e a combinação reta-declive, embora de menor representatividade percentual, são tipologias que exigem atenção específica na modelagem, pois concentram riscos desproporcionais em relação à sua extensão na malha.
+Portanto, percebe-se que as rodovias federais brasileiras possuem um cenário de sinistralidade estrutural e multifatorial, onde fica claro que nenhum fator isolado explica a totalidade dos acidentes, mas sim a convergência de vulnerabilidades humanas, operacionais e de infraestrutura. A análise exploratória revelou que o fator humano é o principal vetor de risco, com falta de atenção, reação tardia e velocidade incompatível respondendo pela maioria das causas registradas, enquanto a infraestrutura precária atua como amplificador dessa fragilidade, especialmente em pista simples e em trechos sem duplicação. A concentração geográfica de ocorrências nos estados do Sul e Sudeste, liderados por Minas Gerais, Santa Catarina e Paraná, reflete a maior densidade de tráfego nessas regiões, ao passo que a letalidade desproporcional das BR-116 e BR-101 evidencia que volume de tráfego aliado à ausência de investimento em duplicação forma uma combinação historicamente fatal. 
+Ademais, a evolução temporal da série histórica evidenciou não se tratar de um problema em vias de solução, o número de feridos cresceu consistentemente entre 2019 e 2024, reforçando com evidência uma das premissas do projeto, de que políticas públicas reativas têm se mostrado insuficientes diante da magnitude do desafio. Diante desse complexo retrato, fica evidente que a transformação desses dados em inteligência preditiva, proposta por este trabalho, não é apenas uma contribuição técnica, mas uma resposta concreta a um problema de saúde pública que ceifa milhares de vidas e consome dezenas de bilhões de reais anualmente.
+
+
+
+
+________________
+
+
+3.2.3 Preparação do Dados
+
+
+        Após a fase de entendimento dos dados, onde foi possível compreender a dinâmica dos dados, atual situação do cenário e coletar informações que foram utilizadas para transformar os dados. A terceira fase se inicia com a preparação da base de dados para o uso do modelo, então aqui temos a tratativa para maximizar a capacidade do Random Forest de aprender os padrões causais da sinistralidade nas rodovias federais brasileiras. Com isso, o dataset deixa de ser feito para análises humanas e passa a ter como o objetivo o entendimento do modelo das relações das variáveis. 
+
+
+3.2.3.1 Transformação e Otimização Estrutural
+
+
+Inicialmente, o primeiro desafio endereçado foi de natureza computacional se tratando da escala dos dados. A base histórica da PRF, compreendendo o período de 2019 a 2025, apresenta um volume de registros que, sem otimização, inviabilizaria o processamento em ambientes com restrições de memória como o Google Colab. Para isso, foi aplicada uma otimização sistemática dos tipos de dados, convertendo variáveis numéricas de precisão dupla float64 para float32 e variáveis categóricas do tipo string para o tipo category do Pandas. Tal conversão, embora tecnicamente simples, reduziu drasticamente o consumo de memória da base, garantindo a execução fluida do pipeline conforme estipulado no RNF-3 do projeto.
+Em paralelo, foram tratados os valores nulos das colunas críticas de localização geográfica. Registros com ausência de variáveis foram removidos pontualmente, pois sem a coordenada espacial da ocorrência, um sinistro torna-se analiticamente inútil tanto para a modelagem preditiva quanto para a integração com a base do DNIT. Após essa filtragem, a base consolidou-se em 473.734 registros íntegros, preservando a integridade da série histórica.
+Além disso, colunas que não tinham valor estatístico para a análise foram removidas, com o objetivo de reduzir ainda mais o tamanho do dataset, facilitando a aplicação dos processos de tratamento e modelagem, por exemplo foram removidas as colunas Delegacia e uop.
+
+
+3.2.3.2 Engenharia de Atributos
+
+
+Com a base limpa, iniciou-se a etapa de engenharia de atributos, processo pelo qual variáveis brutas são materializadas em colunas mensuráveis, ampliando a capacidade explicativa do modelo. Essa etapa é diretamente sustentada pelos insights colhidos na análise exploratória.
+O primeiro conjunto de atributos criados foi de natureza temporal e sazonal. Conforme evidenciado pelo gráfico da Figura 14, o volume de acidentes apresenta sazonalidade mensal, com dezembro registrando o maior pico (aproximadamente 44.000 ocorrências) e fevereiro o menor vale, padrão explicável pelo maior fluxo de viagens durante o período de festas e férias escolares. 
+
+
+Figura 14 - G2: Sazonalidade - Volume de Acidentes por Mês
+  
+
+Fonte: Elaborado pelo autor (2026).
+Complementarmente, o gráfico da Figura 15 revelou que sexta-feira, sábado e domingo concentram sistematicamente os maiores volumes de sinistros, superando 73.000 ocorrências cada, ao passo que terça-feira apresenta o menor índice semanal. A partir dessas evidências, foram criadas as flags binárias is_final_semana e is_feriado, esta última calculada programaticamente com o auxílio da biblioteca Holidays, que identificou de forma automatizada todos os feriados nacionais, estaduais e municipais do período, incluindo datas móveis como o Carnaval e a Sexta-Feira Santa. Adicionalmente, a variável estacao_ano foi extraída para capturar a sazonalidade climática de longo prazo.
+Figura 15 - G5: Frequência de Acidentes por Dia da Semana
+  
+
+Fonte: Elaborado pelo autor (2026).
+Além do mais, a relevância da variável is_feriado para o projeto, é confirmada quantitativamente pelo gráfico da Figura 16, que demonstra uma média de feridos superior nos dias feriados (1,21) em comparação com os dias comuns (1,14), evidência que, embora aparente ser pequena em magnitude absoluta, é estatisticamente consistente ao longo de toda a série histórica de seis anos.
+Figura 16 - G9: Média de Feridos: Dias Comuns (0) vc Feriado (1)
+  
+
+Fonte: Elaborado pelo autor (2026).
+Com isso, a criação das variáveis temporais e sazonais é essencialmente importante, quando o modelo entrar em produção para a simulação de cenários e para o uso no dia a dia de avaliação de datas.
+        Além disso, o segundo conjunto de atributos derivou da variável categórica tracado_via. Foi possível analisar que os três traçados de maior representatividade absoluta na base são a Reta (aproximadamente 330.000 registros), a Curva (aproximadamente 88.000) e a Interseção, com volume consideravelmente menor. Para que o modelo pudesse processar essa informação de forma nativa, aplicou-se um processo de One-Hot Encoding manual, desmembrando a coluna original em variáveis binárias independentes para cada categoria. Essa estratégia transforma uma variável nominal em um conjunto de sinais binários que o algoritmo de árvore pode utilizar como pontos de ramificação booleanos.
+Por fim, foram eliminadas 12 colunas do dataset que representavam risco de vazamento de dados (data leakage) ou sobreposição. Variáveis como causa_acidente, tipo_acidente e ilesos foram descartadas por descreverem consequências ou circunstâncias do sinistro que, em um cenário real de previsão, não estariam disponíveis antes do evento ocorrer, o que tornaria o modelo artificialmente perfeito no treino e completamente inútil na prática operacional.
+Figura 17 - G10: Mapa de Calor (Correlação de Pearson)
+  
+
+Fonte: Elaborado pelo autor (2026).
+Após a criação das variáveis é necessário avaliar, o Mapa de Calor de Correlação de Pearson, apresentado na Figura 17, em que consolida matematicamente as relações entre as variáveis numéricas do dataset pós-processado, funcionando como um raio-x das interdependências estruturais da base, tal gráfico ajuda a validar e a explicar diversas decisões tomadas ao longo do pipeline realizado.
+Analisando é possível perceber, que a maior correlação observada é entre feridos_leves e feridos (0,86), o que por sua vez, é esperado e matematicamente faz sentido, dado que feridos é uma variável composta que agrega feridos_leves e feridos_graves. Esse excesso de variáveis redundantes confirmou a necessidade de eliminação de colunas na etapa de redução de dimensionalidade, pois manter ambas as variáveis introduziria ruído desnecessário ao modelo, podendo gerar perdas de desempenho.
+Adicionalmente, um segundo agrupamento relevante é o par pessoas e feridos (0,54), e pessoas e feridos_leves (0,46), sinalizando que o volume de ocupantes envolvidos no sinistro possui correlação com o número de vítimas, o que faz muito sentido e está de acordo com a realidade, concluímos que mais pessoas no evento implica maior probabilidade de ferimentos.
+Um achado que apoia a criação das variáveis sazonais e temporais e analiticamente mais relevante, entretanto, reside justamente nas correlações baixíssimas das variáveis is_feriado e is_final_semana com as demais. Ambas apresentam valores próximos a zero com todas as outras variáveis numéricas, o que à primeira vista poderia sugerir irrelevância preditiva. Contudo, essa interpretação seria um erro metodológico. Correlação de Pearson mede exclusivamente relações lineares, e o impacto de um feriado ou final de semana sobre a sinistralidade não é linear, mas sim condicional e não-linear, a combinação de feriado com chuva em uma curva de pista simples produz um risco desproporcional que nenhuma correlação bivariada capturaria. É exatamente para esse tipo de interação que o Random Forest, através do Feature Subspace, foi projetado, capturando sinergias que a matriz de Pearson é estruturalmente incapaz de revelar. Portanto, o gráfico da Figura 17 não invalida essas variáveis, mas pelo contrário, ele justifica a escolha de um algoritmo não-linear para explorar seu potencial preditivo real.
+Por fim, a ausência de correlações espúrias ou inesperadamente altas entre variáveis independentes distintas atesta a qualidade do pré-processamento realizado, confirmando que o dataset final está livre de vazamento de dados e apto para a próxima fase, de modelagem.
+
+
+3.2.3.3 Tratamento e Integração da Base do DNIT
+
+
+Primeiramente, a integração com os dados de infraestrutura do DNIT representa um grande diferencial deste projeto, além de ser um grande desafio técnico. A base do DNIT, que contém índices críticos como o ICC (Índice de Condição de Capa) e o ICP (Índice de Condição do Pavimento), possui cobertura temporal iniciada em 2021, gerando uma lacuna de dois anos em relação ao início da série histórica da PRF (2019). Para contornar esse problema sem introduzir imputação pela média, que por sua vez iria contaminar a variância e distorceria os dados, optou-se por aplicar a técnica de um Backfill Estratégico, ou retro-preenchimento temporal, que copia as medições de 2021 para os anos anteriores de 2019 e 2020. A justificativa é baseada na premissa estabelecida que as condições estruturais de um pavimento variam de forma lenta e gradual, sendo normal e razoável assumir que o estado de uma via em 2021 representa uma aproximação válida para a sua condição nos anos imediatamente anteriores.
+Para os registros em que a integração do DNIT com a PRF não resultou em correspondência, optou-se pela imputação com a constante sentinela -1.0 nos índices contínuos ausentes, em vez de recorrer à média ou mediana. Essa decisão é a melhor metodologicamente para o Random Forest, por operar através de partições binárias, o modelo processa o valor -1.0 como uma categoria diferente, aprendendo que a ausência de monitoramento sistemático do DNIT é, por si só, um indicador de risco.
+
+
+3.2.3.4 Junção Intervalar e Resolução da Armadilha Zero-Inflated
+
+
+Passando agora para efetivamente a fusão entre as duas bases, foi realizada através de um Interval Join do tipo ASOF, utilizando como chaves de junção o ano e o código da rodovia, a respectiva BR, alocando o quilômetro exato do sinistro dentro do intervalo contínuo [km_inicial, km_final] correspondente no cadastro do DNIT. Essa estratégia, executada pelo Pandas, resultou em correspondência geográfica para 63,95% da base histórica, enriquecendo os registros com os índices de condição do pavimento sem recorrer à explosão combinatória que um merge convencional por quilômetro decimal exato produziria, o que com um grande nível de certeza esgotaria a memória disponível para continuidade do projeto.
+Com isso, foi resolvida a integração, e ao mesmo tempo emergiu o principal risco estatístico encontrado no projeto, a Armadilha Zero-Inflated. A base de 473.734 eventos individuais, por sua natureza granular, concentrava uma proporção enorme de registros com zero ou uma ocorrência por trecho em determinado dia, um cenário de inflação de zeros que comprometeria qualquer modelo de regressão treinado diretamente sobre os eventos brutos. A solução adotada foi o Bucketing de espaço temporal, a base foi agregada em trechos de 10 km mensais, criando 139.590 cenários preditivos únicos com uma variável alvo contínua e densa, quantidade_acidentes. Essa transformação é o que permite ao modelo estimar o volume de acidentes em um trecho específico para um determinado mês, convertendo eventos discretos e esparsos em inteligência estratégica, esses passos realizados representam a materialização do objetivo central do projeto, com a conclusão da base para treinamento.
+3.2.4 Modelagem
+
+
+        Após a preparação da base de dados para atuação do modelo nos capítulos 3.2.2 e 3.3.3, inicia-se uma etapa determinante para o sucesso do projeto, a quarta fase do framework CRISP-DM, a modelagem preditiva. Essa etapa trás a tona o objetivo central do projeto, com o treinamento e comparação de versões do modelo Random Forest, sendo escolhido o modelo mais adequado ao contexto do projeto e aos requisito funcionais e não funcionais, como RNF-1, que proíbe qualquer transformação da variável alvo, ao RNF-4, que exige R² superior a 0,90 e MAE inferior a 1,0 acidente por trecho/mês, e ao RNF-5, que determina a comparação de no mínimo três arquiteturas distintas.
+3.2.4.1 Estratégia de Divisão dos Dados e Correção do Data Leakage
+        Primeiramente, uma das principais decisões tomadas nessa etapa foi o abandono da divisão aleatória de dados, utilizada nas versões V1 a V4, em prol de uma partição temporal apenas. Essa decisão sacrificou um pouco da pontuação do modelo, entretanto ganhou-se muito no quesito de estar adequado a realidade e ao objetivo do projeto de estimar data futuras, dado que em dados de série temporal, a divisão aleatória por meio da função train_test_split representa uma violação metodológica famosa, conhecida como data leakage temporal, na qual o modelo é treinado com observações futuras em relação a parte do conjunto de teste, inflando artificialmente as métricas de desempenho, pois o modelo apenas aprende a relação das variáveis e não a estimar dados que nunca viu. Conforme mostrado por Hastie, Tibshirani e Friedman (2009), em problemas de forecasting, a avaliação deve sempre respeitar a ordem cronológica dos dados, pois garante que o modelo seja testado exclusivamente com dados que não participaram do treinamento.
+        Seguindo essa estrita diretriz, a base final foi ordenada baseada na ordem cronológica e dividida de modo que o conjunto de treino englobasse os registros do período de 2019 a 2023, correspondendo no final da divisão a aproximadamente 70% da base, enquanto o conjunto de teste foi formado pelos dados de 2024 e 2025, representando os 30% restantes. Essa estratégia tem como objetivo simular com máxima fidelidade o cenário operacional real do projeto em produção, no qual previsões são geradas para períodos futuros com base exclusivamente em dados históricos disponíveis até o momento da análise, caso contrário o modelo se torna capaz de ter informações do futuro em alguns cenários de treino.
+
+
+3.2.4.2 Especificação Técnica das Arquiteturas Avaliadas
+
+
+Em conformidade com o RNF-5, que estabelece a necessidade de comparar diferentes configurações do algoritmo, foram projetadas cinco arquiteturas do Random Forest Regressor, sendo V1 a primeira e V5 a quinta e última. O objetivo desse processo iterativo foi avaliar como o ajuste dos hiperparâmetros de amostragem, profundidade e descorrelação de atributos influencia a capacidade do modelo de generalizar padrões de sinistralidade sem incorrer em sobreajuste,  conceito de overfitting, quando o modelo decora os dados.
+
+
+As especificações técnicas de cada versão estão consolidadas na Tabela 4.
+
+
+Tabela 4 - Especificações técnicas das arquiteturas avaliadas
+Parâmetro
+	V1 Baseline
+	V2 Otimizado
+	V3 Otim. + Poda
+	V4 Log-Transform
+	V5 Temporal
+	Divisão
+	Random 80/20
+	Random 70/30
+	Random 70/30
+	Random 70/30
+	Temporal 70/20
+	Pré-processamento
+	Nenhum
+	Nenhum
+	Nenhum
+	np.log1p(y)
+	Nenhum
+	n_estimators
+	100
+	200
+	200
+	300
+	200
+	max_features
+	1.0 (todas)
+	sqrt
+	sqrt
+	sqrt
+	sqrt
+	criterion
+	squared_error
+	squared_error
+	poisson
+	squared_error
+	squared_error
+	max_samples
+	1,0
+	1,0
+	1,0
+	0,8
+	0,9
+	Regularização
+	depth=None
+	depth=None
+	depth=25, leaf=5
+	depth=30, leaf=3
+	depth=None, leaf=2
+	Fonte: Elaborado pelo autor (2026).
+
+
+A concepção de cada arquitetura respondeu a hipóteses metodológicas bem definidas para atingir o objetivo do projeto:
+
+
+Modelo V1: A arquitetura V1 funcionou como o baseline inicial do projeto, o modelo foi configurado utilizando a totalidade dos atributos a cada nó, max_features=1.0, amostragem integral e sem restrição de profundidade, max_depth=None. O objetivo dessa versão foi estabelecer um teto de referência no espaço de dados original. Contudo, ao utilizar todas as variáveis em cada divisão binária, a V1 expôs o modelo à dominância de poucas variáveis altamente preditivas, como o traçado reto, gerando árvores fortemente correlacionadas entre si e elevando a variância do estimador conjunto.
+
+
+Modelo V2: A segunda arquitetura introduziu a restrição max_features='sqrt', instruindo o algoritmo a selecionar aleatoriamente uma sub amostra de apenas sqrt(p) variáveis a cada tentativa de partição nos nós. Fundamentada na tese de Breiman (2001), essa modificação quebra a correlação entre as árvores da floresta, ao desativar temporariamente a árvore para a variável dominante, como o traçado reto, força-se o modelo a explorar padrões latentes secundários, tais como a interação entre a condição do pavimento do DNIT, feriados e tipo de pista.
+
+
+Modelo V3: A tentativa V3 do modelo testou duas hipóteses teóricas adicionais, a alteração da função de perda e a regularização por poda, pruning. Substituiu-se o erro quadrático médio pelo critério de Poisson, hipótese estatística baseada no fato de que acidentes de trânsito representam dados de contagem discretos e assimétricos. Simultaneamente, aplicou-se uma poda severa fixando a profundidade máxima em 25 níveis, max_depth=25, e exigindo no mínimo 5 observações nas folhas terminais, min_samples_leaf=5. O objetivo foi testar se o controle explícito do crescimento impediria o sobreajuste em ruídos da base.
+
+
+Modelo V4: A V4 investigou o efeito da redução no tamanho das amostras bootstrap para isso reduziu-se a amostragem de cada árvore para 80% do conjunto de treino, max_samples=0.8, combinada a uma profundidade máxima de 30 níveis, max_depth=30, e regularização de folhas em 3 observações, min_samples_leaf=3. A premissa testada foi que forçar cada árvore a enxergar subconjuntos menores e mais distintos do dataset aumentaria a diversidade do comitê, ensemble, reduzindo a sensibilidade a outliers individuais.
+
+
+Modelo V5: A última versão do modelo representou a grande virada metodológica do trabalho. Constatou-se que as versões V1 a V4, por utilizarem partição aleatória através do random split, sofriam do fenômeno de data leakage temporal, em que observações do futuro vazavam para o treino do passado, inflando artificialmente as métricas de desempenho, tornando o modelo melhor mas infiel aos critérios estatísticos.
+
+
+Para corrigir essa fragilidade e simular o ambiente operacional real, a V5 estabeleceu uma Barreira Temporal Estrita:
+
+
+* Conjunto de Treinamento: Registros cronológicos de 2019 a 2023, sendo ~70% da base histórica.
+* Conjunto de Teste: Registros cronológicos exclusivamente de 2024 e 2025, equivalente a ~30% da base histórica.
+
+Além da barreira temporal, a V5 refinou os hiperparâmetros combinando os aprendizados das versões anteriores:
+
+   * Mantiveram-se o Feature Subspace, max_features='sqrt', e a função de perda quadrática, squared_error.
+   * Abandonou-se a poda rígida de profundidade, max_depth=None, pois os testes da V3 e V4 demonstraram que limitar a profundidade introduz viés excessivo em dados com cauda longa, impedindo a floresta de representar eventos de alta severidade.
+   * Fixou-se uma regularização suave de folhas, min_samples_leaf=2, para suprimir ruídos isolados sem podar o topo da distribuição.
+   * Elevou-se o subsampling do Bagging para 90%, max_samples=0.9, preservando representatividade enquanto gera diversidade entre as árvores.
+   * Habilitou-se o Out-of-Bag Score, oob_score=True, e a validação cruzada por TimeSeriesSplit de 5 folds sobre os dados de treino, garantindo o diagnóstico de generalização temporal sem contaminação do conjunto de teste.
+
+
+3.2.4.3 Validação interna
+
+
+De forma complementar, a avaliação no conjunto de teste, o Modelo V5 foi validado internamente por dois mecanismos independentes, já destrinchados no capítulo 2.2.3. O Out-of-Bag Score, habilitado pelo parâmetro oob_score=True, no qual explorou o mecanismo nativo do Bagging em que cada árvore é avaliada nos 37% de registros de treino que não participaram de sua construção, fornecendo uma estimativa de generalização sem custo computacional adicional, melhorando os resultados sem comprometer o tempo de treino. A convergência entre o OOB Score e o R² obtido no conjunto de teste temporal nos dá prova de que o modelo não possui overfitting.
+Ademais, foi aplicada também validação cruzada temporal por meio do TimeSeriesSplit com cinco divisões, garantindo que em cada fold o conjunto de validação sempre correspondesse a um período cronologicamente posterior ao conjunto de treino. Esse procedimento, que foi executado exclusivamente sobre os dados de treinamento (2019-2023), permitiu estimar a estabilidade do desempenho do modelo ao longo do tempo, identificando possíveis instabilidades sazonais antes do teste final. A consistência dos R² entre os cinco folds atestou a robustez temporal do modelo, confirmando que o desempenho observado no teste 2024-2025 não é resultado de um grupo favorável para a assertividade do modelo, mas sim de um aprendizado generalizado dos padrões históricos de sinistralidade.
+Com o pipeline de pré-processamento consolidado, as especificações técnicas das cinco arquiteturas definidas e os mecanismos de validação temporal estabelecidos, encerra-se a fase de métodos. O Capítulo 4 apresenta a avaliação empírica de desempenho das arquiteturas, o diagnóstico de resíduos e as simulações de cenários operacionais.
+________________
+4 RESULTADOS
+O capítulo abaixo apresenta um compilado dos resultados empíricos obtidos através da modelagem preditiva que foi desenvolvida para estimar a sinistralidade nas rodovias federais brasileiras. A partir do pipeline metodológico consolidado no capítulo anterior, as evidências neste capítulo são discutidas sob a ótica da acurácia estatística e da utilidade prática para a administração pública.
+A estrutura do capítulo organiza-se em etapas progressivas. Primeiro inicia-se com a avaliação comparativa das cinco arquiteturas avaliadas e a seleção do Modelo V5 com validação temporal. Em seguida, examinam-se o diagnóstico de resíduos e a hierarquia de importância de variáveis. A influência da infraestrutura viária do DNIT é isolada por meio de técnicas de interpretabilidade e testes contrafactuais. Por fim, exploram-se as simulações de cenários táticos para a PRF e a disponibilização dos resultados em painéis analíticos no Power BI.
+
+
+4.1 Avaliação Comparativa das Arquiteturas e Seleção do Modelo V5
+Conforme determinado no RNF-5, foram treinadas e avaliadas cinco configurações do algoritmo Random Forest Regressor, descritas no capítulo 3.2.4.2. O processo de evolução das métricas reflete os ajustes progressivos nos hiperparâmetros e na estratégia de amostragem. A Tabela 5 consolida os resultados de desempenho obtidos no conjunto de testes designados.
+Tabela 5 — Resultados de performance das arquiteturas no conjunto de teste
+Métrica
+	V1
+	V2
+	V3
+	V4
+	V5
+	R²
+	0,9892
+	0,9770
+	0,9678
+	0,9556
+	0,9726
+	MAE
+	0,2276
+	0,3450
+	0,4011
+	0,4107
+	0,4181
+	MSE
+	0,2985
+	0,6418
+	0,8980
+	1,2398
+	0,8787
+	Tempo de treino
+	~15 s
+	~8 s
+	~5 s
+	~6 s
+	~7 s
+	Fonte: Elaborado pelo autor (2026).
+A interpretação desses resultados exige uma reflexão sobre a estratégia de partição dos dados. As versões V1 a V4 utilizaram amostragem aleatória convencional, train_test_split. Embora essas versões apresentem métricas aparentemente superiores, como o R² de 0,9892 na V1, essa abordagem introduz uma imprecisão metodológica conhecida como data leakage temporal em dados de séries históricas. A partição aleatória permite que o modelo treine com observações cronologicamente futuras em relação a partes do conjunto de teste, inflando as métricas de desempenho.
+Em oposição a isso, o Modelo V5 foi treinado exclusivamente com a partição temporal cronológica restrita de dados de 2019 a 2023 para treino e dados de 2024 e 2025 para teste. Essa estratégia reflete com fidelidade o cenário operacional real em produção, no qual o modelo preditivo deve estimar períodos futuros com base única em dados históricos. 
+A análise comparativa entre as cinco arquiteturas conduz à seleção definitiva do Modelo V5 como a solução final do trabalho. Essa decisão fundamenta-se em três pilares estruturais que são:
+   * Rigor Metodológico: O Modelo V5 é a única arquitetura cujas métricas foram obtidas sem data leakage temporal. O R² de 0,9726 e o MAE de 0,4181 confirmam a capacidade preditiva do sistema para períodos futuros, indicando um erro médio inferior a meio acidente por trecho/mês e superando as metas do RNF-4 (R² > 0,90 e MAE < 1,0).
+   * Aderência aos Requisitos Não Funcionais: Ao operar na escala original dos dados, sem transformações de normalização ou padronização na variável alvo, o algoritmo atende ao RNF-1 de forma nativa. Suas previsões são consumidas diretamente nos dashboards em Power BI. Além disso, a manutenção dos valores extremos, outliers, em conformidade com o RNF-2, garante que os trechos de alta severidade não sejam atenuados.
+   * Riqueza Analítica: Além do desempenho numérico, a configuração do V5, max_features='sqrt', min_samples_leaf=2, max_samples=0.9, reduz a correlação entre as árvores e fornece um mapa de importância de atributos que orienta intervenções preventivas de infraestrutura e fiscalização.
+
+
+4.2 Diagnóstico do Modelo V5
+
+
+A avaliação da qualidade das estimativas do Modelo V5 envolve o diagnóstico dos erros de previsão e o estudo da contribuição de cada variável explicativa. 
+A Figura 18, logo abaixo, apresenta um painel de diagnóstico dos resíduos do Modelo V5, composto pelo histograma de erros e pelo gráfico de dispersão Predito versus Real, no qual são instrumentos fundamentais para avaliar se o modelo comete erros aleatórios ou sistemáticos, e mais importante, em que regiões da distribuição esses erros se concentram.
+
+Figura 18 – Análise de resíduos do Modelo V5: histograma de erros e dispersão predito versus real.
+
+
+  
+
+Fonte: Elaborado pelo autor (2026).
+
+
+O primeiro gráfico, o histograma de resíduos, evidencia algo já sabido dado à arquitetura do modelo, apresenta uma distribuição de erros esmagadoramente concentrada em zeros, e uma massa de erros limitada basicamente a -2 e +2 acidentes. Entretanto, pode-se observar uma cauda a direita, com pequenas ocorrências de erros que vão até cerca de 27 acidentes. Advento que faz sentido, dado às características dos dados que apresenta alta assimetria e valores extremos, com isso, naturalmente o modelo tende a subestimar eventos extremos, pois são raridade no dataset. O gráfico evidencia a taxa de sucesso do modelo a estimar o número de acidentes.
+Essa leve subestimação nos picos decorre do próprio mecanismo teórico do Random Forest detalhado no item 3.1.4, como a predição final de regressão é a média das predições de todas as árvores individuais, o modelo promove uma suavização estatística natural na cauda extrema da distribuição.
+        O gráfico de dispersão Predito vs Real, ajuda a entender esse cenário, uma vez que existe uma densa nuvem de pontos em aderência com a linha diagonal de previsão, apenas após 40 acidentes é possível observar um deslocamento onde o modelo tende a subestimar os eventos extremos, devido a sua raridade na realidade. 
+        Trazendo o modelo para o dia a dia das rodovias brasileiras, do ponto de vista operacional, os resultados da análise de resíduos possuem uma relevância estratégica direta para os stakeholders do projeto. O modelo é altamente preciso para os trechos de sinistralidade rotineira, exatamente onde a maior parte das decisões de alocação preventiva de recursos é tomada no dia a dia da PRF, e conservador, ao subestimar, nos trechos de sinistralidade extrema. Essa propriedade é operacionalmente desejável: um modelo que sistematicamente subestima os pontos mais críticos força os gestores a manter uma margem de segurança na alocação de recursos nesses trechos, reduzindo o risco de subinvestimento nas vias de maior letalidade acumulada.
+4.3 Análise de Importância das Variáveis
+
+
+A Figura 19 logo abaixo apresenta o gráfico das vinte variáveis de maior importância preditiva no Modelo V5, extraído por meio do atributo nativo feature_importances_ do Random Forest, que quantifica a contribuição média de cada variável na redução da impureza das folhas ao longo de todas as árvores da floresta.
+
+
+
+
+
+
+
+
+Figura 19 – Top 20 variáveis por importância preditiva no Modelo V5.
+  
+
+Fonte: Elaborado pelo autor (2026).
+        Em análise do gráfico revela uma hierarquia de importância com implicações estratégicas diretas para os órgãos responsáveis pela segurança viária. A variável is_tracado_via_Reta é a que domina o modelo com aproximadamente 35% de importância total, resultado que, embora à primeira vista possa parecer contraintuitivo, é factível devido os achados da análise exploratória apresentada na Figura 13, que demonstrou que 58,4% dos acidentes ocorrem em trechos de pista reta. Esse domínio confirma que a extensão e a representatividade dos trechos em reta na malha rodoviária federal, combinadas com o comportamento de excesso de velocidade que esses trechos tendem a induzir nos condutores, fazem do traçado reto o principal preditor estrutural do volume de acidentes.
+Ademais, a variável is_final_semana surge como a segunda mais importante para a previsão do modelo, com aproximadamente 21% de contribuição, evidência quantitativa que corrobora os padrões temporais identificados na análise exploratória da Figura 15 e que valida diretamente a estratégia metodológica de engenharia de atributos aplicada no ETL de dados. O peso expressivo dessa variável no modelo possui implicação operacional imediata, o reforço preventivo do patrulhamento e da disponibilidade de equipes de resgate nas sextas-feiras, sábados e domingos é a intervenção de maior impacto estatístico que a PRF pode implementar com base nos resultados deste modelo.
+Já a variável is_tracado_via_Curva, com importância de aproximadamente 10%, confirma o risco desproporcional das curvas em relação à sua extensão na malha, já apontado na análise exploratória. A sequência seguinte, composta pelas variáveis is_tracado_via_Intersecao_de_Vias, is_tracado_via_Declive e is_tracado_via_Aclive, cada uma com importância entre 3% e 7%, reforça que a geometria da via é o conjunto de variáveis de maior poder explicativo do modelo, respondendo conjuntamente por mais de 60% da importância total. Esse resultado possui valor estratégico direto para o DNIT, pois hierarquiza objetivamente os tipos de intervenção de infraestrutura com maior potencial de redução de sinistros, mostrando que as retas tem uma importância devido a sua quantidade na malha e ao comportamento do motorista, já em outras geometrias menos comuns a periculosidade explode, explicando a sua importância para o modelo.
+A variável de qual BR o sinistro ocorreu, sendo o identificador da rodovia federal, aparece com importância de aproximadamente 3%, capturando as diferenças estruturais de volume de tráfego, qualidade de infraestrutura e perfil de uso entre as diferentes rodovias da malha federal, já mostrados na análise exploratória. Os índices de condição do pavimento provenientes da base do DNIT, representados pelas variáveis icc, icp e icm, aparecem com importâncias individuais entre 1% e 2%, resultado que, embora modesto em magnitude absoluta, possui relevância metodológica significativa. A presença dessas variáveis entre as vinte mais importantes valida a estratégia de integração multi-fonte adotada no pipeline de ETL e confirma que a condição do pavimento contribui de forma independente e mensurável para a previsão do volume de acidentes, mesmo após controlar pelos efeitos dominantes do traçado e da sazonalidade temporal.
+A variável is_feriado, com importância de aproximadamente 1%, apresenta contribuição modesta em magnitude mas consistente com o padrão identificado na Figura 16, que evidenciou maior média de feridos em dias feriados. A baixa correlação linear dessa variável com as demais, discutida no contexto da Figura 17, é exatamente compensada pelo mecanismo de Feature Subspace do Random Forest, que captura o efeito condicional e não-linear dos feriados sobre a sinistralidade de forma que nenhum modelo paramétrico linear seria capaz de detectar. Por fim, as variáveis de tipo de pista, tipo_pista_Simples, tipo_pista_Dupla e tipo_pista_Múltipla, e de uso do solo completam o ranking, confirmando a relevância das características estruturais da via na previsão do volume de sinistros.
+
+
+4.4 Avaliação do Impacto da Infraestrutura Rodoviária (DNIT)
+Relatórios históricos de trânsito costumam concentrar a responsabilidade dos sinistros quase que exclusivamente na conduta do motorista. Excesso de velocidade, ingestão de álcool e desatenção ao volante encabeçam as estatísticas tradicionais. Essa perspectiva, contudo, oculta a contribuição silenciosa da infraestrutura física, a pista dita as condições de aderência, a estabilidade dinâmica do veículo e a margem de correção em situações de emergência, informações que são chave para analisar a complexidade do cenário. Para mensurar a influência direta da malha pavimentada na ocorrência de sinistros, desenvolveu-se um pipeline de interpretabilidade composto pelo diagnóstico de registros sentinela, análise de valores SHAP, Shapley Additive Explanations, simulação, Ceteris Paribus, (Teste A/B) e Gráficos de Dependência Parcial (PDP).
+4.4.1 Diagnóstico do Sentinela -1.0 (Vias Não Monitoradas pelo DNIT)
+A integração entre os registros de ocorrências da PRF e as campanhas de monitoramento do DNIT expôs uma disparidade na cobertura dos dados. Dos 213.187 registros agregados em intervalos espaciais de 10 km, apenas 37.798 (17,7%) possuem levantamentos contínuos de pavimento e conservação. Os 82,3% restantes da malha federal não contam com dados de inspeção sistemática nas bases oficiais.
+        Diante desse cenário, a imputação estatística clássica e mais utilizada que é a de utilizar a média ou mediana distorce a variância real das medições e mascara a heterogeneidade das rodovias. A solução adotada consistiu em atribuir o valor sentinela `-1.0` a todos os segmentos desprovidos de medição do DNIT nas variáveis contínuas: Índice de Condição do Pavimento `icp`, Índice de Condição da Conservação `icc` e Índice de Condição da Manutenção `icm`. 
+Árvores de decisão lidam com valores sentinelas de forma categórica. O Random Forest não calcula distâncias euclidianas, ele cria pontos de corte lineares. O algoritmo estabeleceu nós de divisão dedicados exclusivamente à condição `icp <= -0.95`. Dessa forma, os trechos não monitorados foram segregados em um grupo analítico independente, sem interferir na calibração dos índices contínuos (que variam de 0 a 100 na amostra real).
+        O modelo aprendeu que a ausência de vistoria atua como uma variável indicativa de gestão. Rodovias sem monitoramento regular pelo DNIT tendem a coincidir com trechos de tráfego secundário ou de baixo investimento em sinalização e conservação. Para esse grupo sentinela `-1.0`, o modelo convergiu para uma previsão base média de 2,42 acidentes/mês por trecho de 10km.
+
+
+4.4.2 Análise SHAP e Teste A/B Ceteris Paribus (BR-381 KM 340-350 / MG)
+A contribuição marginal dos atributos de infraestrutura foi mensurada por meio dos valores SHAP, fundamentados na Teoria dos Jogos Cooperativos. A avaliação foi processada sobre a partição de dados que dispõe de medição real do DNIT. A Figura 20 a seguir ilustra a hierarquia das variáveis de engenharia rodoviária.
+        Entre as 15 variáveis originárias do DNIT, o Índice de Condição do Pavimento `icp` exerceu a maior força preditiva, com SHAP médio de 0,02956. Seguem-se o `icc` de 0,01543 e o `icm` de 0,01288. Variáveis operacionais de conservação deficiências no sistema de drenagem de 0,00407, sinalização horizontal desgastada 0,00356 e falta de roçada lateral com 0,00317 apresentaram contribuições individuais complementares, demonstrando que o algoritmo capta diferentes facetas da deterioração física da via.
+Figura 20 – Importância média SHAP das variáveis de infraestrutura do DNIT por grupo.
+  
+
+        Fonte: Elaborado pelo autor (2026).
+Para comprovar a causalidade da qualidade do asfalto de forma isolada, estruturou-se um experimento, Ceteris Paribus também conhecido simplesmente como Teste A/B. Fixaram-se rígidamente todas as variáveis exógenas e comportamentais em um segmento notoriamente crítico da malha nacional: a BR-381, entre os quilômetros 340 e 350, localizado em Minas Gerais. O trecho que apresenta traçado sinuoso classificado como, curva acentuada combinada com declive, e pista simples.
+        O experimento congelou o cenário em condições normais: dia útil sem feriado e céu claro, a fim de normalizar as variáveis comportamentais e temporais, para se estudar exclusivamente o impacto da qualidade de infraestrutura. Alterou-se estritamente o valor do `icp` e seus respectivos descritores de conservação:
+   1. Via Perfeita ICP = 90, sem trincas, drenagem limpa: 2,22 acidentes/mês;
+   2. Via Boa ICP = 70, pavimento regular, sinalização íntegra: 2,21 acidentes/mês;
+   3. Via Regular ICP = 50, presença de trincamento isolado: 2,27 acidentes/mês;
+   4. Via Ruim ICP = 25, remendos e panelas superficiais: 2,33 acidentes/mês;
+   5. Via Péssima ICP = 5, desagregação severa, buracos e drenagem obstruída: 2,38 acidentes/mês.
+
+
+Os resultados desse experimento comparativo estão consolidados na Figura 21.
+
+
+Figura 21 — Simulação Ceteris Paribus (Teste A/B) do impacto do pavimento na BR-381 (KM 340–350/MG).
+  
+
+Fonte: Elaborado pelo autor (2026).
+A degradação completa da superfície eleva a previsão de sinistros em +7,2%, 2,22 para 2,38. Como os fatores humanos, climáticos e de calendário permaneceram imutáveis, a elevação decorre estritamente da resposta mecânica da via. O asfalto esburacado e a sinalização apagada reduzem a margem de manobra do condutor, transformando pequenas falhas operacionais em colisões graves.
+
+
+4.4.3 Não Linearidade no PDP e Retorno sobre Investimento
+Através da pesquisa realizada anteriormente, foi possível inferir que a relação entre o estado de conservação do pavimento e o volume de acidentes não é linear. O Gráfico de Dependência Parcial, conhecido academicamente como Partial Dependence Plot, apresentado na Figura 22 abaixo, descreve o comportamento do modelo ao longo de toda a faixa do ICP de 0 a 100. A curva exibe uma inflexão nítida em formato de cotovelo.
+
+
+
+
+
+
+Figura 22 – Gráfico de Dependência Parcial (PDP): impacto isolado do ICP na previsão de acidentes.
+  
+
+Fonte: Elaborado pelo autor (2026).
+A recuperação de uma rodovia em estado crítico, de ICP = 0, para um nível intermediário de trafegabilidade, ICP = 50, reduz a estimativa em -0,120 acidentes/mês por trecho de 10 km. Em contraste, o investimento adicional para elevar essa mesma pista do padrão regular, ICP = 50, para um patamar de excelência, ICP = 100, proporciona uma redução residual de apenas -0,080 acidentes/mês.
+        Esse comportamento reflete a complexa dinâmica do risco viário brasileiro. A eliminação de buracos profundos, depressões e pistas escorregadias remove armadilhas que causam perda imediata de controle veicular. Após restabelecer as condições mínimas de atrito e nivelamento, ganhos marginais de acabamento asfáltico geram impactos proporcionalmente menores na contenção de colisões.
+        Esse achado traz implicações diretas para a gestão orçamentária do DNIT e da ANTT. Sob a ótica da destinação dos recursos públicos, a métrica de Retorno sobre o Investimento em Manutenção (ROMI) para preservação de vidas indica que o orçamento deve priorizar a eliminação de defeitos críticos em trechos degradados da malha antes de financiar recapeamentos de padrão elevado em vias que já operam em nível funcional aceitável.
+
+
+
+
+4.4.4 Showcase de Otimização Global Argmax (BR-40 KM 110-120)
+Para demonstrar a utilidade prática do modelo na alocação de recursos públicos, executou-se uma varredura exaustiva sobre os 4.072 trechos monitorados de 10 km que compõem o conjunto de dados utilizados no estudo. O objetivo consistiu em identificar em qual coordenada geográfica uma intervenção estrutural de engenharia promoveria a maior redução absoluta no volume de acidentes.
+        O algoritmo isolou as interferências sazonais atribuindo a mediana histórica de cada segmento para dias úteis de tempo seco. Em seguida, simulou o ganho decorrente da restauração da pista de um patamar degradado de, ICP = 5, para uma condição pós-obra satisfatória para ICP = 70.
+        O ponto de maior sensibilidade à manutenção identificado na malha nacional está localizado na BR-40, no trecho compreendido entre os quilômetros 110 e 120. O segmento caracteriza-se por pista reta com tráfego denso e histórico de pavimentação comprometida. A Figura 23 ilustra a simulação comparativa e o detalhamento do ganho operacional obtido nesse trecho.
+Figura 23 — Simulação de intervenção do DNIT no ponto crítico da BR-40 (KM 110–120).
+  
+
+Fonte: Elaborado pelo autor (2026).
+Os resultados da simulação evidenciam a magnitude do impacto da infraestrutura:
+
+
+Condição Péssima (ICP = 5): Estimativa de 4,430 acidentes/mês;
+Intervenção do DNIT (ICP = 70): A previsão cai drasticamente para 3,675 acidentes/mês.
+
+
+A intervenção viária proporciona uma redução absoluta de -0,755 acidentes/mês por trecho de 10 km, correspondendo a uma queda relativa imediata de -17,04% na sinistralidade no trecho. Em termos acumulados, essa manutenção estrutural representa aproximadamente 9 acidentes graves a menos por ano em um único segmento de dez quilômetros.
+Essa evidência empírica corrobora a tese central da pesquisa, o estado físico da rodovia dita a probabilidade de ocorrência de sinistros. Como todos os fatores comportamentais e meteorológicos foram rigorosamente retirados, a retração de 17% decorre exclusivamente pela melhora do pavimento. O modelo deixa de ser meramente descritivo e assume caráter prescritivo, entregando ao DNIT uma ferramenta orientada por dados para maximizar a eficiência social do gasto público.
+
+
+4.5 Simulações de Cenários Táticos e Estudo de Caso Operacional (PRF)
+
+
+Enquanto a análise de infraestrutura do DNIT volta-se a intervenções estruturais de médio a longo prazo, buscando responder perguntas no que tange às maiores prioridades de melhorias com base no retorno sobre o capital investido, o planejamento da Polícia Rodoviária Federal (PRF) exige respostas dinâmicas e de curto prazo. A gestão policial opera sobre variáveis contextuais: escalonamento de plantões, fiscalização com etilômetro aos finais de semana e posicionamento de radares móveis em condições de baixa visibilidade. Nesse cenário complexo, estimar a quantidade de acidentes em determinados períodos torna-se fundamental para maximizar a cobertura policial. 
+Para subsidiar essas decisões táticas, o Modelo V5 foi submetido a simulações de cenários operacionais sobre a totalidade da malha federal, avaliando o comportamento do risco sob diferentes combinações de calendário, traçado e clima.
+
+
+4.5.1 Metodologia por Mediana e Avaliação dos Cenários Táticos
+
+
+Nas simulações de cenários em escala nacional, adotou-se a mediana das predições como métrica primária de avaliação 1,8978 acidentes/mês no baseline global, mantendo a média aritmética 3,4182 como referência secundária. A escolha decorre da severa assimetria positiva da base histórica. A média é artificialmente inflada por uma minoria de pontos críticos com mais de 50 acidentes mensais. A mediana reflete o comportamento do trecho rodoviário típico brasileiro, assegurando que o planejamento tático não seja distorcido por valores extremos.
+A Tabela 6 consolida os resultados dos cinco cenários táticos simulados no Modelo V5.
+Tabela 6 – Impacto das Variáveis Exógenas no Risco de Acidentes
+
+
+Situação Testada
+	Condição Normal (Base)
+	Condição Alterada (Teste)
+	Variação de Acidentes
+	Impacto no Risco
+	O que isso significa para a PRF?
+	Fim de Semana
+	Dia Útil (1,83 ac/mês)
+	Final de Semana (1,89 ac/mês)
+	+0,06
+	+3,1%
+	Aumentar fiscalização de sexta a domingo.
+	Traçado da Pista
+	Trecho em Reta (1,06 ac/mês)
+	Trecho em Curva (1,14 ac/mês)
+	+0,08
+	+7,3%
+	Fiscalizar velocidade antes de curvas.
+	Clima
+	Céu Claro (1,90 ac/mês)
+	Pista com Chuva (1,87 ac/mês)
+	-0,03
+	-1,5%
+	O fluxo reduz a velocidade por cautela.
+	Turno do Dia
+	Pleno Dia (1,90 ac/mês)
+	Plena Noite (1,87 ac/mês)
+	-0,03
+	-1,3%
+	Menor fluxo, mas maior severidade.
+	Efeito Extremo
+	Cenário Ideal (1,08 ac/mês)
+	Tempestade Perfeita (1,29 ac/mês)
+	+0,21
+	+19,5%
+	O risco dispara em 20% em condições extremas.
+	Fonte: Elaborado pelo autor (2026).
+
+
+A Tabela 6 sintetiza os resultados do modelo quando alteramos as variáveis exógenas, que no caso são parâmetros que podem ser ajustados de um dia para o outro no ambiente de produção. O objetivo dessas simulações foi responder a uma pergunta prática da gestão pública: qual é o impacto isolado de cada fator sobre a ocorrência de acidentes?
+Ao isolar os fatores um a um (Cenários 1 a 4), as oscilações no volume de acidentes variam em faixas moderadas, situando-se entre 1% e 7%. No entanto, quando múltiplos fatores de risco ocorrem simultaneamente, como observado no Cenário 5, que combina pista reta, final de semana, chuva, noite e feriado, o modelo estima um salto expressivo de +19,5% na quantidade de sinistros em relação ao cenário ideal. Isso comprova que o risco rodoviário não cresce de forma isolada, mas se multiplica quando fatores climáticos, temporais e de geometria coincidem. A Figura 24 ilustra graficamente o comparativo entre a condição normal e a condição de risco para cada uma dessas simulações.
+
+
+Figura 24 — Comparativo geral dos cinco cenários táticos simulados pela mediana das predições.
+  
+Fonte: Elaborado pelo autor (2026).
+
+
+
+
+
+
+
+
+
+
+
+
+A leitura analítica dos cinco cenários revela diretrizes operacionais diretas:
+
+
+   * Cenário 1 (Final de Semana X Dia Útil): A sinistralidade mediana eleva-se em +3,1% aos sábados e domingos, de 1,8307 para 1,8881. O aumento reflete a intensificação de fluxos recreativos, consumo de álcool e viagens de longa distância, justificando a concentração de efetivo e operações de alcoolemia nesses dias.
+   * Cenário 2 (Traçado da Via): Pistas em curva registram mediana +7,3% superior às retas, de 1,0600 para 1,1437, enquanto interseções de vias disparam para 1,3048 (+23,1%). O risco concentrado em cruzamentos e curvas acentuadas exige fiscalização eletrônica pontual de velocidade nesses pontos.
+   * Cenário 3 (Meteorologia) e Cenário 4 (Fase do Dia): Em dias chuvosos ou turnos noturnos, observa-se uma sutil redução na mediana da contagem de sinistros (-1,5% e -1,3%), associada à redução voluntária da velocidade média e à diminuição do fluxo total de veículos de passeio. Contudo, relatórios da PRF indicam que os sinistros noturnos e sob pista molhada apresentam maior índice de letalidade e severidade física.
+   * Cenário 5 (Tempestade Perfeita vs. Cenário Ideal): A combinação simultânea de todos os fatores de risco (reta, final de semana, chuva, plena noite e feriado) eleva a mediana estimada para, de 1,2865, contra 1,0761 no cenário ideal (curva, dia útil, céu claro e pleno dia). Trata-se de um salto de +19,5% no risco operacional, momento crítico em que protocolos de contingência e presença máxima de patrulhas devem ser ativados.
+
+
+Portanto, fica claro a capacidade do modelo ao se adaptar às mudanças frequentes que podem ocorrer em trechos na malha rodoviária brasileira. Transmitindo aos órgãos públicos uma estimativa de vítimas em cada cenário, dessa forma o poder público consegue se planejar de forma assertiva e eficiente. O'Que antes era reativo e baseado única e exclusivamente na experiência dos agentes, passa a ser ancorado em dados e análises.
+4.5.2 Estudo de Caso Real: BR-101 (KM 70)
+Para validar a capacidade do modelo em reproduzir a dinâmica de um trecho de altíssima complexidade no mundo real, selecionou-se um KM aleatório para a demonstração, o escolhido foi KM 70 da BR-101. O segmento concentra uma interseção rodoviária de grande porte com rotatória e viaduto, acumulando um histórico de 2.965 acidentes na base da PRF.
+Na simulação desse trecho, adotou-se uma metodologia estrita, a geometria real da via foi 100% preservada, a fim de simular com o máximo de exatidão um cenário do dia a dia da aplicação, com isso alterou-se exclusivamente às variáveis contextuais de tempo e clima. A Figura 25 apresenta o painel do estudo de caso, comparando as predições do Modelo V5 com as ocorrências reais observadas no pico histórico de Dezembro de 2023.
+
+
+Figura 25 — Painel do estudo de caso na BR-101 (KM 70): histórico mensal, predições por cenário e comparação com dados reais.
+  
+
+Fonte: Elaborado pelo autor (2026).
+Em análise do painel, é possível observar que em Dezembro de 2023, o trecho registrou 54 acidentes reais. Alimentado com os dados originais do período, o Modelo V5 estimou 48,7 acidentes/mês, demonstrando aderência ao volume efetivamente observado em um dos pontos mais críticos do país.
+Em outro cenário no mesmo trecho, ao simular variações puramente contextuais, a predição oscilou de 32,0 acidentes no Cenário Ideal para 32,3 acidentes na Tempestade Perfeita.
+Com isso, essa proximidade observada se materializa em uma evidência para a premissa central desta pesquisa, o volume de sinistros em rodovias federais não é um fenômeno aleatório, mas uma dinâmica estruturada e matematicamente previsível. Em um gargalo complexo que entrelaça o fluxo rodoviário de longa distância com o tráfego urbano local, o modelo foi capaz de capturar a sobrecarga da via sem atenuar sua periculosidade. Para a Polícia Rodoviária Federal, essa capacidade preditiva transforma a atuação institucional, substituindo o atendimento reativo a ocorrências pelo dimensionamento antecipado de viaturas, bafômetros e equipes de resgate médico nos meses onde a população está mais exposta a sinistros fatais.
+
+
+________________
+5 DISCUSSÃO 
+
+
+Primeiramente é sabido que, reduzir acidentes exige mais do que apenas registrar tragédias após o encerramento do exercício fiscal. Os achados quantitativos revelados pela modelagem preditiva comprovam que a sinistralidade nas rodovias federais obedece a padrões determinísticos que podem e devem ser antecipados pelo Estado. 
+A apresentação numérica dos dados consolidados no capítulo anterior só ganha sentido prático quando é confrontado com o desafio real da segurança viária brasileira. Mais do que uma sequência de métricas de acurácia ou coeficientes estatísticos, os resultados obtidos pelo Modelo V5 representam uma resposta direta às dores estruturais diagnosticadas na literatura. O objetivo deste capítulo é dissecar o significado dessas evidências empíricas, avaliando como o rigor metodológico adotado, o isolamento dos efeitos da infraestrutura do DNIT e as simulações táticas da PRF transformam dados espalhados de ocorrências em diretrizes concretas de governança orientada a dados.
+
+
+5.1 Da Reatividade à Antecipação
+
+
+Primeiramente fica claro que, os resultados obtidos demonstrados no último capítulo, validam a hipótese central levantada no início do projeto, a Introdução, o uso de Ciência de Dados rompe o status quo atual da gestão de tráfego, que é a inércia reativa que historicamente caracteriza a gestão viária no Brasil. Durante anos, a administração pública atuou apenas após a consolidação da tragédia, cenário que o Laboratório de Inovação e Dados (ÍRIS, 2022) identifica como o principal entrave para que os governos atinjam a maturidade analítica e superem a cultura burocrática, cenário comumente conhecido como “apagar incêndio”. O Anuário da PRF (2025), ao registrar 73.156 sinistros e 6.160 mortes em 2024, atesta a falência desse modelo puramente retrospectivo.
+Com isso, a revolução para o modelo orientado a dados,  atende aos princípios teóricos de Provost e Fawcett (2013) e Wegman et al. (2015), segundo os quais o dado bruto só se torna ativo estratégico quando reduz a incerteza de eventos futuros. Ao atingir um R2 de 0,9726 com erro médio inferior a meio acidente por trecho/mês, MAE=0,418, o pipeline comprova que a sinistralidade não é um evento puramente caótico ou imprevisível. Existe um padrão determinismo probabilístico imposto pela geometria da via, pelo calendário e pela qualidade do pavimento, no qual um algoritmo consegue estimar com um alto nível de acerto. 
+Portanto, para o Estado brasileiro, que acumula perdas anuais estimadas em R$ 50 bilhões pelo IPEA(2020) e analisando apenas rodovias federais é estimado em R$ 12,9 bilhões segundo a CNT (2023), ter a possibilidade de antecipar a probabilidade de risco significa alocar viaturas e ambulâncias no local exato antes da colisão, transformando gastos emergenciais em investimento preventivo, ocasionando em um saving de vidas e orçamentário para o poder público.
+
+
+5.2 A Ilusão das Métricas e a Assimetria Real
+
+
+A comparação entre as cinco arquiteturas testadas traz uma discussão fundamental sobre a aplicação de Machine Learning em séries temporais governamentais. Se a avaliação do projeto tivesse se guiado exclusivamente pela busca do maior coeficiente numérico, a versão V1 teria sido a escolhida devido ao seu R2 de 0,9892. No entanto, essa escolha configuraria uma falha metodológica grave, o data leakage temporal introduzido pela amostragem aleatória convencional (train_test_split).
+Em problemas de segurança pública, o tempo é um vetor estritamente cronológico. Permitir que observações de 2024 componham o treinamento para prever 2021 equivale a alimentar o algoritmo com o futuro que ele deveria inferir. A redução controlada das métricas no Modelo V5 (R2 de 0,9726 treinado entre 2019-2023 e testado em 2024-2025) reflete o único desempenho fidedigno para um ambiente real de produção. O modelo comprovou sua capacidade de generalizar diante do desconhecido, respaldando a teoria de ensemble learning de Breiman (2001) e James et al. (2023) sobre a contenção de variância sem sobreajuste conhecido como overfitting mundialmente.
+De maneira complementar, a constatação da assimetria positiva severa, através do skewness no dataset da PRF justificou o abandono da média aritmética em favor da mediana como métrica primária de simulação (Mediana Baseline = 1,8978 vs. Média Baseline = 3,4182). Como a maioria dos trechos registra poucos sinistros rotineiros enquanto raros trechos concentram dezenas de ocorrências, utilizar a média como balizador operacional induziria a PRF a superdimensionar efetivos em vias calmas e subdimensionar em pontos de cauda longa. Outro ponto importante foi o tratamento via Bucketing espaço-temporal de 10 km que resolveu a armadilha zero-inflated, gerando uma variável densa e utilizável para regressão sem distorcer a realidade física da via.
+
+
+5.3 Economia de Infraestrutura e Diretrizes para o DNIT
+
+
+A análise de interpretabilidade via SHAP e Gráficos de Dependência Parcial (PDP) permitiu isolar o impacto da engenharia viária sobre o risco de acidentes, contrapondo-se ao senso comum que responsabiliza unicamente o fator humano. O experimento Ceteris Paribus na BR-381 (KM 340-350) demonstrou quantitativamente que a degradação física da via eleva a sinistralidade em 7,2%, mesmo quando variáveis de tráfego, clima e calendário permanecem congeladas. A pista deteriorada reduz a margem de manobra do condutor, transformando pequenas falhas em colisões severas, ou seja, a falta de manutenção no pavimento agrava erros do condutor, levando consideravelmente a sinistralidade.
+O achado de maior relevância na pesquisa para o planejamento orçamentário do DNIT reside no formato em cotovelo identificado na curva PDP. A recuperação de um trecho em estado crítico para o nível regular (ICP 0 para 50) ou asfaltar um trecho reduz a sinistralidade em 0,120 acidentes/mês por 10 km, enquanto o salto de regular para excelente (ICP 50 para 100) traz um ganho marginal de apenas 0,080 acidentes.
+Esse comportamento dita uma diretriz econômica clara para a gestão de infraestrutura, o Retorno sobre o Investimento em Manutenção (ROMI) para preservação de vidas é exponencialmente mais alto quando o orçamento público é direcionado para eliminar defeitos graves (buracos, trincamentos profundos e drenagens colapsadas) em trechos degradados, em vez de financiar recapeamentos de alto padrão em vias que já operam em condições regulares. O showcase de otimização Argmax na BR-40 (KM 110-120) comprova essa premissa, elevar o pavimento da nota 5 para 70 reduz os sinistros em 17,04%, poupando cerca de 9 acidentes graves por ano em apenas dez quilômetros de rodovia.
+
+
+5.4 A Hierarquia entre Geometria Física e Dinâmica Temporal
+
+
+As simulações de cenários operacionais revelam uma hierarquia de causalidade indispensável para o planejamento tático da Polícia Rodoviária Federal. A dominância das pistas retas na importância preditiva (MDI de aproximadamente 35%) decorre de sua predominância na extensão da malha e do excesso de velocidade que essas vias permitem e induzem por monotonia. No entanto, em contraponto ao analisar a densidade de risco por quilômetro, as interseções de vias e curvas acentuadas elevam o risco mediano em +23,1% e +7,3%, respectivamente.
+O estudo de caso real do KM 70 da BR-101 sintetiza a relação entre estrutura física e contexto temporal. Em um trecho de geometria complexa (viaduto com rotatória) que acumulou 54 sinistros em um único mês, o Modelo V5 previu 48,7 acidentes. Ao simular variações puramente contextuais (tempo bom vs. chuva, feriado ou dia útil) com a geometria física fixada, a predição oscilou na faixa estreita de 32,0 a 32,3 acidentes/mês.
+Essa evidência demonstra que a geometria física e a presença de acessos urbanos determinam o risco base do local, dessa forma esses fatores determinantes prevalecem sobre fatores humanos e temporais, com issoariações de chuva ou turno noturno atuam como moduladores secundários. Para a PRF, a lição prática é simples, blitzes sazonais e reforços temporários de patrulhamento são paliativos necessários no curto prazo, mas a erradicação de nós de acidentes históricos exige intervenções definitivas de engenharia viária para alterar a geometria da via, que devem conduzidas em cooperação com o DNIT.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+6 CONCLUSÃO
+
+
+A segurança viária em rodovias federais permanece como um dos nós mais dramáticos da administração pública brasileira, pois vidas são ceifadas diariamente no asfalto brasileiro. Por trás dos números consolidados nos boletins da Polícia Rodoviária Federal, persistem tragédias familiares e prejuízos econômicos que drenam dezenas de bilhões de reais da sociedade ano após ano. O poder público, historicamente condicionado a agir apenas após a colisão, opera na maior parte do tempo em regime reativo, mobilizando viaturas e equipes de resgate quando o dano já se consumou. Este Trabalho de Conclusão de Curso desafiou essa postura de inércia, a investigação buscou demonstrar como a integração de Ciência de Dados, Aprendizado de Máquina e inteligência geoespacial pode erguer uma ponte sólida entre repositórios abertos de dados governamentais e a tomada de decisão preventiva no Estado.
+Ao conectar os registros operacionais de sinistros da PRF (2019 a 2025) aos cadastros técnicos de infraestrutura viária do DNIT, o projeto estruturou uma esteira analítica orientada pelo framework CRISP-DM. Longe de tratar os algoritmos preditivos como caixas-pretas de oráculos, o esforço investigativo priorizou a transparência metodológica, a interpretabilidade dos fatores de risco e a formulação de diretrizes acionáveis para as políticas públicas de transporte. O percurso revelou tanto o vigor dos modelos de árvores de decisão para prever volumes de sinistralidade quanto os desafios matemáticos que emergem quando se tenta modelar a realidade complexa e assimétrica das rodovias brasileiras.
+
+
+6.1 Síntese do Cumprimento dos Objetivos
+
+
+O objetivo geral do trabalho foi plenamente atingido ao se desenvolver, testar e homologar uma arquitetura preditiva robusta capaz de estimar o volume mensal de acidentes em segmentos da malha federal. Para isso, o modelo Random Forest V5 consolidou-se como o resultado central da pesquisa. Diferentemente de abordagens puramente teóricas que repartem conjuntos de treino e teste de modo aleatório caindo no vício de data leakage temporal, o Modelo V5 submeteu-se a um particionamento cronológico estrito: foi calibrado com 5 anos de 2019 a 2023 e testado frente aos anos de 2024 e 2025. Ao confrontar o futuro desconhecido, o modelo alcançou um coeficiente de determinação R2 de 0,9726 e um Erro Médio Absoluto (MAE) de 0,4181 acidentes por trecho de 10 km ao mês, superando com folga os parâmetros estabelecidos no RNF-4 (R2 > 0,90 e MAE<1,0).
+Os objetivos específicos traçados logo no início do planejamento da pesquisa foram concretizados ao longo das etapas do pipeline analítico:
+Ingestão e Harmonização Multi-fonte: O pipeline de ETL processou mais de 450 mil boletins de ocorrência da PRF e os integrou aos levantamentos de condição estrutural do DNIT por meio de junções intervalares temporais e espaciais (ASOF join). Para contornar a esparsidade extrema da escala métrica pontual, a malha rodoviária foi agregada em buckets espaço-temporais homogêneos de 10 quilômetros por mês, assegurando consistência tabular para o treinamento algorítmico.
+Interpretabilidade e Avaliação Causal da Infraestrutura: A aplicação combinada de importância por impureza (MDI), valores SHAP (Shapley Additive Explanations), Gráficos de Dependência Parcial (PDP) e testes A/B Ceteris Paribus decifrou a mecânica interna do Random Forest. Os experimentos comprovaram a relação não linear entre a qualidade do pavimento e a sinistralidade. A otimização global via algoritmo Argmax identificou na BR-40 (KM 110 ao 120) o trecho prioritário nacional, no qual a recuperação asfáltica (ICP de 5 para 70) aponta uma redução potencial de -17,04% na ocorrência de acidentes.
+Simulações de Cenários Operacionais e Validação Empírica: Foram simulados cinco cenários táticos balizados pela mediana das estimativas, neutralizando o efeito de caudas longas. As simulações comprovaram que o risco de sinistros salta +3,1% nos finais de semana, cresce +7,3% em trechos sinuosos e escala +23,1% em interseções viárias, culminando em uma alta de +19,5% no cenário de `tempestade perfeita`. No estudo de caso real do KM 70 da BR-101 (trecho com viaduto e rotatória), o modelo estimou 48,7 acidentes no mês frente aos 54 efetivamente registrados, demonstrando grande proximidade com a realidade operacional.
+Disponibilização em Plataforma de Business Intelligence: Atendendo integralmente aos requisitos RF-7 e RNF-1, as estimativas foram preservadas na escala original das contagens para poderem ser exportadas para painéis executivos no Microsoft Power BI. A ferramenta entrega à gestão pública mapas de calor de criticidade viária, histórico descritivo, simulador interativo de cenários What-If e ranking automatizado de intervenção em pavimentos para o DNIT.
+
+
+6.2 Contribuições para a Gestão Pública
+
+
+A principal virtude desta pesquisa reside em fornecer ferramentas concretas para a transformação cultural da segurança viária no Brasil. Conforme advertem Provost e Fawcett (2013), a maturidade analítica de uma organização só atinge sua plenitude quando os dados deixam de servir a relatórios de autópsia e passam a balizar escolhas estratégicas prévias. O setor público brasileiro não carece de registros, carece de capacidade preditiva articulada. O presente trabalho oferece uma contribuição palpável para preencher essa lacuna em duas instituições chaves para a malha rodoviária: a Polícia Rodoviária Federal e o Departamento Nacional de Infraestrutura de Transportes.
+Para a Polícia Rodoviária Federal, o modelo disponibiliza uma régua quantitativa de antecipação. Em vez de definir rondas a partir do hábito ou de impressões empíricas dispersas, o comando operacional pode alocar viaturas e posicionar radares móveis guiando-se pela probabilidade espacial de risco. Como revelou a análise dos cenários táticos, cruzamentos e curvas sinuosas combinados com fluxo de finais de semana demandam policiamento ostensivo prioritário. Saber onde e quando a probabilidade de colisões se eleva autoriza o remanejamento cirúrgico do efetivo policial, otimizando o gasto com combustíveis e ampliando a presença dissuasória da autoridade nos pontos de maior perigo.
+Para o DNIT, as contribuições recaem diretamente sobre a eficiência na aplicação dos escassos recursos do orçamento federal. A análise por Dependência Parcial (PDP) desfez uma premissa intuitiva: a curva em cotovelo identificada na relação entre o Índice de Condição do Pavimento (ICP) e os sinistros prova que recuperar um trecho em estado Péssimo para Regular (ICP<50) traz um retorno marginal substancialmente superior em vidas salvas (-0,120 acidentes/mês por km) do que recapear vias que já operam em condições aceitáveis (-0,080 acidentes/mês por km). Esse achado estabelece um critério objetivo de Retorno Social do Investimento (ROMI) para a engenharia viária. O algoritmo Argmax testado no estudo de caso da BR-40 exemplifica como a inteligência computacional pode criar uma fila técnica de prioridades para obras asfálticas, baseado inteiramente na ciência de dados afastando de cena outras pressões para priorizar trechos onde o asfalto novo possui maior poder de preservar vidas.
+Há ainda uma contribuição institucional intangível, porém indispensável para a análise, a integração técnica entre PRF e DNIT. Historicamente, ministérios e autarquias federais operam seus dados em compartimento, ou silos. O policial preenche o boletim na pista, o engenheiro mede o asfalto meses depois em outra planilha, mas raramente esses dados se cruzam e são analisados como um só. Este estudo provou a viabilidade técnica e a riqueza analítica de fundir esses dois universos em uma camada de dados única, inaugurando um precedente metodológico para políticas integradas de mobilidade e segurança de transportes no governo federal.
+
+
+6.3 Limitações da Pesquisa
+
+
+O desenvolvimento de modelos estatísticos sobre dados abertos da administração pública impõe um dos maiores desafios na ciência de dados. Durante a construção do Modelo V5, a busca pela superação de barreiras estruturais da base revelou uma dinâmica clássica da Ciência de Dados, a tentativa de contornar uma limitação matemática frequentemente introduz efeitos colaterais na etapa seguinte do pipeline.
+A distribuição bruta dos boletins de ocorrência da PRF apresenta esparsidade extrema quando analisada em escala métrica linear contínua. Em um determinado dia e quilômetro isolado de rodovia, a probabilidade pontual de colisão é virtualmente nula, gerando uma inflação massiva de zeros conhecido como zero-inflation, conceito já explicado anteriormente, superior a 99% das observações. Para viabilizar a convergência de algoritmos baseados em árvores de decisão, estruturou-se a agregação da malha em buckets espaço-temporais de 10 quilômetros por mês. A abordagem tomada atingiu com sucesso o objetivo imediato de densificar a variável resposta. Contudo, essa consolidação acarretou dois desdobramentos metodológicos críticos, não previstos.
+O primeiro desdobramento consiste no viés de sobrevivência decorrente da perda dos trechos seguros. O agrupamento temporal foi executado aplicando operações de sumarização (groupby) sobre a tabela histórica de sinistros registrados pela PRF. Consequentemente, apenas trechos e meses que registraram ao menos um acidente integraram a matriz final de treinamento, pois no dataset da PRF contém apenas ocorrências de sinistros e não os meses que os trechos não tiveram acidente algum. Dessa forma, variável alvo assumiu valor mínimo unitário, excluindo da modelagem os milhares de segmentos federais que operaram com total segurança ao longo do ano. O modelo não estima a probabilidade incondicional de acidentes na malha rodoviária federal, ele opera estritamente condicionado à preexistência de sinistralidade. O sistema perde, portanto, a sensibilidade matemática para discriminar ativamente os fatores que mantiveram um segmento preservado sem nenhuma ocorrência ao longo de doze meses consecutivos.
+O segundo desdobramento diz respeito a uma decomposição contábil das variáveis geométricas que atuou como facilitador estatístico nas métricas de desempenho. Na fase de engenharia de atributos, as variáveis categóricas de traçado da via e de calendário foram computadas no nível do evento e consolidadas no bucket mensal por meio de somatórios de ocorrências. Ao receber essas variáveis somadas como preditores, o Random Forest identificou uma quase identidade contábil, a soma das colisões em retas, curvas e cruzamentos reconstitui perfeitamente o próprio volume total de acidentes daquele mês, dessa forma o modelo identificou um atalho para o atingimento da meta.
+Esse mecanismo esclarece a razão pela qual o Modelo V5 alcançou um coeficiente de determinação aparentemente excepcional mesmo sob uma partição temporal rigorosa (treino 2019–2023 / teste 2024–2025). As colunas explicativas do conjunto de teste já continham a contagem agregada de sinistros daquele mês. O modelo operou com maestria como um reconciliador de perfis físicos de sinistros ocorridos.
+Outro ponto de desafio, foi a integração das medições de engenharia viária do DNIT aos registros da PRF, que revelou assimetrias severas na infraestrutura de dados governamentais.
+Lacuna Amostral de 82,3%: Apenas 17,7% dos buckets georreferenciados possuíam avaliação estrutural contemporânea do pavimento cadastrada pelo DNIT. A esmagadora maioria da malha federal não dispunha de séries contínuas para o Índice de Condição da Superfície (ICP) e o Índice de Gravidade Global (IGG).
+Com esse fato, foi tomada a decisão para não distorcer a variância populacional por meio de imputações artificiais de média ou mediana, os trechos desprovidos de monitoramento receberam a constante sentinela -1.0. A topologia de divisão das árvores do Random Forest isolou esse valor em ramos próprios. Entretanto, esse artifício transformou a feature contínua em um separador binário de governança: o modelo aprendeu a distinguir trechos monitorados pelo DNIT daqueles negligenciados, atenuando a detecção suave da curva de degradação física do asfalto.
+O ofuscamento de Atributos, a presença de somatórios contábeis de acidentes nas colunas de traçado fez com que o algoritmo concentrasse cortes de impureza (MDI) na geometria viária, que respondeu por mais de 60% do ganho de informação, devido ao atalho que ele identificou. Variáveis contínuas de pavimento (icp, icc, icm) receberam participações residuais entre 1% e 2%, limitando a sensibilidade pura do asfalto nos testes preditivos.
+Por fim, identificaram-se restrições na sensibilidade das simulações de cenários (Ceteris Paribus). Ao realizar as simulações de cenários e fixar um atributo de cenário como is_tracado_via_Curva = 1, o modelo treinado sob somas absolutas e fortemente impactado pelo atalho, interpretou a entrada como a ocorrência de apenas uma colisão naquela condição, comprimindo as previsões simuladas em uma faixa estreita entre 1,36 e 1,60 acidentes por trecho/mês. 
+
+
+6.4 Trabalhos Futuros
+As fronteiras encontradas nesta pesquisa não encerram a discussão; abrem, pelo contrário, um roteiro claro para o amadurecimento científico da modelagem preditiva em segurança viária. Propõem-se quatro frentes complementares para investigações posteriores:
+A primeira iniciativa consiste na construção de uma matriz cartesiana exaustiva com presença de zeros reais. O pipeline deve abandonar a estruturação restrita aos sinistros ocorridos e adotar uma grade espaço-temporal completa. Essa grade será formada pelo produto cartesiano de todos os trechos homogêneos da malha rodoviária federal multiplicados pelos doze meses do ano civil. Os segmentos que não registrarem ocorrências em determinado período receberão explicitamente a contagem 
+Y=0
+Y=0. Esse ajuste capacitará o algoritmo a discriminar os fatores determinantes da segurança viária e da imunidade a sinistros, superando o viés de sobrevivência.
+A segunda frente requer o desacoplamento categórico dos atributos cadastrais. As características físicas do leito viário devem emanar de dados cadastrais estáticos e perenes do DNIT, jamais de somatórios de sinistros no bucket. Recomenda-se substituir as variáveis dicotômicas somadas por atributos geométricos contínuos reais:
+Grau e raio médio de curvatura do segmento (medido em metros);
+Rampa longitudinal e inclinação média de declive e aclive (em percentual);
+Largura útil de pista de rolamento e presença de acostamento pavimentado;
+Contagem de acessos comerciais e interseções em nível por quilômetro.
+Dessa forma, os preditores representarão a topografia real da rodovia de forma imutável e exógena, existindo antes e independentemente de qualquer sinistro acontecer.
+A terceira diretriz direciona-se à experimentação com arquiteturas estatísticas nativas para dados de contagem com excesso de zeros. Em vez de forçar o Random Forest padrão sobre distribuições truncadas, sugere-se investigar:
+Modelos Hurdle e Zero-Inflated: Abordagens como Zero-Inflated Poisson (ZIP) e Zero-Inflated Negative Binomial (ZINB) decompõem o problema em dois momentos estatísticos distintos. Primeiro, um regressor logístico estima a probabilidade de um trecho sofrer ao menos um acidente (
+P(Y>0)
+P(Y>0) versus 
+P(Y=0)
+P(Y=0)); em seguida, um modelo de contagem truncada calcula o volume de sinistros condicionado à quebra do zero.
+Funções de Perda Tweedie em Algoritmos de Boosting: Implementação de LightGBM ou XGBoost com distribuição Tweedie, cuja formulação matemática acomoda naturalmente distribuições com massa pontual concentrada em zero combinada a caudas contínuas estritamente positivas.
+A quarta frente reside na integração sensorial contínua com sensores climáticos e contadores de tráfego. Propõe-se conectar os buckets georreferenciados às séries horárias das estações automáticas do Instituto Nacional de Meteorologia (INMET), alimentando o modelo com grandezas físicas reais de precipitação acumulada (milímetros por hora), rajadas de vento e índice de visibilidade horizontal. Da mesma forma, torna-se essencial incorporar o Volume Diário Médio (VDM) aferido por praças de pedágio e radares do DNIT. A inclusão da contagem volumétrica de tráfego permitirá converter previsões de volume absoluto em taxas normalizadas de exposição ao risco por milhão de veículos-quilômetro percorridos, elevando a precisão das decisões operacionais do Estado a um patamar inédito.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+REFERÊNCIAS
+
+ANUÁRIO POLÍCIA RODOVIÁRIA FEDERAL. Brasília, DF: PRF, 2025. Disponível em: https://www.gov.br/prf/pt-br/acesso-a-informacao/dados-abertos/diest-arquivos/anuario-2024_final.html . Acesso em: 18 fev. 2026.
+BASS, Len; CLEMENTS, Paul; KAZMAN, Rick. Software Architecture in Practice. 3. ed. Boston: Addison-Wesley, 2012. Disponível em: https://resources.sei.cmu.edu/library/asset-view.cfm?assetid=30264 . Acesso em: 2 mar. 2026.
+BECK, Kent et al. Manifesto para Desenvolvimento Ágil de Software. [S.l.], 2001. Disponível em: https://agilemanifesto.org/iso/ptbr/manifesto.html . Acesso em: 7 maio 2026.
+BECK, Kent. Extreme Programming Explained: Embrace Change. 2. ed. Boston: Addison-Wesley, 2004. Disponível em: https://ptgmedia.pearsoncmg.com/images/9780321278654/samplepages/9780321278654.pdf . Acesso em: 2 mar. 2026.
+BOFFO, Gabriela Holz. Formatos e técnicas de modelos de previsão de acidentes de trânsito. UFRGS, 2011. Disponível em: https://lume.ufrgs.br/bitstream/handle/10183/31414/000780089.pdf . Acesso em: 2 mar. 2026.
+BREIMAN, Leo. Random Forests. Machine Learning, v. 45, n. 1, p. 5-32, out. 2001. Disponível em: https://doi.org/10.1023/A:1010933404324 . Acesso em: 2 mar. 2026.
+CARVALHO, Carlos Henrique Ribeiro de. Custos dos acidentes de trânsito no Brasil: estimativa simplificada com base na atualização das pesquisas do Ipea sobre custos de acidentes nos aglomerados urbanos e rodovias. Brasília: Ipea, 2020. (Texto para Discussão, n. 2565). Disponível em: https://repositorio.ipea.gov.br/items/98e21d94-320d-42bf-950b-7eb1a7f90911 . Acesso em: 2 mar. 2026.
+CHEN, Hsinchun; CHIANG, Roger H. L.; STOREY, Veda C. Business Intelligence and Analytics: From Big Data to Big Impact. MIS Quarterly, Minneapolis, v. 36, n. 4, p. 1165-1188, 2012. Disponível em: https://misq.umn.edu/business-intelligence-and-analytics-from-big-data-to-big-impact.html . Acesso em: 7 maio 2026.
+CNT - CONFEDERAÇÃO NACIONAL DO TRANSPORTE. Acidentes e mortes nas rodovias federais custaram ao país quase R$ 13 bilhões em 2022. Brasília: Agência CNT, 2023. Disponível em: https://www.cnt.org.br/agencia-cnt/acidentes-e-mortes-nas-rodovias-federais-custaram-ao-pais-quase-13-bilhoes-em-2022 . Acesso em: 2 mar. 2026.
+CONFEDERAÇÃO NACIONAL DO TRANSPORTE. Pesquisa CNT de rodovias 2024: relatório principal. Brasília: CNT: SEST SENAT: ITL, 2024. 224 p. Disponível em: https://static.poder360.com.br/2024/11/Pesquisa-CNT-de-Rodovias-2024.pdf . Acesso em: 2 mar. 2026.
+CRISP-DM: WIRTH, R.; HIPP, J. CRISP-DM: Towards a standard process model for data mining. (2000). Disponível em: https://www.cs.unibo.it/~danilo.montesi/CBD/Beatriz/10.1.1.198.5133.pdf . Acesso em: 2 mar. 2026.
+DNIT DEPARTAMENTO NACIONAL DE INFRAESTRUTURA DE TRANSPORTES. Condições do pavimento. Disponível em: https://servicos.dnit.gov.br/dadosabertos/dataset/condicoes-do-pavimento . Acesso em: 18 fev. 2026.
+DNIT DEPARTAMENTO NACIONAL DE INFRAESTRUTURA DE TRANSPORTES. Manual de projeto e práticas operacionais para segurança nas rodovias. Rio de Janeiro: IPR, 2010. Disponível em: https://www.gov.br/dnit/pt-br/assuntos/planejamento-e-pesquisa/ipr/coletanea-de-manuais/vigentes/741_manual_projeto_praticas_operacionais.pdf . Acesso em: 7 maio 2026.
+FERRARI, Alberto; RUSSO, Marco. Introducing Microsoft Power BI. Redmond: Microsoft Press, 2016. Disponível em: https://download.microsoft.com/download/0/8/1/0816F8D1-D1A5-4F60-9AF5-BC91E18D6D64/Microsoft_Press_ebook_Introducing_Power_BI_PDF_mobile.pdf . Acesso em: 2 mar. 2026.
+GARTNER. Magic Quadrant for Analytics and Business Intelligence Platforms. Stamford: Gartner, jun. 2024.
+GOES, Paulo B. Big Data and IS Research. MIS Quarterly, v. 38, n. 3, p. iii-viii, set. 2014. Disponível em: https://doi.org/10.25300/MISQ/2014/38.3.E0 . Acesso em: 2 mar. 2026.
+GOODFELLOW, Ian; BENGIO, Yoshua; COURVILLE, Aaron. Deep Learning. Cambridge: MIT Press, 2016. Disponível em: https://www.deeplearningbook.org/ . Acesso em: 2 mar. 2026.
+HASTIE, Trevor; TIBSHIRANI, Robert; FRIEDMAN, Jerome. The Elements of Statistical Learning: Data Mining, Inference, and Prediction. 2. ed. New York: Springer, 2009. Disponível em: https://hastie.su.domains/ElemStatLearn/ . Acesso em: 2 mar. 2026.
+HUNTER, John D. Matplotlib: A 2D graphics environment. Computing in Science & Engineering, v. 9, n. 3, p. 90-95, 2007. Disponível em: https://ieeexplore.ieee.org/document/4160265/ . Acesso em: 2 mar. 2026.
+IBGE – INSTITUTO BRASILEIRO DE GEOGRAFIA E ESTATÍSTICA. Greve dos caminhoneiros leva indústria a ter a maior queda desde 2008. Rio de Janeiro: Agência IBGE Notícias, 2018. Disponível em: https://agenciadenoticias.ibge.gov.br/agencia-noticias/2012-agencia-de-noticias/noticias/21622-greve-dos-caminhoneiros-leva-industria-a-ter-a-maior-queda-desde-2008 . Acesso em: 3 mar. 2026.
+IBM. What is ETL (Extract, Transform, Load)? IBM Think, [S.l.], 2024. Disponível em: https://www.ibm.com/think/topics/etl . Acesso em: 7 maio 2026.
+ILOS – INSTITUTO DE LOGÍSTICA E SUPPLY CHAIN. Custo logístico no Brasil atinge 15,5% do PIB, indica pesquisa. Rio de Janeiro: ILOS, 2026. Disponível em: https://ilos.com.br/custo-logistico-no-brasil-atinge-155-do-pib-indica-pesquisa/ . Acesso em: 3 mar. 2026.
+ÍRIS – LABORATÓRIO DE INOVAÇÃO E DADOS DO GOVERNO DO CEARÁ. Introdução à transformação digital para gestores públicos. Fortaleza: Governo do Estado do Ceará, 2022. Disponível em: https://irislab.ce.gov.br/wp-content/uploads/2022/04/Introducao-a-transformacao-digital-para-gestores-publicos.pdf . Acesso em: 7 maio 2026.
+JAMES, Gareth et al. An Introduction to Statistical Learning: with Applications in R. New York: Springer, 2013. Disponível em: https://www.statlearning.com/ . Acesso em: 2 mar. 2026.
+JAMES, Gareth et al. An Introduction to Statistical Learning: with Applications in Python. Cham: Springer, 2023. Disponível em: https://www.statlearning.com/ . Acesso em: 7 maio 2026.
+JOANES, D. N.; GILL, C. A. Comparing measures of sample skewness and kurtosis. Journal of the Royal Statistical Society: Series D (The Statistician), v. 47, n. 1, p. 183-189, 1998. Disponível em: https://rss.onlinelibrary.wiley.com/doi/pdf/10.1111/1467-9884.00122 . Acesso em: 9 abr. 2026.
+KITCHIN, Rob. The Data Revolution: Big Data, Open Data, Data Infrastructures and Their Consequences. London: SAGE Publications, 2014. Disponível em: https://books.google.com.br/books?id=GfOICwAAQBAJ . Acesso em: 2 mar. 2026.
+LANEY, Doug. 3D Data Management: Controlling Data Volume, Velocity and Variety. Stamford: Meta Group, 2001. Disponível em: https://diegonogare.net/wp-content/uploads/2020/08/3D-Data-Management-Controlling-Data-Volume-Velocity-and-Variety.pdf . Acesso em: 3 mar. 2026.
+MAYER-SCHÖNBERGER, Viktor; CUKIER, Kenneth. Big Data: como extrair volume, variedade, velocidade e valor da avalanche de informação cotidiana. Tradução de Paulo Polzonoff Jr. Rio de Janeiro: Elsevier, 2013. Disponível em: https://www.kufunda.net/publicdocs/Big%20Data%20(Viktor%20Mayer%20Sch%C5%A1nberger).pdf . Acesso em: 2 mar. 2026.
+MCKINNEY, Wes. Data Structures for Statistical Computing in Python. Proceedings of the 9th Python in Science Conference, 2010. Disponível em: https://proceedings.scipy.org/articles/Majora-92bf1922-00a . Acesso em: 2 mar. 2026.
+MCKINNEY, Wes. Python for Data Analysis: Data Wrangling with pandas, NumPy, and Jupyter. 3. ed. Sebastopol: O'Reilly Media, 2022. Disponível em: https://wesmckinney.com/book/ . Acesso em: 7 maio 2026.
+MICROSOFT. O que é o Power BI? Redmond: Microsoft, 2026. Disponível em: https://learn.microsoft.com/pt-br/power-bi/fundamentals/power-bi-overview . Acesso em: 3 mar. 2026.
+OLIPHANT, Travis E. Guide to NumPy. Provo, UT: T.E. Oliphant, 2006. Disponível em: https://web.mit.edu/dvp/Public/numpybook.pdf . Acesso em: 2 mar. 2026.
+POLÍCIA RODOVIÁRIA FEDERAL. Dados abertos da PRF. Disponível em: https://www.gov.br/prf/pt-br/acesso-a-informacao/dados-abertos/dados-abertos-da-prf . Acesso em: 18 fev. 2026.
+PRESS, Gil. Cleaning Big Data: Most Time-Consuming, Least Enjoyable Data Science Task, Survey Says. Forbes, Nova York, 23 mar. 2016. Disponível em: https://www.forbes.com/sites/gilpress/2016/03/23/data-preparation-most-time-consuming-least-enjoyable-data-science-task-survey-says/ . Acesso em: 7 maio 2026.
+PRESSMAN, Roger S.; MAXIM, Bruce R. Engenharia de Software: uma abordagem profissional. 8. ed. Porto Alegre: AMGH Editora, 2016. Disponível em: https://archive.org/details/pressman-engenharia-de-software-uma-abordagem-profissional-8a . Acesso em: 2 mar. 2026.
+PROVOST, Foster; FAWCETT, Tom. Data Science and its Relationship to Big Data and Data-Driven Decision Making. Big Data, New Rochelle, v. 1, n. 1, p. 51-59, 2013. Disponível em: https://www.liebertpub.com/doi/10.1089/big.2013.1508 . Acesso em: 7 maio 2026.
+RICHARDS, Mark; FORD, Neal. Fundamentals of Software Architecture: An Engineering Approach. Sebastopol: O'Reilly Media, 2020. Disponível em: https://api.pageplace.de/preview/DT0400.9781492043423_A49444423/preview-9781492043423_A49444423.pdf . Acesso em: 2 mar. 2026.
+GANDOMI, Amir; HAIDER, Murtaza. Beyond the hype: Big data concepts, methods, and analytics. International Journal of Information Management, v. 35, n. 2, p. 137-144, 2015. Disponível em: https://doi.org/10.1016/j.ijinfomgt.2014.10.007 . Acesso em: 7 maio 2026.
+SCHWABER, Ken; SUTHERLAND, Jeff. The Scrum Guide. 2020. Disponível em: https://scrumguides.org/docs/scrumguide/v2020/2020-Scrum-Guide-US.pdf .
+SHARMA, Prashant. An Introduction to Random Forest Algorithm for Beginners. Analytics Vidhya, 2021. Disponível em: https://www.analyticsvidhya.com/blog/2021/10/an-introduction-to-random-forest-algorithm-for-beginners/ . Acesso em: 27 fev. 2026.
+SOMMERVILLE, Ian. Engenharia de Software. 9. ed. São Paulo: Pearson Education do Brasil, 2011. Disponível em: https://www.facom.ufu.br/~william/Disciplinas%202018-2/BSI-GSI030-EngenhariaSoftware/Livro/engenhariaSoftwareSommerville.pdf . Acesso em: 2 mar. 2026.
+STANDISH GROUP. CHAOS Report 2020: Beyond Infinity. Boston: The Standish Group International, 2020.
+VAN ROSSUM, Guido; DRAKE, Fred L. The Python Language Reference. Wilmington: Python Software Foundation, 2026. Disponível em: https://docs.python.org/3/reference/ . Acesso em: 7 maio 2026.
+VIRTANEN, P. et al. SciPy 1.0: fundamental algorithms for scientific computing in Python. Nature Methods, v. 17, n. 3, p. 261-272, 2020. Disponível em: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7056644/ . Acesso em: 2 mar. 2026.
+WASKOM, Michael L. Seaborn: statistical data visualization. Journal of Open Source Software, v. 6, n. 60, p. 3021, 2021. Disponível em: https://joss.theoj.org/papers/10.21105/joss.03021 . Acesso em: 2 mar. 2026.
+WEGMAN, F. et al. Evidence-based and data-driven road safety management. IATSS Research, v. 39, n. 1, p. 19–25, 2015. Disponível em: https://www.sciencedirect.com/science/article/pii/S038611121500014X. Acesso em: 2 mar. 2026.

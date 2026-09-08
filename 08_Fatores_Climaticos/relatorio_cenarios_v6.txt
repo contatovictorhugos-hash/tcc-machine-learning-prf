@@ -1,0 +1,17 @@
+==============================================================================
+              RELATÓRIO DE CENÁRIOS OPERACIONAIS — MODELO V6                 
+==============================================================================
+
+BR-381 KM 340 (MG) - Mês Regular         : 2.65 acidentes/mês
+BR-381 KM 340 (MG) - Feriados + FDS      : 2.74 acidentes/mês
+BR-116 KM 50 (SP) - Inverno Regular      : 11.47 acidentes/mês
+BR-116 KM 50 (SP) - Pico de Verão        : 11.25 acidentes/mês
+BR-101 KM 130 (SC) - Baixo Fluxo         : 29.40 acidentes/mês
+BR-101 KM 130 (SC) - Feriadões           : 29.62 acidentes/mês
+BR-317 KM 70 (AC) - Trecho Seguro        : 0.09 acidentes/mês
+
+Conclusão:
+Diferente do Modelo V5 (que ficava comprimido entre 1.36 e 1.60 acidentes),
+o Modelo V6 discrimina com precisão trechos de risco nulo (BR-317: 0.09 ac/mês)
+de trechos de altíssimo risco concentrado (BR-116/381: até 11.25 ac/mês).
+==============================================================================
