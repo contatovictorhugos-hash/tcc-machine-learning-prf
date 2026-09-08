@@ -1,18 +1,17 @@
-4.2 Diagnóstico do Modelo V5
+## 4.2 Diagnóstico do Modelo V6 Oficial
 
+A avaliação da qualidade das estimativas do Modelo V6 Oficial envolve o diagnóstico detalhado dos erros de previsão no conjunto de teste independente (anos de 2024 e 2025). A Figura 18 apresenta o painel de diagnóstico dos resíduos, composto pelo histograma de erros e pelo gráfico de dispersão Predito versus Real, instrumentos fundamentais para verificar se o modelo comete desvios aleatórios ou sistemáticos e em quais faixas da distribuição esses desvios se concentram.
 
-A avaliação da qualidade das estimativas do Modelo V5 envolve o diagnóstico dos erros de previsão e o estudo da contribuição de cada variável explicativa. 
-A Figura 18, logo abaixo, apresenta um painel de diagnóstico dos resíduos do Modelo V5, composto pelo histograma de erros e pelo gráfico de dispersão Predito versus Real, no qual são instrumentos fundamentais para avaliar se o modelo comete erros aleatórios ou sistemáticos, e mais importante, em que regiões da distribuição esses erros se concentram.
+Figura 18: Análise de resíduos do Modelo V6 Oficial: histograma de erros e dispersão predito versus real.
 
-Figura 18 – Análise de resíduos do Modelo V5: histograma de erros e dispersão predito versus real.
-
-
-  
+![Figura 18: Análise de resíduos do Modelo V6 Oficial](../figuras/figura18_analise_residuos_v6.png)
 
 Fonte: Elaborado pelo autor (2026).
 
+O primeiro gráfico, correspondente ao histograma de resíduos, apresenta uma distribuição de erros fortemente concentrada em torno do zero, com média residual de +0,002 acidentes e mediana de -0,14. Do total de 135.720 observações avaliadas no teste, 84,0% dos erros absolutos situam-se em até 1 acidente e 93,6% estão contidos no intervalo entre -2 e +2 acidentes. Observa-se uma cauda alongada à direita, com pequenas ocorrências de erros positivos que chegam a aproximadamente +38,8 acidentes no caso do registro de pico máximo histórico (77 acidentes reais em um único mês). Esse comportamento decorre da assimetria dos dados, caracterizada por alta frequência de zeros e raridade de eventos múltiplos severos, contexto no qual o modelo tende a subestimar os picos atípicos.
 
-O primeiro gráfico, o histograma de resíduos, evidencia algo já sabido dado à arquitetura do modelo, apresenta uma distribuição de erros esmagadoramente concentrada em zeros, e uma massa de erros limitada basicamente a -2 e +2 acidentes. Entretanto, pode-se observar uma cauda a direita, com pequenas ocorrências de erros que vão até cerca de 27 acidentes. Advento que faz sentido, dado às características dos dados que apresenta alta assimetria e valores extremos, com isso, naturalmente o modelo tende a subestimar eventos extremos, pois são raridade no dataset. O gráfico evidencia a taxa de sucesso do modelo a estimar o número de acidentes.
-Essa leve subestimação nos picos decorre do próprio mecanismo teórico do Random Forest detalhado no item 3.1.4, como a predição final de regressão é a média das predições de todas as árvores individuais, o modelo promove uma suavização estatística natural na cauda extrema da distribuição.
-        O gráfico de dispersão Predito vs Real, ajuda a entender esse cenário, uma vez que existe uma densa nuvem de pontos em aderência com a linha diagonal de previsão, apenas após 40 acidentes é possível observar um deslocamento onde o modelo tende a subestimar os eventos extremos, devido a sua raridade na realidade. 
-        Trazendo o modelo para o dia a dia das rodovias brasileiras, do ponto de vista operacional, os resultados da análise de resíduos possuem uma relevância estratégica direta para os stakeholders do projeto. O modelo é altamente preciso para os trechos de sinistralidade rotineira, exatamente onde a maior parte das decisões de alocação preventiva de recursos é tomada no dia a dia da PRF, e conservador, ao subestimar, nos trechos de sinistralidade extrema. Essa propriedade é operacionalmente desejável: um modelo que sistematicamente subestima os pontos mais críticos força os gestores a manter uma margem de segurança na alocação de recursos nesses trechos, reduzindo o risco de subinvestimento nas vias de maior letalidade acumulada.
+Essa subestimação nos picos decorre do próprio mecanismo teórico do Random Forest detalhado no item 3.1.4. Como a predição final de regressão resulta da média das predições de todas as árvores individuais da floresta, o modelo promove uma suavização estatística natural na cauda extrema da distribuição.
+
+O gráfico de dispersão Predito versus Real ajuda a compreender esse comportamento. Observa-se uma nuvem densa de pontos em estreita aderência com a linha diagonal de previsão perfeita ($Y = \hat{Y}$), que se estende por praticamente toda a faixa rotineira da malha rodoviária. Apenas a partir de 40 acidentes mensais nota-se um deslocamento sistemático em que as estimativas ficam abaixo da diagonal, reflexo da escassez amostral desses casos extremos, que representam somente 200 observações (0,15% da base de teste).
+
+Do ponto de vista operacional nas rodovias brasileiras, os resultados da análise de resíduos trazem subsídios diretos para a tomada de decisão da PRF. O modelo apresenta alta precisão nos trechos de sinistralidade rotineira, exatamente onde a maior parte das decisões de alocação preventiva de recursos é tomada no dia a dia da instituição, e comporta-se de maneira conservadora nos trechos de sinistralidade extrema. Essa propriedade é adequada na rotina policial: qualquer segmento rodoviário projetado com 30 ou 40 acidentes mensais já é classificado compulsoriamente no topo de prioridade operacional, garantindo a mobilização de fiscalização reforçada independentemente da dispersão de valores nos picos isolados.
