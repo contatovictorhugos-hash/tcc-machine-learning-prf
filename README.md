@@ -6,126 +6,170 @@
 ![Dataset](https://img.shields.io/badge/Dataset-475k%20Linhas%20(Zeros%20Reais)-purple)
 ![Auditoria](https://img.shields.io/badge/Status-Auditado%20V6%20(Zero%20Leakage)-success)
 
-Este repositório contém todo o pipeline de engenharia de dados, as arquiteturas de modelagem de Machine Learning (V1 à V6), a monografia completa e os módulos de explicabilidade (XAI) do Trabalho de Conclusão de Curso (TCC) em Ciência da Computação (UNIP, 2026). O objetivo central do projeto é **isolar e provar matematicamente o impacto da infraestrutura viária** (medida pelo DNIT) na frequência e letalidade de sinistros registrados pela Polícia Rodoviária Federal (PRF), controlando fatores comportamentais, climáticos e inércia de tráfego.
+Este repositório contém o pipeline completo de engenharia de dados, as arquiteturas de modelagem preditiva (V1 a V6 Oficial e o experimento V7), a monografia acadêmica e os módulos de explicabilidade (XAI) do Trabalho de Conclusão de Curso em Ciência da Computação (UNIP, 2026). O objetivo central reside em mensurar o impacto da infraestrutura viária (avaliada pelo DNIT) na frequência e letalidade dos sinistros registrados pela Polícia Rodoviária Federal (PRF), isolando variáveis comportamentais, meteorológicas e a inércia espacial de tráfego.
 
-> ⚠️ **Nota sobre os Dados:** Devido aos limites de armazenamento do GitHub, os arquivos massivos (`.csv` originais de > 200MB) e os modelos serializados `.pkl` **não estão versionados** neste repositório. O foco aqui é a demonstração do Código-Fonte, Metodologia, Monografia, Scripts de Treinamento e Gráficos de Resultados.
+> **Nota sobre os Dados:** Em conformidade com os limites de armazenamento do GitHub, bases volumétricas originais (`.csv` > 200 MB) e binários serializados `.pkl` não são versionados diretamente neste repositório. O repositório prioriza o código-fonte reprodutível, a metodologia, a monografia modular e o catálogo consolidado de gráficos e diagnósticos.
 
 ---
 
-## 🏆 Destaque Científico Central: O Efeito Peltzman e a Severidade do DNIT
+## Destaque Científico: O Efeito Peltzman e a Severidade do DNIT
 
-Uma das principais contribuições da pesquisa é a demonstração empírica do paradoxo de compensação de risco e o impacto real do pavimento na **gravidade das vítimas**:
+Uma das descobertas centrais da pesquisa é a demonstração empírica do paradoxo de compensação de risco e o efeito mensurável do pavimento na **severidade e letalidade das vítimas**:
 
 ![O Efeito Peltzman e a Severidade: Onde o DNIT Realmente Salva Vidas](graficos_v6/efeito_peltzman_e_severidade_dnit_v6.png)
 
-1. **O Paradoxo da Frequência (Efeito Peltzman):** Em rodovias com asfalto excelente ($ICP \ge 70$), a velocidade operacional média sobe para 110–140 km/h e atrai maior fluxo veicular, mantendo o registro de pequenas colisões leves.
-2. **A Revelação da Letalidade Real da PRF:** O pavimento **Péssimo ($ICP \le 20$) é +43,4% mais letal que o Bom ($ICP \in [61, 80]$)** (10,50% de óbitos por acidente vs. 7,32%). Crateras forçam manobras evasivas bruscas e estouro de pneus, provocando choques frontais e capotamentos com alta energia dissipada.
-3. **Índice de Vítimas Severas:** A recuperação do pavimento (Péssimo $\rightarrow$ Bom) reduz os acidentes com vítimas graves e mortos de **41,1% para 31,8%**, comprovando onde o investimento do DNIT salva vidas e minimiza sequelas incapacitantes.
+1. **O Paradoxo da Frequência (Efeito Peltzman):** Em rodovias com pavimento excelente ($ICP \ge 70$), a velocidade operacional média atinge patamares elevados (110 a 140 km/h) e há maior atratividade de fluxo, resultando em maior densidade de colisões leves e moderadas.
+2. **A Taxa Real de Letalidade da PRF:** O pavimento **Péssimo ($ICP \le 20$) é +43,4% mais letal que o Bom ($ICP \in [61, 80]$)** (10,50% de óbitos por acidente contra 7,32%). Desvios bruscos de buracos, deformações plásticas e estouro de pneus geram perda de controle direcional e colisões frontais com alta energia dissipada.
+3. **Índice de Vítimas Severas:** A recuperação estrutural da pista (Péssimo para Bom) reduz os acidentes com vítimas graves e mortos de **41,1% para 31,8%**, comprovando onde o investimento em recapeamento viário efetivamente preserva vidas e minimiza sequelas permanentes.
 
 ---
 
-## 🤖 Evolução das Arquiteturas de Modelagem (V1 à V6)
+## Evolução das Arquiteturas de Modelagem (V1 a V7)
 
-O projeto percorreu um amadurecimento metodológico completo, culminando na **Arquitetura V6 Oficial**:
+O projeto percorreu um amadurecimento metodológico completo, culminando na **Arquitetura V6 Oficial** (modelo da monografia) e no **Experimento V7** (estudo contrafactual):
 
-| Arquitetura | Script | Divisão Amostral | Hiperparâmetros / Função de Perda | R² Teste | MAE Teste | Diagnóstico Metodológico |
+| Arquitetura | Script | Partição Amostral | Algoritmo / Função de Perda | R² Teste | MAE Teste | Diagnóstico Metodológico |
 | :--- | :--- | :--- | :--- | :---: | :---: | :--- |
-| **V1 (Baseline)** | `model_training_v1.py` | Aleatório 80/20 | 100 árvores, `max_features=1.0`, MSE | 0,9892* | 0,2276 | Baseline preliminar ingênuo. |
-| **V2 (Otimizado)** | `model_training_v2.py` | Aleatório 70/30 | 200 árvores, `max_features='sqrt'`, OOB | 0,9770* | 0,3450 | Captura não-linearidades locais. |
-| **V3 (Poisson)** | `model_training_v3.py` | Aleatório 70/30 | 200 árvores, `criterion='poisson'`, depth=25 | 0,9678* | 0,4011 | Primeira adaptação para contagem. |
-| **V4 (Log-Transform)** | `model_training_v4.py` | Aleatório 70/30 | 300 árvores, `np.log1p(y)`, max_samples=0.8 | 0,9556* | 0,4107 | Regularização de cauda longa. |
-| **V5 (Temporal)** | `model_training_v5.py` | Temporal (2019–23 / 2024–25) | 200 árvores, max_samples=0.9, min_leaf=2 | **0,9726*** | **0,4181** | **Target Leakage:** Soma de categorias pós-evento + viés de sobrevivência (zeros ausentes). |
-| **V6-Ablation (Infra)**| `model_training_v6.py` | **Out-of-Time (2024–2025)** | 200 árvores, Poisson, **sem lags de tráfego** | **0,0381** | **1,4550** | **Estudo de Ablação:** Demonstra que a infraestrutura pura modula o risco, mas não cria fluxo. |
-| **V6-MSE (Benchmark)**| `model_training_v6.py` | **Out-of-Time (2024–2025)** | 200 árvores, Squared Error, Lags + Grade Real | **0,8736** | **0,6219** | **Benchmark Honesto:** Mesma loss da V5 sobre a matriz de 475k observações auditadas. |
-| **V6-Full (Oficial)** | `model_training_v6.py` | **Out-of-Time (2024–2025)** | **200 árvores, Poisson Deviance, Lags + DNIT** | **0,8678** | **0,6137** | **CAMPEÃO OFICIAL:** $D^2 = 0{,}7964$, generalização cega fora do tempo sem vazamento. |
+| **V1 (Baseline)** | `model_training_v1.py` | Aleatória 80/20 | 100 árvores, `max_features=1.0`, MSE | 0,9892* | 0,2276 | Baseline preliminar ingênuo. |
+| **V2 (Otimizado)** | `model_training_v2.py` | Aleatória 70/30 | 200 árvores, `max_features='sqrt'`, OOB | 0,9770* | 0,3450 | Captura não-linearidades locais. |
+| **V3 (Poisson)** | `model_training_v3.py` | Aleatória 70/30 | 200 árvores, `criterion='poisson'`, depth=25 | 0,9678* | 0,4011 | Primeira adaptação para contagem. |
+| **V4 (Log-Transform)** | `model_training_v4.py` | Aleatória 70/30 | 300 árvores, `np.log1p(y)`, max_samples=0.8 | 0,9556* | 0,4107 | Regularização da cauda longa. |
+| **V5 (Temporal)** | `model_training_v5.py` | Temporal (2019–23 / 2024–25) | 200 árvores, max_samples=0.9, min_leaf=2 | **0,9726*** | **0,4181** | **Target Leakage:** Soma de categorias pós-evento e viés de sobrevivência (zeros ausentes). |
+| **V6-Ablation (Infra)**| `model_training_v6.py` | Out-of-Time (2024–2025) | 200 árvores, Poisson, **sem lags temporais** | **0,0381** | **1,4550** | **Estudo de Ablação:** Mostra que a infraestrutura pura modula o risco, mas não cria fluxo. |
+| **V6-MSE (Benchmark)**| `model_training_v6.py` | Out-of-Time (2024–2025) | 200 árvores, Squared Error, Lags + Grade Real | **0,8736** | **0,6219** | **Benchmark Direto:** Mesma loss da V5 sobre a matriz de 475k observações auditadas. |
+| **V6-Full (Oficial)** | `model_training_v6.py` | **Out-of-Time (2024–2025)** | **200 árvores, Poisson Deviance, Lags + DNIT** | **0,8678** | **0,6137** | **MODELO OFICIAL DO TCC:** $D^2 = 0{,}7964$, generalização fora do tempo sem vazamento. |
+| **V7 (Experimental)** | `experimento_v7_dnit_imputado.py` | **Out-of-Time (2024–2025)** | **200 árvores, Poisson, DNIT 100% Imputado** | **0,8701** | **0,6208** | **Estudo Contrafactual:** Simulação de cobertura universal do DNIT (MDI saltou para 8,09%). |
 
-*\*Nota: Os modelos V1 a V5 apresentavam vazamento contábil de soma de categorias pós-evento (`is_*`) e viés de sobrevivência (ausência de trechos sem acidentes).*
-
----
-
-## 🛡️ Fundamentos da Arquitetura V6 (Zero Target Leakage)
-
-A **Arquitetura V6** foi construída a partir do zero para sanar todas as fragilidades apontadas na auditoria técnica:
-1. **Grade Cartesiana Completa (Zeros Reais):** Mapeamento integral dos 5.655 trechos de 10 km da malha federal ao longo de 84 meses (2019–2025), totalizando **475.020 observações com 70,61% de zeros reais** (meses sem sinistro).
-2. **Zero Target Leakage:** Expurgadas todas as contagens pós-evento agregadas (`tipo_acidente_*`, `causa_*`). As variáveis preditivas contêm exclusivamente atributos pré-evento e medições do DNIT.
-3. **Inércia Espacial e Lags Temporais:** Criação de defasagens históricas puras ($t-1, t-2, t-3, t-12$) para controlar a densidade de tráfego intrínseca do trecho.
-4. **Sentinela DNIT Estrito:** Ausência de medições DNIT tratada com o sentinela `-1.0` e flag binária explícita `has_dnit_data`, sem interpolações temporais artificiais (*backfill*).
-5. **Divisão Fora do Tempo (Out-of-Time):** Aquecimento de lags em 2019, treino entre 2020 e 2023 ($N=271.440$) e teste estritamente cego nos anos de 2024 e 2025 ($N=135.720$).
-6. **Discriminação de Trechos Seguros:** Erro absoluto médio de apenas **0,2889 acidentes/mês** em trechos pacificados, eliminando a compressão de variância da V5.
+*\*Nota: Os modelos V1 a V5 continham vazamento contábil por agregação de atributos gerados após a ocorrência do sinistro e operavam condicionados à ocorrência ($Y \ge 1$), excluindo trechos seguros.*
 
 ---
 
-## 🏗️ Estrutura dos Módulos do Repositório
+## Fundamentos da Arquitetura V6 Oficial (Zero Target Leakage)
+
+A **Arquitetura V6 Oficial** foi implementada a partir do zero para sanar as fragilidades identificadas durante a auditoria técnica:
+1. **Grade Cartesiana Completa (Zeros Reais):** Mapeamento integral de 5.655 trechos de 10 km da malha federal ao longo de 84 meses (2019 a 2025), totalizando **475.020 observações com 70,61% de zeros reais** (meses sem sinistro).
+2. **Eliminação do Target Leakage:** Expurgadas todas as variáveis contextuais pós-evento (`tipo_acidente_*`, `causa_*`, contagens de traçado de via). A matriz preditiva baseia-se unicamente em atributos pré-evento e medições físicas.
+3. **Inércia Espacial e Lags Temporais:** Criação de defasagens históricas rigorosas ($t-1, t-2, t-3, t-12$) como proxy instrumental do Volume Diário Médio (VDM) e densidade de tráfego do trecho.
+4. **Sentinela DNIT Estrito:** Ausência de medições contemporâneas tratada com sentinela `-1.0` e flag binária `has_dnit_data`, evitando imputações arbitrárias na matriz de referência.
+5. **Partição Temporal Fora do Tempo (Out-of-Time):** Aquecimento dos lags em 2019, treino de 2020 a 2023 ($N=271.440$) e teste cego nos anos de 2024 e 2025 ($N=135.720$).
+6. **Acurácia em Trechos Seguros:** Erro absoluto médio de **0,2889 acidentes/mês** nos trechos sem ocorrências, eliminando a compressão de variância presente na V5.
+
+---
+
+## Estudo Experimental Contrafactual: Arquitetura V7 (Simulação DNIT 100%)
+
+Com o objetivo de avaliar o retorno analítico de uma eventual cobertura universal da malha pelo DNIT, estruturou-se o experimento de laboratório **Modelo V7** (`06_Modelagem/experimento_v7_dnit_imputado.py`). 
+
+A simulação eliminou o valor sentinela `-1.0` por meio de uma interpolação espacial-temporal fisiográfica: os trechos sem vistoria contemporânea receberam valores estimados a partir do histórico do próprio trecho, da média da rodovia (BR) no estado (UF) e de médias regionais calibradas exclusivamente no conjunto de treino (2020 a 2023).
+
+### Comparativo Direto: V6 Oficial vs. V7 Experimental
+
+| Métrica / Parâmetro | V6 Oficial (Base Real) | V7 Experimental (DNIT 100% Imputado) | Diagnóstico da Simulação |
+| :--- | :---: | :---: | :--- |
+| **Cobertura do Pavimento DNIT** | 17,7% (Sentinela `-1.0`) | 100,0% (Imputação Contínua) | Simulação de sensoriamento universal |
+| **max_depth** | `None` (Ilimitado) | `28` (Regularizado) | Prevenção de sobreajuste em ruídos de cauda |
+| **max_features** | `sqrt` (~15% das colunas) | `0.35` (35% das colunas) | Maior oportunidade para atributos físicos competirem |
+| **R² Global (Teste 2024–2025)** | **0,8678** | **0,8701** | Ganho marginal (+0,23 p.p.) |
+| **RMSE Global** | **1,2786** | **1,2674** | Redução do erro médio quadrático |
+| **MAE Global** | **0,6137 ac/mês** | **0,6208 ac/mês** | Equivalência na escala dimensional |
+| **Poisson D² Score** | **0,7964** | **0,7911** | Alta capacidade explicativa em contagens |
+| **R² em Trechos com Sinistros ($Y \ge 1$)** | ~0,62 | **0,8513** | **Salto substancial de aderência nos trechos críticos** |
+| **Peso Relativo do DNIT (MDI)** | **2,24%** | **8,09%** | **O peso da infraestrutura quase quadruplicou (3,6x)** |
+
+### Hierarquia de Importância das Variáveis no Modelo V7
+
+```text
+  01. acidentes_media_movel_3m      : 37,43%  (Inércia de Tráfego)
+  02. acidentes_lag_1m              : 22,16%  (Inércia de Tráfego)
+  03. acidentes_lag_2m              : 16,98%  (Inércia de Tráfego)
+  04. acidentes_lag_12m             : 11,56%  (Inércia de Tráfego / Sazonalidade Anual)
+  05. icp (Condição do Pavimento)   :  3,16%  [DNIT] -> Entrou no Top 5 de relevância
+  06. icm (Macrotextura Superficial):  2,67%  [DNIT] -> Entrou no Top 6 de relevância
+  07. icc (Conservação da Faixa)    :  2,25%  [DNIT] -> Entrou no Top 7 de relevância
+  08. dias_fim_semana               :  0,45%  (Calendário)
+  09. uf_PA                         :  0,41%  (Geográfico)
+  10. dias_feriado                  :  0,33%  (Calendário)
+```
+
+### Principais Aprendizados do Experimento V7
+1. **Confirmação da Inércia de Tráfego:** A inércia temporal continuou responsável por aproximadamente 88% da força preditiva do modelo, validando a tese de que o volume absoluto de veículos é o principal impulsionador do volume de sinistros.
+2. **Ganho de Expressividade da Engenharia Viária:** Ao dispor de 100% de cobertura, as variáveis do DNIT superaram todos os condicionantes de calendário civil e geográficos, alcançando 8,09% de relevância global. A variável de controle `has_dnit_data` caiu para 0,00%, atestando que a árvore abandonou a distinção entre trechos fiscalizados e não fiscalizados para focar exclusivamente na condição física da via.
+3. **Calibração de Trechos de Risco:** O $R^2$ restrito aos segmentos com pelo menos uma ocorrência subiu para 0,8513, evidenciando que a qualidade do pavimento auxilia decisivamente na quantificação precisa de sinistros em trechos perigosos.
+
+---
+
+## Estrutura dos Módulos do Repositório
 
 ```
-├── documento_tcc/                                      <- Monografia completa estruturada em capítulos
+├── documento_tcc/                                      <- Monografia completa estruturada em capítulos modulares
 │   ├── 00_pre_textual/                                 <- Capa, resumo, abstract e sumário
 │   ├── 01_introducao/                                  <- Introdução, problema de pesquisa e objetivos
-│   ├── 02_revisao_literatura/                          <- Fundamentação teórica (segurança, ML, DNIT)
+│   ├── 02_revisao_literatura/                          <- Fundamentação teórica (segurança viária, ML, DNIT)
 │   ├── 03_materiais_e_metodos/                         <- Metodologia CRISP-DM, Grade Cartesiana e Poisson
 │   ├── 04_resultados/                                  <- Análise comparativa, ablação e diagnósticos
 │   ├── 05_discussao/                                   <- Discussão do Efeito Peltzman e letalidade
 │   ├── 06_conclusao/                                   <- Conclusão, contribuições e trabalhos futuros
-│   └── 07_referencias/                                 <- Referências bibliográficas (ABNT)
+│   └── 07_referencias/                                 <- Referências bibliográficas (ABNT NBR 6023)
 │
-├── graficos_v6/                                        <- Galeria consolidada com os 20 gráficos da V6
+├── graficos_v6/                                        <- Galeria consolidada com as 20 visualizações oficiais
 │
 ├── 01_Extracao/
-│   └── etl_dnit_v6.py                                  <- ETL do DNIT com recuperação de 2023
+│   └── etl_dnit_v6.py                                  <- Pipeline de extração e consolidação DNIT
 ├── 02_Transformacao/
-│   └── transform_prf_v6.py                             <- Agregação transacional da PRF (sem dummies pós-evento)
+│   └── transform_prf_v6.py                             <- Agregação transacional da PRF (sem variáveis pós-evento)
 ├── 04_Integracao_DNIT/
-│   └── build_cartesian_grid_v6.py                      <- Construção da Grade Cartesiana de zeros reais
+│   └── build_cartesian_grid_v6.py                      <- Construção da Grade Cartesiana com zeros reais
 ├── 05_Pre_Modelagem/
-│   └── feature_engineering_v6.py                       <- Engenharia de Lags temporais e calendário civil
+│   └── feature_engineering_v6.py                       <- Engenharia de lags temporais e calendário civil
 ├── 06_Modelagem/
 │   ├── model_training_v6.py                            <- Treinamento dos modelos V6 (Poisson, MSE, Ablação)
-│   └── model_report_v6.py                              <- Diagnósticos de resíduos e dispersão
+│   ├── model_report_v6.py                              <- Diagnósticos de resíduos e dispersão
+│   ├── experimento_v7_dnit_imputado.py                 <- Script do estudo contrafactual V7 (DNIT 100%)
+│   └── relatorio_experimento_v7.txt                    <- Relatório analítico do experimento V7
 ├── 07_Variaveis_Importantes/
-│   └── feature_importance_v6.py                        <- Importância MDI e XAI do modelo
+│   └── feature_importance_v6.py                        <- Importância MDI e interpretabilidade XAI
 ├── 08_Fatores_Climaticos/
-│   └── cenarios_v6.py                                  <- Simulação de cenários táticos operacionais
+│   └── cenarios_v6.py                                  <- Simulações de cenários táticos operacionais
 ├── 09_Analise_Infraestrutura/
 │   └── analise_impacto_icp_v6.py                       <- Sensibilidade do pavimento (ICP) e letalidade
 ├── 10_Documentacao_Geral/
 │   ├── relatorio_dataset_v6.md                         <- Auditoria estatística do dataset V6
 │   └── relatorio_modelo_v6.md                          <- Relatório técnico executivo do Modelo V6
 │
-└── gerar_todos_graficos_v6.py                          <- Script gerador automatizado da pasta graficos_v6/
+├── TCC_2026_V6.txt                                     <- Monografia consolidada na íntegra
+└── gerar_todos_graficos_v6.py                          <- Script gerador automatizado das figuras oficiais
 ```
 
 ---
 
-## 📊 Catálogo de Visualizações na Pasta `graficos_v6/`
+## Catálogo de Visualizações na Pasta `graficos_v6/`
 
-Todos os gráficos correspondentes à evolução histórica do projeto foram padronizados para a Arquitetura V6:
-
-| Gráfico | Categoria | Descrição |
+| Arquivo | Categoria | Descrição Técnica |
 | :--- | :--- | :--- |
-| `01_previsto_vs_real_v6.png` | Diagnóstico | Dispersão Real vs Predito no teste cego (*out-of-time* 2024–2025). |
-| `residuos_v6.png` | Diagnóstico | Histograma e densidade de resíduos perfeitamente centrados em zero. |
-| `03_discriminacao_zeros_v6.png` | Diagnóstico | Demonstração da capacidade do modelo de discriminar trechos sem acidentes. |
-| `feature_importance_v6.png` | Explicabilidade | Ranking MDI das 15 features mais importantes (Lags, DNIT, Calendário, UF). |
-| `dnit_mdi_importancia_v6.png` | Explicabilidade | Importância relativa das variáveis de infraestrutura (`icp`, `icc`, `icm`). |
+| `01_previsto_vs_real_v6.png` | Diagnóstico | Dispersão Real contra Predito no teste cego fora do tempo (2024–2025). |
+| `residuos_v6.png` | Diagnóstico | Histograma e curva KDE dos resíduos, centrados rigorosamente em zero. |
+| `03_discriminacao_zeros_v6.png` | Diagnóstico | Capacidade do modelo de discriminar trechos sem acidentes de trechos com sinistros. |
+| `feature_importance_v6.png` | Explicabilidade | Ranking MDI das variáveis preditivas (Lags, Infraestrutura, Calendário, UF). |
+| `dnit_mdi_importancia_v6.png` | Explicabilidade | Importância das variáveis de engenharia viária (`icp`, `icc`, `icm`). |
 | `dnit_mdi_vs_permutation_v6.png` | Explicabilidade | Comparação entre ganho de impureza (MDI) e Permutation Importance. |
 | `c1_lineplot_previsto_vs_real_v6.png` | Série Temporal | Série temporal mês a mês no Brasil (2024–2025) comparando previsto e real. |
-| `c1_barplot_impacto_feriado_clima_v6.png` | Cenários | Impacto de fins de semana prolongados e feriados nacionais. |
-| `c4_barplot_sazonalidade_mensal_v6.png` | Sazonalidade | Padrão sazonal ao longo dos 12 meses com picos em dezembro e julho. |
-| `cenario_01_final_semana_v6.png` | Cenários | Curva de sensibilidade à quantidade de dias de final de semana no mês. |
-| `cenario_05_extremos_v6.png` | Cenários | Amplitude dinâmica: Trecho pacífico (0,09 ac/mês) vs Crítico (29,35 ac/mês). |
-| `cenario_05_top5_trechos_v6.png` | Cenários | Top 5 trechos federais com maior frequência predita de sinistros. |
-| `comparativo_geral_cenarios_v6.png` | Cenários | Visão consolidada comparativa de todos os cenários operacionais. |
-| `impacto_geral_icp_v6.png` | Infraestrutura | Curva de sensibilidade do ICP (0 a 100): V6-Full vs V6-Ablation. |
-| `dnit_pdp_icp_acidentes_v6.png` | Infraestrutura | Partial Dependence Plot (PDP) manual com faixas conceituais do DNIT. |
-| `dnit_ceterisparibus_ab_test_v6.png` | Infraestrutura | Experimento *Ceteris Paribus* A/B variando exclusivamente o asfalto na BR-381. |
-| `maior_reducao_icp5_70_v6.png` | Infraestrutura | Maior ganho individual absoluto obtido com recapeamento viário. |
-| `top5_reducao_icp5_70_v6.png` | Infraestrutura | Top 5 trechos com maior redução absoluta de acidentes pós-reforma. |
-| `dnit_showcase2_ranking_top10_v6.png` | Infraestrutura | Ranking de 10 trechos críticos monitorados pelo DNIT para intervenção. |
-| **`efeito_peltzman_e_severidade_dnit_v6.png`** | **Destaque TCC** | **Infográfico tríplice: Paradoxo da Frequência vs Letalidade e Severidade Real.** |
+| `c1_barplot_impacto_feriado_clima_v6.png` | Cenários | Impacto de fins de semana e feriados nacionais no volume predito. |
+| `c4_barplot_sazonalidade_mensal_v6.png` | Sazonalidade | Padrão sazonal anual ao longo dos doze meses com picos em julho e dezembro. |
+| `cenario_01_final_semana_v6.png` | Cenários | Sensibilidade do modelo à quantidade de dias de final de semana no mês. |
+| `cenario_05_extremos_v6.png` | Cenários | Amplitude dinâmica: trecho pacificado (0,09 ac/mês) versus crítico (29,35 ac/mês). |
+| `cenario_05_top5_trechos_v6.png` | Cenários | Top 5 trechos federais com maior volume predito de sinistros. |
+| `comparativo_geral_cenarios_v6.png` | Cenários | Síntese consolidada comparativa dos cenários operacionais da PRF. |
+| `impacto_geral_icp_v6.png` | Infraestrutura | Curva de sensibilidade do ICP (0 a 100): Modelo V6-Full versus V6-Ablation. |
+| `dnit_pdp_icp_acidentes_v6.png` | Infraestrutura | Curva de Dependência Parcial (PDP) do pavimento com faixas conceituais do DNIT. |
+| `dnit_ceterisparibus_ab_test_v6.png` | Infraestrutura | Experimento *Ceteris Paribus* isolando o asfalto no trecho crítico da BR-381/MG. |
+| `maior_reducao_icp5_70_v6.png` | Infraestrutura | Maior ganho individual absoluto obtido por recapeamento viário. |
+| `top5_reducao_icp5_70_v6.png` | Infraestrutura | Top 5 trechos com maior redução absoluta de sinistros pós-reforma. |
+| `dnit_showcase2_ranking_top10_v6.png` | Infraestrutura | Priorização de dez trechos críticos vistoriados pelo DNIT para intervenção. |
+| **`efeito_peltzman_e_severidade_dnit_v6.png`** | **Destaque Central** | **Painel tríplice: Paradoxo da Frequência versus Letalidade e Vítimas Graves.** |
 
 ---
 
-## 🚀 Como Reproduzir os Resultados
+## Como Reproduzir os Resultados
 
 ```bash
 # 1. Configurar o ambiente virtual:
@@ -144,14 +188,17 @@ python3 07_Variaveis_Importantes/feature_importance_v6.py
 python3 08_Fatores_Climaticos/cenarios_v6.py
 python3 09_Analise_Infraestrutura/analise_impacto_icp_v6.py
 
-# 5. Gerar toda a Galeria Consolidada de Gráficos (pasta graficos_v6/):
+# 5. Executar o Experimento Contrafactual V7 (Opcional / Laboratório):
+python3 06_Modelagem/experimento_v7_dnit_imputado.py
+
+# 6. Gerar a Galeria Consolidada de Gráficos (pasta graficos_v6/):
 python3 gerar_todos_graficos_v6.py
 ```
 
 ---
 
-## 👥 Autores e Orientação
+## Autores e Instituição
 
-* **Pesquisador:** Victor Hugo Moreira
-* **Orientador:** Prof. Me. Edy Hayashida
-* **Instituição:** Universidade Paulista (UNIP) — Bacharelado em Ciência da Computação (2026)
+* **Autores:** Victor Hugo Moreira e Guilherme Figueira
+* **Orientação:** Prof. Me. Edy Hayashida
+* **Instituição:** Universidade Paulista (UNIP) — Ciência da Computação (2026)

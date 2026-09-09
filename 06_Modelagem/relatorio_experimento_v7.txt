@@ -1,0 +1,20 @@
+RELATÓRIO EXPERIMENTAL — ARQUITETURA V7 (ORACLE DNIT 100%)
+======================================================================
+
+R² Global V7: 0.8701 (vs V6: 0.8678)
+MAE Global V7: 0.6208 (vs V6: 0.6137)
+RMSE V7: 1.2674 (vs V6: 1.2786)
+Poisson D² V7: 0.7911 (vs V6: 0.7964)
+Peso do DNIT no V7: 8.09% (vs V6: 2.24%)
+
+Top 10 Features V7:
+  - acidentes_media_movel_3m: 37.43%
+  - acidentes_lag_1m: 22.16%
+  - acidentes_lag_2m: 16.98%
+  - acidentes_lag_12m: 11.56%
+  - icp: 3.16%
+  - icm: 2.67%
+  - icc: 2.25%
+  - dias_fim_semana: 0.45%
+  - uf_PA: 0.41%
+  - dias_feriado: 0.33%
