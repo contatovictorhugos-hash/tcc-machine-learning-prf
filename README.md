@@ -52,7 +52,7 @@ A **Arquitetura V6 Oficial** foi implementada a partir do zero para sanar as fra
 3. **Inércia Espacial e Lags Temporais:** Criação de defasagens históricas rigorosas ($t-1, t-2, t-3, t-12$) como proxy instrumental do Volume Diário Médio (VDM) e densidade de tráfego do trecho.
 4. **Sentinela DNIT Estrito:** Ausência de medições contemporâneas tratada com sentinela `-1.0` e flag binária `has_dnit_data`, evitando imputações arbitrárias na matriz de referência.
 5. **Partição Temporal Fora do Tempo (Out-of-Time):** Aquecimento dos lags em 2019, treino de 2020 a 2023 ($N=271.440$) e teste cego nos anos de 2024 e 2025 ($N=135.720$).
-6. **Acurácia em Trechos Seguros:** Erro absoluto médio de **0,2889 acidentes/mês** nos trechos sem ocorrências, eliminando a compressão de variância presente na V5.
+6. **Acurácia em Trechos Seguros:** Erro absoluto médio de **0,3075 acidentes/mês** nos trechos sem ocorrências ($Y=0$), eliminando a compressão de variância presente na V5.
 
 ---
 
@@ -134,8 +134,15 @@ A simulação eliminou o valor sentinela `-1.0` por meio de uma interpolação e
 │   └── analise_impacto_icp_v6.py                       <- Sensibilidade do pavimento (ICP) e letalidade
 ├── 10_Documentacao_Geral/
 │   ├── relatorio_dataset_v6.md                         <- Auditoria estatística do dataset V6
-│   └── relatorio_modelo_v6.md                          <- Relatório técnico executivo do Modelo V6
+│   ├── relatorio_modelo_v6.md                          <- Relatório técnico executivo do Modelo V6
+│   └── planejamento_dashboard_powerbi_v6.md            <- Especificação técnica do dashboard Power BI
+├── 11_Apresentacao_e_Dashboards/                       <- Materiais para banca e pitch executivo
+│   ├── ROTEIRO_APRESENTACAO_STORYTELLING_V6.txt        <- Roteiro oficial de defesa (5 atos, 15 min + Q&A)
+│   ├── apresentacao_storytelling_pitch_v6.md           <- Roteiro de pitch para banca examinadora
+│   └── planejamento_dashboard_powerbi_v6.md            <- Modelo dimensional e medidas DAX
 │
+├── ROTEIRO_APRESENTACAO_STORYTELLING_V6.txt            <- Roteiro oficial de apresentação na raiz
+├── PLANEJAMENTO_DASHBOARD_POWERBI_V6.md                <- Planejamento do Dashboard Executivo na raiz
 ├── TCC_2026_V6.txt                                     <- Monografia consolidada na íntegra
 └── gerar_todos_graficos_v6.py                          <- Script gerador automatizado das figuras oficiais
 ```

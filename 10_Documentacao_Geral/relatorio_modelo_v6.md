@@ -44,10 +44,10 @@ A partição foi realizada estritamente no tempo:
 | :--- | :--- | :--- | :--- |
 | **Critério de Perda** | Poisson Deviance | Squared Error (MSE) | Poisson Deviance |
 | **R² (Coeficiente de Determinação)** | **0.8678** | **0.8736** | 0.0381 |
-| **Poisson D² Score** | **0.7964** | 0.7712 | 0.0215 |
+| **Poisson D² Score** | **0.7964** | 0.7924 | 0.1024 |
 | **MAE Global (acidentes/mês)** | **0.6137** | 0.6219 | 1.4550 |
-| **RMSE (acidentes/mês)** | **1.2618** | **1.2338** | 3.4002 |
-| **MAE em Trechos Seguros ($Y=0$)** | **0.2889** | 0.3012 | 0.6210 |
+| **RMSE (acidentes/mês)** | **1.2786** | **1.2502** | 3.4493 |
+| **MAE em Trechos Seguros ($Y=0$)** | **0.2889** | 0.3075 | 0.9554 |
 | **Tempo de Treinamento** | 206.8 s (~3.4 min) | 162.3 s (~2.7 min) | 88.4 s (~1.5 min) |
 | **Número de Features** | 42 | 42 | 38 |
 
@@ -91,11 +91,11 @@ Embora a frequência de colisões leves possa ser mantida pela velocidade, a **t
 
 | Faixa de Condição do Pavimento (DNIT) | Taxa de Mortalidade (% dos acidentes com óbito) | Índice de Vítimas Severas (Mortos + Feridos Graves) |
 | :--- | :--- | :--- |
-| **Péssimo ($ICP \le 20$)** | **10.50%** | **37.8%** |
-| **Ruim ($ICP \in [21, 40]$)** | **8.83%** | **31.2%** |
-| **Regular ($ICP \in [41, 60]$)** | **7.99%** | **28.4%** |
-| **Bom ($ICP \in [61, 80]$)** | **7.32%** | **25.9%** |
-| **Ótimo ($ICP \in [81, 100]$)** | **8.62%** | **27.1%** |
+| **Péssimo ($ICP \le 20$)** | **10.50%** | **41.1%** |
+| **Ruim ($ICP \in [21, 40]$)** | **8.83%** | **37.7%** |
+| **Regular ($ICP \in [41, 60]$)** | **7.99%** | **36.3%** |
+| **Bom ($ICP \in [61, 80]$)** | **7.32%** | **31.8%** |
+| **Ótimo ($ICP \in [81, 100]$)** | **8.62%** | **35.8%** |
 
 > [!CAUTION]
 > **Diferença Crítica de Letalidade:**  
