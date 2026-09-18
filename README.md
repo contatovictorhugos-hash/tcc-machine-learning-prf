@@ -24,6 +24,22 @@ Uma das descobertas centrais da pesquisa é a demonstração empírica do parado
 
 ---
 
+## Dinâmica Temporal e Calibração Operacional: Malha Nacional vs. Hotspot Crítico
+
+A **Figura 26** é uma das visualizações centrais do trabalho, demonstrando a capacidade do Modelo V6 Oficial de operar simultaneamente em duas escalas geográficas complementares ao longo dos 24 meses do teste independente fora do tempo (biênio 2024–2025):
+
+![Dinâmica Temporal Mensal de Acidentes: Malha Federal e Trecho Crítico](graficos_v6/figura26_dinamica_temporal_v6.png)
+
+1. **Escala Nacional (Painel A — 5.655 Trechos / Todo o Brasil):**
+   * **Oscilação Sazonal de +28,0%:** O gráfico revela o pulso anual da mobilidade brasileira, partindo do vale histórico em fevereiro (~5.280 acidentes mensais, mês mais curto) e acelerando no segundo semestre com as férias de julho (6.401 acidentes) até culminar no pico de dezembro (6.770 acidentes em 2025).
+   * **Aderência Macroscópica:** O Modelo V6 (linha tracejada azul) rastreia com fidelidade a curva real observada pela PRF (linha contínua vermelha), provando que as defasagens temporais e as variáveis de calendário capturam a dinâmica da demanda rodoviária sem atrasos espúrios.
+
+2. **Escala Local em Gargalo Crítico (Painel B — BR-101/BA km 200, Feira de Santana):**
+   * **Taxa de Risco de Base Calibrada:** No trecho de maior sinistralidade contínua do país, o registro real oscila fortemente devido à estocasticidade (de 43 a 72 acidentes/mês, amplitude de +67%). O Modelo V6 opera como um estimador de risco estrutural, mantendo suas estimativas estabilizadas na faixa de **37 a 43 acidentes/mês** (média de 41,4 acidentes/mês), filtrando o ruído aleatório.
+   * **Resposta a Choques Exógenos (Micareta de Feira de Santana):** Em maio de 2024, o registro real saltou atipicamente para 72 acidentes devido ao evento festivo regional. O modelo projetou 39,3 acidentes com base na inércia trimestral recente, mas no mês subsequente (junho), ao receber o lag de 72, elevou sua estimativa para 41,0. Essa resposta defasada ilustra na prática como a floresta de Poisson modela o risco estrutural de longo prazo sem reagir histericamente a anomalias pontuais.
+
+---
+
 ## Evolução das Arquiteturas de Modelagem (V1 a V7)
 
 O projeto percorreu um amadurecimento metodológico completo, culminando na **Arquitetura V6 Oficial** (modelo da monografia) e no **Experimento V7** (estudo contrafactual):
@@ -106,12 +122,12 @@ A simulação eliminou o valor sentinela `-1.0` por meio de uma interpolação e
 │   ├── 01_introducao/                                  <- Introdução, problema de pesquisa e objetivos
 │   ├── 02_revisao_literatura/                          <- Fundamentação teórica (segurança viária, ML, DNIT)
 │   ├── 03_materiais_e_metodos/                         <- Metodologia CRISP-DM, Grade Cartesiana e Poisson
-│   ├── 04_resultados/                                  <- Análise comparativa, ablação e diagnósticos
+│   ├── 04_resultados/                                  <- Análise comparativa, ablação, diagnósticos, síntese dos objetivos e implicações práticas
 │   ├── 05_discussao/                                   <- Discussão do Efeito Peltzman e letalidade
-│   ├── 06_conclusao/                                   <- Conclusão, contribuições e trabalhos futuros
+│   ├── 06_conclusao/                                   <- Conclusão e recapitulação executiva da pesquisa
 │   └── 07_referencias/                                 <- Referências bibliográficas (ABNT NBR 6023)
 │
-├── graficos_v6/                                        <- Galeria consolidada com as 20 visualizações oficiais
+├── graficos_v6/                                        <- Galeria consolidada com as visualizações oficiais
 │
 ├── 01_Extracao/
 │   └── etl_dnit_v6.py                                  <- Pipeline de extração e consolidação DNIT
@@ -141,8 +157,6 @@ A simulação eliminou o valor sentinela `-1.0` por meio de uma interpolação e
 │   ├── apresentacao_storytelling_pitch_v6.md           <- Roteiro de pitch para banca examinadora
 │   └── planejamento_dashboard_powerbi_v6.md            <- Modelo dimensional e medidas DAX
 │
-├── ROTEIRO_APRESENTACAO_STORYTELLING_V6.txt            <- Roteiro oficial de apresentação na raiz
-├── PLANEJAMENTO_DASHBOARD_POWERBI_V6.md                <- Planejamento do Dashboard Executivo na raiz
 ├── TCC_2026_V6.txt                                     <- Monografia consolidada na íntegra
 └── gerar_todos_graficos_v6.py                          <- Script gerador automatizado das figuras oficiais
 ```
@@ -173,6 +187,7 @@ A simulação eliminou o valor sentinela `-1.0` por meio de uma interpolação e
 | `top5_reducao_icp5_70_v6.png` | Infraestrutura | Top 5 trechos com maior redução absoluta de sinistros pós-reforma. |
 | `dnit_showcase2_ranking_top10_v6.png` | Infraestrutura | Priorização de dez trechos críticos vistoriados pelo DNIT para intervenção. |
 | **`efeito_peltzman_e_severidade_dnit_v6.png`** | **Destaque Central** | **Painel tríplice: Paradoxo da Frequência versus Letalidade e Vítimas Graves.** |
+| **`figura26_dinamica_temporal_v6.png`** | **Série / Cenários** | **Dinâmica temporal mensal em 2 escalas: Malha Brasil (A) e Hotspot Feira de Santana (B).** |
 
 ---
 
