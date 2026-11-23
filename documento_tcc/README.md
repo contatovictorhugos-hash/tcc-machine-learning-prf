@@ -8,7 +8,7 @@ Este diretório contém a monografia completa do TCC particionada em seções mo
 
 | Capítulo / Seção | Arquivo Modular | Linhas | Foco de Atualização para V6 |
 | :--- | :--- | :---: | :--- |
-| **0. Elementos Pré-Textuais** | `00_pre_textual/00_capa_e_folha_rosto.md`<br>`00_pre_textual/01_resumo_abstract.md`<br>`00_pre_textual/02_sumario.md` | ~246 | Atualizar resumo com métricas finais da V6 ($R^2=0.8678$, MAE=0.61). |
+| **0. Elementos Pré-Textuais** | `00_pre_textual/00_capa_e_folha_rosto.md`<br>`00_pre_textual/01_resumo_abstract.md`<br>`00_pre_textual/02_lista_figuras.md`<br>`00_pre_textual/03_lista_tabelas.md`<br>`00_pre_textual/04_sumario.md` | ~270 | Atualizar resumo com métricas finais da V6 ($R^2=0.8678$, MAE=0.61) e listas de elementos ilustrativos. |
 | **1. Introdução** | `01_introducao/1_introducao.md` | 43 | Citar a evolução metodológica das arquiteturas. |
 | **2. Revisão da Literatura** | `02_revisao_literatura/2_1_panorama_seguranca_viaria.md`<br>`02_revisao_literatura/2_2_descritiva_a_preditiva_etl_crisp_rf.md`<br>`02_revisao_literatura/2_3_business_intelligence_powerbi.md`<br>`02_revisao_literatura/2_4_engenharia_software.md` | ~252 | Teórico / Estável. Mantém fundamentos de CRISP-DM e Random Forest. |
 | **3. Materiais e Métodos** | `03_materiais_e_metodos/3_1_materiais.md`<br>`03_materiais_e_metodos/3_2_1_entendimento_negocio.md`<br>`03_materiais_e_metodos/3_2_2_entendimento_dados.md`<br>`03_materiais_e_metodos/3_2_3_preparacao_dados.md`<br>`03_materiais_e_metodos/3_2_4_modelagem.md` | ~525 | **ZONA CRÍTICA DE ATUALIZAÇÃO:**<br>- `3_2_3`: Lags temporais, Grade Cartesiana de zeros reais e integração DNIT.<br>- `3_2_4`: Split temporal estrito 2020-2023 / 2024-2025 e perda Poisson. |

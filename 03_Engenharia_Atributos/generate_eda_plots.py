@@ -87,22 +87,22 @@ def generate_eda_plots():
     top_10_brs = df.groupby('br')['mortos'].sum().sort_values(ascending=False).head(10).index
     df_top_brs = df[df['br'].isin(top_10_brs)]
     sns.barplot(data=df_top_brs, x='br', y='mortos', estimator=sum, errorbar=None, palette='Reds_r', order=top_10_brs)
-    plt.title('EDA 5: Top 10 Rodovias (BRs) com Maior Letalidade Acumulada')
+    plt.title('EDA 4: Top 10 Rodovias (BRs) com Maior Letalidade Acumulada')
     plt.xlabel('BR')
     plt.ylabel('Total de Mortos (Bruto)')
     plt.savefig(f'{output_dir}/eda5_top10_brs_letais.png', bbox_inches='tight')
     plt.close()
-    log("   - [EDA Grafico 5] eda5_top10_brs_letais.png: Crucial para justificar geograficamente quais rodovias puxam a cauda longa de mortes.")
+    log("   - [EDA Grafico 4] eda5_top10_brs_letais.png: Crucial para justificar geograficamente quais rodovias puxam a cauda longa de mortes.")
 
     # G6: Concentracao de Vitimas (Pessoas vs Veículos no Acidente)
     plt.figure(figsize=(10, 8))
     # Amostragem para scatter nao travar
     df_sample = df.sample(n=10000, random_state=42) if len(df) > 10000 else df
     sns.scatterplot(data=df_sample, x='veiculos', y='pessoas', alpha=0.3, hue='classificacao_acidente', palette='tab10')
-    plt.title('EDA 6: Dispersão Bruta - Ocupantes vs Veículos Envolvidos (Sample 10k)')
+    plt.title('EDA 5: Dispersão Bruta – Ocupantes vs. Veículos Envolvidos (Amostra 10k)')
     plt.savefig(f'{output_dir}/eda6_dispersao_veiculos_pessoas.png', bbox_inches='tight')
     plt.close()
-    log("   - [EDA Grafico 6] eda6_dispersao_veiculos_pessoas.png: Revela anomalias brutas, como acidentes envolvendo onibus (1 veiculo = dezenas de pessoas).")
+    log("   - [EDA Grafico 5] eda6_dispersao_veiculos_pessoas.png: Revela anomalias brutas, como acidentes envolvendo onibus (1 veiculo = dezenas de pessoas).")
 
     # G7: Estados (UF) Mais Atingidos
     plt.figure(figsize=(12, 6))
@@ -122,19 +122,19 @@ def generate_eda_plots():
     dados_tracado = pd.concat([top_tracados, outros])
     
     plt.pie(dados_tracado, labels=dados_tracado.index, autopct='%1.1f%%', colors=sns.color_palette('pastel'), startangle=140)
-    plt.title('EDA 8: Composição do Traçado da Via Original')
+    plt.title('EDA 7: Composição do Traçado da Via Original')
     plt.savefig(f'{output_dir}/eda8_pie_tracado_original.png', bbox_inches='tight')
     plt.close()
-    log("   - [EDA Grafico 8] eda8_pie_tracado_original.png: Justifica visualmente a complexidade do texto 'tracado_via' antes do tratamento realizado no ETL (onde separamos 'Reta;Declive', etc).")
+    log("   - [EDA Grafico 7] eda8_pie_tracado_original.png: Justifica visualmente a complexidade do texto 'tracado_via' antes do tratamento realizado no ETL (onde separamos 'Reta;Declive', etc).")
 
     # G9: Classificacao Acidente (Pizza Letalidade)
     plt.figure(figsize=(8, 8))
     class_counts = df['classificacao_acidente'].value_counts()
     plt.pie(class_counts, labels=class_counts.index, autopct='%1.1f%%', colors=['#4C72B0', '#55A868', '#C44E52'])
-    plt.title('EDA 9: Classificação Gravimétrica dos Acidentes (Target Distribution)')
+    plt.title('EDA 6: Classificação Gravimétrica dos Acidentes (Distribuição por Severidade)')
     plt.savefig(f'{output_dir}/eda9_classificacao_pizza.png', bbox_inches='tight')
     plt.close()
-    log("   - [EDA Grafico 9] eda9_classificacao_pizza.png: Ilustra a variavel gravimetrica original na classe bruta antes do pareamento numérico.")
+    log("   - [EDA Grafico 6] eda9_classificacao_pizza.png: Ilustra a variavel gravimetrica original na classe bruta antes do pareamento numérico.")
 
     # G10: Evolucao de Feridos Ilsesos e Ignorados
     plt.figure(figsize=(10, 6))

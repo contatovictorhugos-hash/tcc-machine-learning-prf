@@ -49,7 +49,7 @@ A identificação das rodovias mais críticas em termos de letalidade acumulada 
 
 
 
-Figura 10 – EDA 5: Top 10 Rodovias (BRs) com Maior Letalidade Acumulada.
+Figura 10 – EDA 4: Top 10 Rodovias (BRs) com Maior Letalidade Acumulada.
 
 
   
@@ -64,7 +64,7 @@ Analisando o gráfico, percebe-se que as rodovias BR-116 e BR-101 destacam-se co
 
 
 
-Figura 11 – EDA 6: Dispersão Bruta – Ocupantes vs. Veículos Envolvidos (Amostra 10k).
+Figura 11 – EDA 5: Dispersão Bruta – Ocupantes vs. Veículos Envolvidos (Amostra 10k).
   
 
 Fonte: Elaborado pelo autor (2026).
@@ -74,13 +74,13 @@ O gráfico de dispersão foi gerado a partir de uma amostra de 10.000 registros 
 A distribuição gravimétrica dos acidentes, consolidada na Figura 12, fornece uma visão da proporção entre os diferentes níveis de severidade.
 
 
-Figura 12 – EDA 9: Classificação Gravimétrica dos Acidentes (Distribuição da Variável Alvo).
+Figura 12 – EDA 6: Classificação Gravimétrica dos Acidentes (Distribuição por Severidade).
   
 
 Fonte: Elaborado pelo autor (2026).
 A análise do gráfico de pizza revela que 75,9% dos acidentes registrados resultaram em vítimas feridas, enquanto 17,0% foram classificados como sem vítimas e 7,1% como com vítimas fatais. Essa distribuição é um insumo direto para a priorização de políticas públicas: enquanto a maioria dos sinistros gera demanda sobre o sistema de saúde com feridos, a fração fatal, embora minoritária em volume, representa o impacto humano mais grave e irreversível. Do ponto de vista do modelo preditivo, essa distribuição reforça o cenário de classes desbalanceadas, onde a concentração em "Com Vítimas Feridas" poderia enviesar um classificador ingênuo, justificando a abordagem de regressão adotada neste projeto em vez de uma classificação direta.
 A composição do traçado das vias onde os acidentes ocorreram, apresentada na Figura 13, adiciona a dimensão de infraestrutura à análise exploratória.
-Figura 13 – EDA 8: Composição do Traçado da Via Original.
+Figura 13 – EDA 7: Composição do Traçado da Via Original.
   
 
 Fonte: Elaborado pelo autor (2026).
